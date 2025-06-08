@@ -1,0 +1,23 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 20
+    commands:
+      - echo "Instalando Serverless Framework"
+      - npm install -g serverless@3.38.0
+
+  pre_build:
+    commands:
+      - echo "Instalando dependencias del proyecto"
+      - npm install
+
+  build:
+    commands:
+      - echo "Empaquetando e implementando con Serverless"
+      - SLS_DEBUG=* serverless deploy --region sa-east-1 --verbose
+
+artifacts:
+  files:
+    - '**/*'
