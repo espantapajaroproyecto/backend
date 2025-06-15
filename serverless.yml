@@ -1,30 +1,58 @@
 service: aws-node-http-api-project
-frameworkVersion: '3.38.0'
+frameworkVersion: '3.40.0'
 
 provider:
   name: aws
   runtime: nodejs20.x
   region: sa-east-1
   stage: dev
- 
+
+package:   
+  individually: true
+  patterns:
+    - "!.cache/**"
+    - "!.env.example/**"
+    - "!index.js"
+    - "!data/**"
+    - "!functions/**"
+    - "!venv/**"
+    - "!.venv/**"
+    - "!.git/**"
+    - "!.serverless/**"
+    - "!README.md"
+    - "!test/**"
+    - "!__tests__/**"
+    - "!*.spec.js"
+    - "!*.test.js" 
+
+
+
 functions:
   helloWorld:
     handler: index.handler
     events:
       - httpApi:
           path: /
-          method: get
+          method: get 
 
   obtenerUsuarios:
     handler: functions/usuario/obtenerUsuarios.handler
-    vpc:
-      securityGroupIds:
-        - sgr-0503f4baca53672c1 # el del RDS o uno que permita comunicación con él
-      subnetIds:
-        - subnet-0f60ec3e213ffda63
-        - subnet-0143de5b505ce3449
-        - subnet-0990f4dff828b9d3e
-    events:
-      - httpApi:
-          path: /usuario
-          method: get
+    package:
+      individually: true
+      include:
+        - functions/usuario/obtenerUsuarios.js
+        
+
+  usuarioLogin:
+    handler: functions/login/usuarioLogin.handler
+    package:
+      individually: true
+      include:
+        - functions/login/usuarioLogin.js 
+
+  agregarUsuario:
+    handler: functions/usuario/agregarUsuario.handler
+    package:
+      individually: true
+      include:
+        - functions/usuario/agregarUsuario.js 
