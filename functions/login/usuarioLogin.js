@@ -1,60 +1,56 @@
-const mysql = require('mysql2/promise');
+require('dotenv').config()
+const dbService = require('../../services/dbService');
+const s3Service = require('../../services/s3Service');
+const UTILS = require('../../utils/utils');
 
 module.exports.handler = async (event) => {
-  const connectionConfig = {
-    host: process.env.DB_HOST,       // Aurora endpoint
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    port: process.env.DB_USER,
-    connectTimeout: 10000,
-  };
-  let connection;
   try {
+    console.log({ event });
+
     const body = JSON.parse(event.body);
-    console.log(body);
-    const { username, password } = body;
+    const { dni, contrasenia } = body;
 
-    if (!username || !password) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({ message: 'Username y password requeridos' }),
-      };
-    }
+    // const { valid, message } = UTILS.validarLoginInput(usuario, contrasenia);
+    // if (!valid) {
+    //   return {
+    //     statusCode: 400,
+    //     body: JSON.stringify({ message }),
+    //   };
+    // }
 
-    connection = await mysql.createConnection(connectionConfig);
-    const [rows] = await connection.execute(
-      'SELECT * FROM usuario WHERE username = ?',
-      [username]
-    );
+    const useS3 = process.env.USE_S3 === 'true';
+    const obtenerUsuarioPorDNI = useS3 ? s3Service.obtenerUsuarioPorDNI : dbService.obtenerUsuarioPorDNI;
 
-    if (rows.length === 0) {
+    const user = await obtenerUsuarioPorDNI(dni);
+    console.log({user});
+    
+
+    if (!user) {
       return {
         statusCode: 401,
         body: JSON.stringify({ message: 'Usuario no encontrado' }),
       };
     }
 
-    const user = rows[0];
-
-    const validPassword = password == user.password;
-    if (!validPassword) {
+    const isValid = UTILS.compararContrasenias(contrasenia, user.contrasenia);
+    if (!isValid) {
       return {
         statusCode: 401,
         body: JSON.stringify({ message: 'Password incorrecta' }),
       };
     }
 
-    // Aquí podrías generar y devolver un JWT si querés
+    // TODO: Generar JWT si querés
+
     return {
       statusCode: 200,
       body: JSON.stringify({
         message: 'Login exitoso',
         user: {
-          id: user.id,
+          id: user.id || null, // S3 no tiene ID
           nombre: user.nombre,
           apellido: user.apellido,
-          username: user.username,
+          usuario: user.usuario || user.usuario, // en S3 usamos "usuario"
         },
       }),
     };
@@ -64,7 +60,5 @@ module.exports.handler = async (event) => {
       statusCode: 500,
       body: JSON.stringify({ message: 'Error interno', error: error.message }),
     };
-  } finally {
-    if (connection) await connection.end();
   }
 };

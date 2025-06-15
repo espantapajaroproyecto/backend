@@ -1,33 +1,21 @@
-const mysql = require("mysql");
+require('dotenv').config()
+const dbService = require('../../services/dbService');
+const s3Service = require('../../services/s3Service');
 
-const connection = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  port: 5432,
-  // connectTimeout: 10000, // 10 segundos
-});
+module.exports.handler = async (event) => {  
+  const useS3 = process.env.USE_S3 == 'true';
+  const obtenerUsuarios = useS3 ? s3Service.obtenerUsuarios : dbService.obtenerUsuarios;
 
-function queryDatabase(sql) {
-  return new Promise((resolve, reject) => {
-    connection.query(sql, (error, results, fields) => {
-      if (error) return reject(error);
-      resolve(results);
-    });
-  });
-}
-
-module.exports.handler = async (event) => {
   try {
-    const results = await queryDatabase("SELECT * FROM usuario");
-    console.log(results);
+    const results = await obtenerUsuarios();
 
     return {
       statusCode: 200,
       body: JSON.stringify(
         {
-          message: "Conectado a Aurora con éxito",
+          message: useS3
+            ? 'Usuarios cargados desde S3'
+            : 'Usuarios cargados desde Aurora',
           results,
         },
         null,
@@ -35,20 +23,18 @@ module.exports.handler = async (event) => {
       ),
     };
   } catch (error) {
-    console.error("DB error:", error);
+    console.error('DB error:', error);
 
     return {
       statusCode: 500,
       body: JSON.stringify(
         {
-          message: "Error en conexión con Aurora",
+          message: 'Error al obtener los usuarios',
           error: error.message,
         },
         null,
         2
       ),
     };
-  } finally {
-    connection.end(); // importante cerrar siempre
   }
 };
