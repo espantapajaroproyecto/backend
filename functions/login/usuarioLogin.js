@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config();
 const dbService = require('../../services/dbService');
 const s3Service = require('../../services/s3Service');
 const UTILS = require('../../utils/utils');
@@ -32,7 +32,7 @@ module.exports.handler = async (event) => {
       };
     }
 
-    const isValid = UTILS.compararContrasenias(contrasenia, user.contrasenia);
+    const isValid = await UTILS.compararContrasenias(contrasenia, user.contrasenia);
     if (!isValid) {
       return {
         statusCode: 401,
