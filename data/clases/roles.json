@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "nombre": "alumno"
+  },
+  {
+    "id": 2,
+    "nombre": "profesor"
+  },
+  {
+    "id": 3,
+    "nombre": "admin"
+  }
+]
