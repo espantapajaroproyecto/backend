@@ -21,7 +21,7 @@ module.exports.handler = async (event) => {
     // }
 
     const useS3 = process.env.USE_S3 === 'true';
-    const obtenerUsuarioPorDNI = useS3 ? s3Service.obtenerUsuariosConRoles : dbService.obtenerUsuarioPorDNI;
+    const obtenerUsuarioPorDNI = useS3 ? s3Service.obtenerUsuarioPorDNI : dbService.obtenerUsuarioPorDNI;
 
     const user = await obtenerUsuarioPorDNI(dni);
     console.log({user});
