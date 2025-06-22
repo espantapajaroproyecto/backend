@@ -4,7 +4,7 @@ frameworkVersion: '3.40.0'
 provider:
   name: aws
   runtime: nodejs20.x
-  region: sa-east-1
+  region: us-east-1
   stage: dev
 
 package:   
@@ -55,4 +55,11 @@ functions:
     package:
       individually: true
       include:
-        - functions/usuario/agregarUsuario.js 
+        - functions/usuario/agregarUsuario.js
+
+  cargarDataS3:
+    handler: utils/cargarDataS3.handler
+    package:
+      individually: true
+      include:
+        - utils/cargarDataS3.js
