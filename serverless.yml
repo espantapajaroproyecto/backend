@@ -63,3 +63,10 @@ functions:
       individually: true
       include:
         - utils/cargarDataS3.js
+  
+  lambdaAutorizer:
+    handler: functions/auth/lambdaAutorizer.handler
+    package:
+      individually: true
+      include:
+        - functions/auth/lambdaAutorizer.js
