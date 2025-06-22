@@ -1,10 +1,24 @@
 #!/bin/bash
 SERVERLESS_DIR=".serverless"
 
+echo "¿Querés empaquetar todo el proyecto con 'sls package'? (s/n)"
+read RESPUESTA
+
+if [[ "$RESPUESTA" == "s" || "$RESPUESTA" == "S" ]]; then
+  echo "🚀 Empaquetando todo el proyecto..."
+  sls package
+  echo "✅ Proyecto empaquetado."
+  exit 0
+fi
+
+
 echo "📦 Ingresá el nombre del archivo ZIP (sin .zip):"
 read ZIP_NAME
 
 SERVERLESS_PATH="$SERVERLESS_DIR/$ZIP_NAME.zip"
+
+
+
 
 # Verificar existencia del ZIP
 if [ ! -f "$SERVERLESS_PATH" ]; then
