@@ -27,6 +27,12 @@ async function obtenerUsuarioPorDNI(dni) {
         const [rows] = await connection.execute(
             'SELECT * FROM usuario WHERE dni = ?',
             [username]
+            // Consulta si usamos con roll
+            // `SELECT u.id, u.nombre, u.apellido, u.usuario, u.dni, u.contrasenia, r.nombre AS rol
+            // FROM usuario u
+            // LEFT JOIN roles r ON u.rol_id = r.id
+            // WHERE u.dni = ?`,
+            // [dni]
         );
         return rows[0] || null;
     } finally {

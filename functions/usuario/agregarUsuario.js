@@ -1,6 +1,7 @@
 require('dotenv').config()
 const dbService = require('../../services/dbService');
 const s3Service = require('../../services/s3Service');
+const { hashPassword } = require('../../utils/utils'); 
 
 module.exports.handler = async (event) => {
     try {
@@ -17,7 +18,16 @@ module.exports.handler = async (event) => {
         const useS3 = process.env.USE_S3 === 'true';
         const agregarUsuario = useS3 ? s3Service.agregarUsuario : dbService.agregarUsuario;
 
-        await agregarUsuario({ nombre, apellido, usuario, contrasenia, telefono, dni });
+        const contraseniaHasheada = await hashPassword(contrasenia);
+       
+        await agregarUsuario({ 
+            nombre, 
+            apellido, 
+            usuario, 
+            contrasenia : contraseniaHasheada, 
+            telefono, 
+            dni 
+        });
 
         return {
             statusCode: 201,
