@@ -8,7 +8,7 @@
     "local": "sls invoke local --function",
     "package": "sls package",
     "reset:s3": "sls invoke local --function cargarDataS3",
-    "package:lambda": "./utils/bash/preparar-lambda-zip.sh"
+    "package:lambda": "npx webpack bundle"
   },
   "repository": {
     "type": "git",
@@ -34,6 +34,7 @@
   "devDependencies": {
     "serverless-dotenv-plugin": "^6.0.0",
     "webpack": "^5.99.9",
-    "webpack-cli": "^6.0.1"
+    "webpack-cli": "^6.0.1",
+    "zip-webpack-plugin": "^4.0.3"
   }
 }

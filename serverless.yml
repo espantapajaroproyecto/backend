@@ -9,21 +9,21 @@ provider:
 
 package:   
   individually: true
-  patterns:
-    - "!.cache/**"
-    - "!.env.example/**"
-    - "!index.js"
-    - "!data/**"
-    - "!functions/**"
-    - "!venv/**"
-    - "!.venv/**"
-    - "!.git/**"
-    - "!.serverless/**"
-    - "!README.md"
-    - "!test/**"
-    - "!__tests__/**"
-    - "!*.spec.js"
-    - "!*.test.js" 
+  # patterns:
+    # - "!.cache/**"
+    # - "!.env.example/**"
+    # - "!index.js"
+    # - "!data/**"
+    # - "!functions/**"
+    # - "!venv/**"
+    # - "!.venv/**"
+    # - "!.git/**"
+    # - "!.serverless/**"
+    # - "!README.md"
+    # - "!test/**"
+    # - "!__tests__/**"
+    # - "!*.spec.js"
+    # - "!*.test.js" 
 
 
 
