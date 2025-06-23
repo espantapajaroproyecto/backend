@@ -1,0 +1,8 @@
+[
+  { "id": 1, "grado_id": 1, "materia_id": 1 },
+  { "id": 2, "grado_id": 1, "materia_id": 2 },
+  { "id": 3, "grado_id": 2, "materia_id": 1 },
+  { "id": 4, "grado_id": 2, "materia_id": 2 },
+  { "id": 5, "grado_id": 8, "materia_id": 3 },
+  { "id": 6, "grado_id": 8, "materia_id": 2 }
+]
