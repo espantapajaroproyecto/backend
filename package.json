@@ -6,9 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "local": "sls invoke local --function",
-    "package": "sls package",
-    "reset:s3": "sls invoke local --function cargarDataS3",
-    "package:lambda": "npx webpack bundle"
+    "reload:s3": "sls invoke local --function cargarDataS3",
+    "package": "npx webpack bundle"
   },
   "repository": {
     "type": "git",
@@ -25,7 +24,7 @@
     "@aws-sdk/client-s3": "^3.832.0",
     "@next/env": "^15.3.3",
     "aws-sdk": "^2.1692.0",
-    "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.2",
     "dotenv": "^16.5.0",
     "jsonwebtoken": "^9.0.2",
     "mysql": "^2.18.1",

@@ -30,29 +30,15 @@ package:
 functions:
   helloWorld:
     handler: index.handler
-    events:
-      - httpApi:
-          path: /
-          method: get 
-
+   
   obtenerUsuarios:
-    handler: functions/usuario/obtenerUsuarios.handler
-    package:
-      individually: true
-      include:
-        - functions/usuario/obtenerUsuarios.js
+    handler: functions/usuario/obtenerUsuarios/index.handler   
         
 
   usuarioLogin:
-    handler: functions/login/usuarioLogin.handler
-    package:
-      individually: true
-      include:
-        - functions/login/usuarioLogin.js 
+    handler: functions/login/usuarioLogin/index.handler
+    
 
   agregarUsuario:
-    handler: functions/usuario/agregarUsuario.handler
-    package:
-      individually: true
-      include:
-        - functions/usuario/agregarUsuario.js 
+    handler: functions/usuario/agregarUsuario/index.handler
+    
