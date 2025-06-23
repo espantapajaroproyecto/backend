@@ -9,46 +9,34 @@ provider:
 
 package:   
   individually: true
-  patterns:
-    - "!.cache/**"
-    - "!.env.example/**"
-    - "!index.js"
-    - "!data/**"
-    - "!functions/**"
-    - "!venv/**"
-    - "!.venv/**"
-    - "!.git/**"
-    - "!.serverless/**"
-    - "!README.md"
-    - "!test/**"
-    - "!__tests__/**"
-    - "!*.spec.js"
-    - "!*.test.js" 
+  # patterns:
+    # - "!.cache/**"
+    # - "!.env.example/**"
+    # - "!index.js"
+    # - "!data/**"
+    # - "!functions/**"
+    # - "!venv/**"
+    # - "!.venv/**"
+    # - "!.git/**"
+    # - "!.serverless/**"
+    # - "!README.md"
+    # - "!test/**"
+    # - "!__tests__/**"
+    # - "!*.spec.js"
+    # - "!*.test.js" 
 
 
 
 functions:
   helloWorld:
     handler: index.handler
-    events:
-      - httpApi:
-          path: /
-          method: get 
-
+   
   obtenerUsuarios:
-    handler: functions/usuario/obtenerUsuarios.handler
-    package:
-      individually: true
-      include:
-        - functions/usuario/obtenerUsuarios.js
+    handler: functions/usuario/obtenerUsuarios/index.handler   
         
 
   usuarioLogin:
-    handler: functions/login/usuarioLogin.handler
-    package:
-      individually: true
-      include:
-        - functions/login/usuarioLogin.js 
+    handler: functions/login/usuarioLogin/index.handler    
 
   agregarUsuario:
     handler: functions/usuario/agregarUsuario.handler
