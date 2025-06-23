@@ -7,3 +7,6 @@ jspm_packages
 
 # Variables de ambiente
 .env
+
+# Carpeta de bundle
+dist

@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 // Cantidad de rondas de sal (seguridad). 10 es un buen equilibrio
 const SALT_ROUNDS = 10;

@@ -1,6 +1,24 @@
 const jwt = require('jsonwebtoken');
 const SECRET = process.env.JWT_SECRET;
 
+// Función utilitaria para generar el objeto de respuesta requerido por API Gateway
+const generatePolicy = (principalId, effect, resource, context = {}) => {
+    return {
+        principalId,
+        policyDocument: {
+            Version: "2012-10-17",
+            Statement: [
+                {
+                    Action: "execute-api:Invoke",
+                    Effect: effect,
+                    Resource: resource,
+                },
+            ],
+        },
+        context, // Aquí podés pasar datos útiles como el email, role, etc.
+    };
+}
+
 function verificarToken(event) {
   const authHeader = event.headers.Authorization || event.headers.authorization;
 
@@ -21,4 +39,5 @@ function autorizarRoles(tokenPayload, rolesPermitidos) {
 module.exports = {
   verificarToken,
   autorizarRoles,
+  generatePolicy
 };
