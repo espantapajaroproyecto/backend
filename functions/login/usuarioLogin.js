@@ -35,13 +35,14 @@ module.exports.handler = async (event) => {
     }
 
     const isValid = await UTILS.compararContrasenias(contrasenia, user.contrasenia);
+
     if (!isValid) {
       return {
         statusCode: 401,
         body: JSON.stringify({ message: 'Password incorrecta' }),
       };
     }
-
+    
     //JWT con rol incluido
     const token = jwt.sign(
       {
