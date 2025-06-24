@@ -1,0 +1,16 @@
+[
+  { "id": 1, "nombre": "Castellano/Lengua" },
+  { "id": 2, "nombre": "Historia" },
+  { "id": 3, "nombre": "Latín" },
+  { "id": 4, "nombre": "GEOGRAFÍA" },
+  { "id": 5, "nombre": "MATEMÁTICA" },
+  { "id": 6, "nombre": "FÍSICA" },
+  { "id": 7, "nombre": "QUÍMICA" },
+  { "id": 8, "nombre": "HISTORIA DEL ARTE" },
+  { "id": 9, "nombre": "BIOLOGÍA" },
+  { "id": 10, "nombre": "EDUCACIÓN PARA LA SALUD" },
+  { "id": 11, "nombre": "EDUCACIÓN CIUDADANA" },
+  { "id": 12, "nombre": "INGLÉS" },
+  { "id": 13, "nombre": "LITERATURA ESPAÑOLA" },
+  { "id": 14, "nombre": "LITERATURA HISPANOAMERICANA/ARGENTINA" }
+]
