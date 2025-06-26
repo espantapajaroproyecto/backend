@@ -1,7 +1,11 @@
 require('dotenv').config()
 const dbService = require('../../services/dbService');
 const s3Service = require('../../services/s3Service');
+<<<<<<< Updated upstream
 const { hashPassword } = require('../../utils/utils');
+=======
+const { hashPassword } = require('../../utils/utils'); 
+>>>>>>> Stashed changes
 const jwt = require('jsonwebtoken');
 
 const SECRET = process.env.JWT_SECRET;
@@ -45,13 +49,20 @@ module.exports.handler = async (event) => {
 
         const user = await buscarUsuario(dni, mail);
 
+<<<<<<< Updated upstream
         const rol = useS3
             ? await s3Service.obtenerNombreRolPorId(user.rol_id)
             : await dbService.obtenerNombreRolPorId(user.rol_id);
+=======
+        const nombreRol = useS3
+        ? await s3Service.obtenerNombreRolPorId(user.rol_id)
+        : await dbService.obtenerNombreRolPorId(user.rol_id);
+>>>>>>> Stashed changes
 
         //JWT con rol incluido
         const token = jwt.sign(
             {
+<<<<<<< Updated upstream
                 dni: user.dni,
                 nombre: user.nombre,
                 apellido: user.apellido,
@@ -62,12 +73,29 @@ module.exports.handler = async (event) => {
             SECRET,
             //{ expiresIn: '2h' }
         );
+=======
+            dni: user.dni,
+            nombre: user.nombre,
+            apellido: user.apellido,
+            mail: user.mail,
+            celular: user.celular,
+            nombreRol, // ej: "alumno", "profesor", "admin"
+            },
+            SECRET,
+            //{ expiresIn: '2h' }
+        ); 
+>>>>>>> Stashed changes
 
         return {
             statusCode: 201,
             body: JSON.stringify({
                 message: useS3 ? 'Usuario guardado en S3' : 'Usuario guardado en base de datos',
+<<<<<<< Updated upstream
                 user: { dni, nombre, apellido, mail, celular, rol }, // omitimos contraseña
+=======
+                token,
+                user: { dni, nombre, apellido, mail, celular, rol: nombreRol }, // omitimos contraseña
+>>>>>>> Stashed changes
             }),
         };
     } catch (error) {
