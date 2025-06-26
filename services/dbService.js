@@ -50,6 +50,25 @@ async function obtenerUsuarios() {
     }
 }
 
+<<<<<<< Updated upstream
+=======
+async function obtenerNombreRolPorId(rol_id) {
+  const query = 'SELECT nombre FROM Rol WHERE rol_id = ?';
+  const [rows] = await connection.execute(query, [rol_id]);
+  return rows.length > 0 ? rows[0].nombre : null;
+}
+// dbService.js
+
+async function buscarUsuarioPorDniOMail(dni, mail) {
+  const result = await pool.query(
+    "SELECT * FROM usuarios WHERE dni = $1 OR mail = $2 LIMIT 1",
+    [dni, mail]
+  );
+  return result.rows[0] || null;
+}
+
+
+>>>>>>> Stashed changes
 module.exports = {
     agregarUsuario,
     obtenerUsuarioPorDNI,
