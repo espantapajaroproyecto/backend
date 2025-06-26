@@ -51,7 +51,10 @@ async function obtenerUsuarios() {
 }
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
 async function obtenerNombreRolPorId(rol_id) {
   const query = 'SELECT nombre FROM Rol WHERE rol_id = ?';
   const [rows] = await connection.execute(query, [rol_id]);
