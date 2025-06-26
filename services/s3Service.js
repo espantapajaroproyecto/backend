@@ -63,7 +63,7 @@ const tablasRelacion = {
 async function agregar(key, dataNueva) {
   try {
 
-    const respuesta = await s3.getObject({ Bucket: BUCKET, Key: key }).promise();
+    const respuesta = await s3.getObject({ Bucket: BUCKET, Key: key + ".json" }).promise();
 
     // response.Body es un Buffer, lo convertimos a string
     const jsonString = respuesta.Body.toString("utf-8");
@@ -79,7 +79,7 @@ async function agregar(key, dataNueva) {
     await s3
       .putObject({
         Bucket: BUCKET,
-        Key: key,
+        Key: key + ".json",
         Body: JSON.stringify(data, null, 2),
         ContentType: "application/json",
       })
@@ -102,6 +102,10 @@ async function obtener({ key, propiedad = null, valor = null, populate = true })
     result = data.find(e => e[propiedad] == valor) || null;
     if (!populate || !tablasRelacion[key]) return result ? { ...result } : null;
   }
+  console.log({ result });
+  if (!result) {
+    return result
+  }
 
   // Si no hay populate o no hay relaciones definidas
   if (!populate || !tablasRelacion[key]) return result;
@@ -121,6 +125,10 @@ async function obtener({ key, propiedad = null, valor = null, populate = true })
   }));
 
   // Realizar populate
+  console.log({ registros, propiedad });
+  if (registros) {
+
+  }
   const populated = registros.map(obj => {
     const newObj = { ...obj };
     relaciones.forEach(({ key: relatedKey, propiedad }) => {
@@ -131,6 +139,7 @@ async function obtener({ key, propiedad = null, valor = null, populate = true })
     });
     return newObj;
   });
+  console.log({ result });
 
   return Array.isArray(result) ? populated : populated[0];
 }
@@ -186,7 +195,7 @@ async function actualizar({ key, propiedad = "id", valor, nuevosValores }) {
 
 // Usuarios
 async function agregarUsuario(user) {
-  return await agregar(USERS_KEY, user);
+  return await agregar(TABLAS.USUARIO_KEY, user);
 }
 
 

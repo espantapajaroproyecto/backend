@@ -67,7 +67,7 @@ module.exports.handler = async (event) => {
             statusCode: 201,
             body: JSON.stringify({
                 message: useS3 ? 'Usuario guardado en S3' : 'Usuario guardado en base de datos',
-                user: { dni, nombre, apellido, mail, celular, rol: nombreRol }, // omitimos contraseña
+                user: { dni, nombre, apellido, mail, celular, rol }, // omitimos contraseña
             }),
         };
     } catch (error) {
