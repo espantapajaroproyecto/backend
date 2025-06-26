@@ -110,7 +110,7 @@ async function obtenerUsuarios() {
   return users;
 }
 
-async function obtenerUsuariosConRoles() {
+async function obtenerUsuariosConRoles(dni) {
   const [usersData, rolesData] = await Promise.all([
     s3.getObject({ Bucket: BUCKET, Key: USERS_KEY }).promise(),
     s3.getObject({ Bucket: BUCKET, Key: ROLES_KEY }).promise(),
@@ -119,7 +119,6 @@ async function obtenerUsuariosConRoles() {
   const users = JSON.parse(usersData.Body.toString());
   const roles = JSON.parse(rolesData.Body.toString());
 
-  // Crear mapa rol_id → nombre
   const rolesMap = {};
   roles.forEach((rol) => {
     rolesMap[rol.id] = rol.nombre;
@@ -130,8 +129,56 @@ async function obtenerUsuariosConRoles() {
     ...user,
     rol: rolesMap[user.rol_id] || "desconocido",
   }));
+  // Encontrar usuario con ese DNI
+  const user = users.find(u => u.dni === dni);
+  if (!user) return null;
 
-  return usuariosConRoles;
+  // Añadir nombre de rol
+  return {
+  ...user,
+  rol_id: Number(user.rol_id),
+  rol: rolesMap[Number(user.rol_id)] || 'desconocido'
+  };
+}
+
+async function buscarUsuarioPorDniOMail(dni, mail) {
+    try {
+        // Leer archivo usuarios.json desde S3
+        const s3Data = await s3.getObject({
+            Bucket: BUCKET,
+            Key: USERS_KEY
+        }).promise();
+
+        const usuarios = JSON.parse(s3Data.Body.toString());
+
+        // Buscar si ya existe por dni o mail
+        return usuarios.find(u => u.dni === dni || u.mail === mail) || null;
+
+    } catch (error) {
+        if (error.code === 'NoSuchKey') {
+            // Si el archivo no existe, es como si no hubiera usuarios
+            return null;
+        }
+        console.error('Error buscando usuario en S3:', error);
+        throw error;
+    }
+}
+
+async function obtenerNombreRolPorId(rol_id) {
+  try {
+    const data = await s3.getObject({
+      Bucket: BUCKET,
+      Key: ROLES_KEY,
+    }).promise();
+
+    const roles = JSON.parse(data.Body.toString('utf-8'));
+    const rol = roles.find(r => r.rol_id === rol_id || r.rol_id === Number(rol_id));
+
+    return rol ? rol.nombre : null;
+  } catch (error) {
+    console.error('Error al obtener roles desde S3:', error);
+    throw error;
+  }
 }
 
 // sls invoke local --function usuarioLogin --path ./data/eventos/evento_login.json
@@ -141,4 +188,6 @@ module.exports = {
   obtenerUsuarioPorDNI,
   obtenerUsuarios,
   obtenerUsuariosConRoles,
+  buscarUsuarioPorDniOMail,
+  obtenerNombreRolPorId
 };

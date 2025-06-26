@@ -50,8 +50,20 @@ async function obtenerUsuarios() {
     }
 }
 
+// dbService.js
+
+async function buscarUsuarioPorDniOMail(dni, mail) {
+  const result = await pool.query(
+    "SELECT * FROM usuarios WHERE dni = $1 OR mail = $2 LIMIT 1",
+    [dni, mail]
+  );
+  return result.rows[0] || null;
+}
+
+
 module.exports = {
     agregarUsuario,
     obtenerUsuarioPorDNI,
-    obtenerUsuarios
+    obtenerUsuarios,
+    buscarUsuarioPorDniOMail
 };

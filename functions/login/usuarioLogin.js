@@ -1,7 +1,8 @@
+const { serialize } = require('cookie');
 require('dotenv').config();
 const dbService = require('../../services/dbService');
 const s3Service = require('../../services/s3Service');
-const UTILS = require('../../utils/utils');
+const UTILS = require('./utils/utils');
 const jwt = require('jsonwebtoken');
 
 const SECRET = process.env.JWT_SECRET;
@@ -56,18 +57,27 @@ module.exports.handler = async (event) => {
       //{ expiresIn: '2h' }
     );
 
+    const serializeToken = serialize('myTokenName', token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      maxAge: 60 * 60 * 24 * 30, // 30 días en segundos
+      path: '/',
+    })
+
     return {
       statusCode: 200,
+      headers: {
+        'Set-Cookie': serializeToken
+      },
       body: JSON.stringify({
         message: 'Login exitoso',
         token,
         user: {
-          id: user.id || null, // S3 no tiene ID
+          id: user.id,
           nombre: user.nombre,
           apellido: user.apellido,
-          usuario: user.usuario || user.usuario, // en S3 usamos "usuario"
-          //agregar rol en s3
-          rol: user.rol || null, // agregamos el rol si viene de base
+          rol: user.rol
         }, 
       }),
     };

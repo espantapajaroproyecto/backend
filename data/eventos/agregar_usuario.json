@@ -1,3 +1,4 @@
 {
-    "body": "{\"nombre\":\"Roberta\",\"apellido\":\"Fernández\",\"usuario\":\"lauraf\",\"contrasenia\":\"claveSegura123\",\"telefono\":\"1167894321\",\"dni\":\"67890999\"}"
+    "body": "{\"dni\":\"81818181\",\"nombre\":\"Carlos\",\"apellido\":\"Gómez\",\"mail\":\"cgomez@ejemplo.com\",\"contrasenia\":\"miClaveFuerte456\",\"celular\":\"099887766\",\"rol_id\":3}"
 }
+

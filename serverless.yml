@@ -1,15 +1,31 @@
 service: aws-node-http-api-project
 frameworkVersion: '3.40.0'
 
+plugins:
+  - serverless-dotenv-plugin
+
 provider:
   name: aws
   runtime: nodejs20.x
   region: us-east-1
   stage: dev
+  environment:
+    JWT_SECRET: ${.env:JWT_SECRET}
+    USE_S3: ${.env:USE_S3}
+  httpApi:
+    cors:
+      allowedOrigins:
+        - '*'                          # O tus orígenes permitidos, ej: http://localhost:3000
+      allowedHeaders:
+        - Authorization
+        - Content-Type
+      allowedMethods:
+        - GET
+        - POST
+        - OPTIONS
 
-package:   
+package:
   individually: true
-
 
 functions:
   helloWorld:
@@ -25,7 +41,6 @@ functions:
   agregarUsuario:
     handler: functions/usuario/agregarUsuario.handler
     package:
-      individually: true
       include:
         - functions/usuario/agregarUsuario.js
 
