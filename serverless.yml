@@ -16,11 +16,11 @@ functions:
     handler: index.handler
    
   obtenerUsuarios:
-    handler: functions/usuario/obtenerUsuarios/index.handler   
+    handler: functions/usuario/obtenerUsuarios.handler   
         
 
   usuarioLogin:
-    handler: functions/login/usuarioLogin/index.handler    
+    handler: functions/login/usuarioLogin.handler    
 
   agregarUsuario:
     handler: functions/usuario/agregarUsuario.handler

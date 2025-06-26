@@ -5,7 +5,7 @@
     "nombre": "Juan",
     "apellido": "Pérez",
     "mail": "juan.perez@example.com",
-    "password": "$2b$10$EjemploDeHashBCrypt1234567890",
+    "contrasenia": "$2b$10$EjemploDeHashBCrypt1234567890",
     "celular": "099123456",
     "rol_id": 1
   },
@@ -15,7 +15,7 @@
     "nombre": "Ana",
     "apellido": "González",
     "mail": "ana.gonzalez@example.com",
-    "password": "$2b$10$OtroHashDeEjemplo9876543210",
+    "contrasenia": "$2b$10$OtroHashDeEjemplo9876543210",
     "celular": "098765432",
     "rol_id": 2
   },
@@ -25,7 +25,7 @@
     "nombre": "Carlos",
     "apellido": "Ramírez",
     "mail": "carlos.ramirez@example.com",
-    "password": "$2b$10$AdminHashEjemplo0000000000",
+    "contrasenia": "$2b$10$AdminHashEjemplo0000000000",
     "celular": "091112233",
     "rol_id": 3
   }
