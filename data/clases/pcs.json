@@ -1,0 +1,12 @@
+[
+    {
+        "id": 1,
+        "tipo": "ESCRITORIO",
+        "disponible": true
+    },
+    {
+        "id": 2,
+        "tipo": "LAPTOP",
+        "disponible": true
+    }
+]
