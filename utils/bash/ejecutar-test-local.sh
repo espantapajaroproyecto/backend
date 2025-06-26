@@ -1,14 +1,22 @@
 #!/bin/bash
+
 EVENT_DIR="data/eventos"
 
-echo "🔧 Ingresá el nombre de la función (como está en serverless.yml):"
-read FUNCTION_NAME
+# Si se pasan como argumentos, usarlos; si no, pedirlos
+FUNCTION_NAME=$1
+EVENT_FILE=$2
 
-echo "📄 Ingresá el nombre del archivo de evento, asegurece que exista en data/eventos (ej: evento_autorizer):"
-read EVENT_FILE
+if [ -z "$FUNCTION_NAME" ]; then
+  echo "🔧 Ingresá el nombre de la función (como está en serverless.yml):"
+  read FUNCTION_NAME
+fi
 
+if [ -z "$EVENT_FILE" ]; then
+  echo "📄 Ingresá el nombre del archivo de evento (sin .json), asegurece que exista en $EVENT_DIR:"
+  read EVENT_FILE
+fi
 
-EVENT_PATH="$EVENT_DIR/$EVENT_FILE".json
+EVENT_PATH="$EVENT_DIR/$EVENT_FILE.json"
 
 # Validación mínima
 if [ ! -f "$EVENT_PATH" ]; then

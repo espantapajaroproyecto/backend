@@ -191,10 +191,6 @@ async function agregarUsuario(user) {
   return await agregar(USERS_KEY, user);
 }
 
-async function obtenerUsuarioPorDNI(dni) {
-  const obtenerParams = { key: TABLAS.USUARIO_KEY, propiedad: "dni", valor: dni, populate: true }
-  return await obtener(obtenerParams);
-}
 
 async function obtenerUsuarios() {
   const obtenerParams = { key: TABLAS.USUARIO_KEY, propiedad: null, valor: null, populate: false }
@@ -206,11 +202,65 @@ async function obtenerUsuariosConRoles() {
   return await obtener(obtenerParams);
 }
 
-// sls invoke local --function usuarioLogin --path ./data/eventos/evento_login.json
+async function obtenerUsuarioPorDNI(dni) {
+  const obtenerParams = { key: TABLAS.USUARIO_KEY, propiedad: "dni", valor: dni, populate: true }
+  return await obtener(obtenerParams);
+}
+
+async function buscarUsuarioPorDniOMail(dni, mail) {
+  const s3Key = TABLAS.USUARIO_KEY + ".json";
+
+  // Obtener los usuarios
+  const response = await s3.getObject({ Bucket: BUCKET, Key: s3Key }).promise();
+  const usuarios = JSON.parse(response.Body.toString());
+
+  // Buscar por DNI o mail
+  const usuario = usuarios.find(u => u.dni == dni || u.mail == mail);
+
+  if (!usuario) return null;
+
+  // Hacer populate si corresponde
+  const relaciones = tablasRelacion[TABLAS.USUARIO_KEY];
+  if (!relaciones || relaciones.length === 0) return usuario;
+
+  const relatedDataMap = {};
+  await Promise.all(
+    relaciones.map(async ({ key: relatedKey }) => {
+      const relResponse = await s3.getObject({
+        Bucket: BUCKET,
+        Key: relatedKey + ".json",
+      }).promise();
+      const relatedData = JSON.parse(relResponse.Body.toString());
+      relatedDataMap[relatedKey] = Object.fromEntries(
+        relatedData.map(obj => [obj.id, obj])
+      );
+    })
+  );
+
+  // Popular el usuario
+  const usuarioPopulado = { ...usuario };
+  relaciones.forEach(({ key: relatedKey, propiedad }) => {
+    const relatedObj = relatedDataMap[relatedKey]?.[usuario[propiedad]];
+    if (relatedObj) {
+      usuarioPopulado[propiedad.replace("_id", "")] = relatedObj;
+    }
+  });
+
+  return usuarioPopulado;
+}
+
+
+async function obtenerNombreRolPorId(id) {
+  const obtenerParams = { key: TABLAS.USUARIO_KEY, propiedad: "id", valor: id, populate: true }
+  const rol = await obtener(obtenerParams)
+  return rol;
+}
 
 module.exports = {
   agregarUsuario,
   obtenerUsuarioPorDNI,
   obtenerUsuarios,
   obtenerUsuariosConRoles,
+  buscarUsuarioPorDniOMail,
+  obtenerNombreRolPorId
 };
