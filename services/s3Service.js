@@ -2,8 +2,6 @@ const AWS = require("aws-sdk");
 const s3 = new AWS.S3();
 
 const BUCKET = process.env.S3_BUCKET;
-const USERS_KEY = process.env.S3_KEY;
-const ROLES_KEY = process.env.S3_ROLES_KEY; // roles.json
 
 const TABLAS = {
   ROL_KEY: "roles",
@@ -193,7 +191,7 @@ async function agregarUsuario(user) {
 
 
 async function obtenerUsuarios() {
-  const obtenerParams = { key: TABLAS.USUARIO_KEY, propiedad: null, valor: null, populate: false }
+  const obtenerParams = { key: TABLAS.USUARIO_KEY, propiedad: null, valor: null, populate: true }
   return await obtener(obtenerParams);
 }
 
