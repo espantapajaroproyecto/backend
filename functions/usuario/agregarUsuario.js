@@ -1,14 +1,8 @@
 require('dotenv').config()
 const dbService = require('../../services/dbService');
 const s3Service = require('../../services/s3Service');
-<<<<<<< Updated upstream
 const { hashPassword } = require('../../utils/utils');
-=======
-const { hashPassword } = require('../../utils/utils'); 
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+
 const jwt = require('jsonwebtoken');
 
 const SECRET = process.env.JWT_SECRET;
@@ -52,70 +46,31 @@ module.exports.handler = async (event) => {
 
         const user = await buscarUsuario(dni, mail);
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-        const rol = useS3
+        const rolNombre = useS3
             ? await s3Service.obtenerNombreRolPorId(user.rol_id)
             : await dbService.obtenerNombreRolPorId(user.rol_id);
-=======
-        const nombreRol = useS3
-        ? await s3Service.obtenerNombreRolPorId(user.rol_id)
-        : await dbService.obtenerNombreRolPorId(user.rol_id);
->>>>>>> Stashed changes
-=======
-        const nombreRol = useS3
-        ? await s3Service.obtenerNombreRolPorId(user.rol_id)
-        : await dbService.obtenerNombreRolPorId(user.rol_id);
->>>>>>> Stashed changes
 
         //JWT con rol incluido
         const token = jwt.sign(
             {
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
                 dni: user.dni,
                 nombre: user.nombre,
                 apellido: user.apellido,
                 mail: user.mail,
                 celular: user.celular,
-                rol, // ej: "alumno", "profesor", "admin"
+                rol: rolNombre, // ej: "alumno", "profesor", "admin"
             },
             SECRET,
             //{ expiresIn: '2h' }
         );
-=======
-=======
->>>>>>> Stashed changes
-            dni: user.dni,
-            nombre: user.nombre,
-            apellido: user.apellido,
-            mail: user.mail,
-            celular: user.celular,
-            nombreRol, // ej: "alumno", "profesor", "admin"
-            },
-            SECRET,
-            //{ expiresIn: '2h' }
-        ); 
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 
         return {
             statusCode: 201,
             body: JSON.stringify({
                 message: useS3 ? 'Usuario guardado en S3' : 'Usuario guardado en base de datos',
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
                 user: { dni, nombre, apellido, mail, celular, rol }, // omitimos contraseña
-=======
                 token,
-                user: { dni, nombre, apellido, mail, celular, rol: nombreRol }, // omitimos contraseña
->>>>>>> Stashed changes
-=======
-                token,
-                user: { dni, nombre, apellido, mail, celular, rol: nombreRol }, // omitimos contraseña
->>>>>>> Stashed changes
+                user: { dni, nombre, apellido, mail, celular, rol: rolNombre }, // omitimos contraseña
             }),
         };
     } catch (error) {
