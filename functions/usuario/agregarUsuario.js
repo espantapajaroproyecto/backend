@@ -45,9 +45,9 @@ module.exports.handler = async (event) => {
 
         const user = await buscarUsuario(dni, mail);
 
-        const rol = useS3
-            ? await s3Service.obtenerNombreRolPorId(user.rol_id)
-            : await dbService.obtenerNombreRolPorId(user.rol_id);
+        // const rol = useS3
+        //     ? await s3Service.obtenerNombreRolPorId(user.rol_id)
+        //     : await dbService.obtenerNombreRolPorId(user.rol_id);
 
         //JWT con rol incluido
         const token = jwt.sign(
@@ -57,17 +57,18 @@ module.exports.handler = async (event) => {
                 apellido: user.apellido,
                 mail: user.mail,
                 celular: user.celular,
-                rol, // ej: "alumno", "profesor", "admin"
+                rol: user?.rol?.nombre, // ej: "alumno", "profesor", "admin"
             },
             SECRET,
             //{ expiresIn: '2h' }
         );
+        console.log([token]);
 
         return {
             statusCode: 201,
             body: JSON.stringify({
+                token,
                 message: useS3 ? 'Usuario guardado en S3' : 'Usuario guardado en base de datos',
-                user: { dni, nombre, apellido, mail, celular, rol }, // omitimos contraseña
             }),
         };
     } catch (error) {
