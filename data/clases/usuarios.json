@@ -1,32 +1,32 @@
 [
   {
     "id": 1,
-    "dni": "12345678",
-    "nombre": "Juan",
-    "apellido": "Pérez",
-    "mail": "juan.perez@example.com",
-    "contrasenia": "$2b$10$EjemploDeHashBCrypt1234567890",
-    "celular": "099123456",
+    "dni": "67890999",
+    "nombre": "Roberta",
+    "apellido": "Fernández",
+    "mail": "roberta.perez@example.com",
+    "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
+    "celular": "1167894321",
     "rol_id": 1
   },
   {
     "id": 2,
-    "dni": "87654321",
-    "nombre": "Ana",
-    "apellido": "González",
-    "mail": "ana.gonzalez@example.com",
-    "contrasenia": "$2b$10$OtroHashDeEjemplo9876543210",
-    "celular": "098765432",
-    "rol_id": 2
+    "dni": "67890123",
+    "nombre": "Laura",
+    "apellido": "Fernández",
+    "mail": "laura.fernandez@example.com",
+    "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
+    "celular": "1167894322",
+    "rol_id": "3"
   },
   {
     "id": 3,
-    "dni": "11223344",
-    "nombre": "Carlos",
-    "apellido": "Ramírez",
-    "mail": "carlos.ramirez@example.com",
-    "contrasenia": "$2b$10$AdminHashEjemplo0000000000",
-    "celular": "091112233",
-    "rol_id": 3
+    "dni": "67890124",
+    "nombre": "Fernanda",
+    "apellido": "Fernández",
+    "mail": "fernanda.fernandez@example.com",
+    "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
+    "celular": "1167894323",
+    "rol_id": "2"
   }
 ]
