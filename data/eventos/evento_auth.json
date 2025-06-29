@@ -1,0 +1,5 @@
+{
+    "type": "TOKEN",
+    "methodArn": "arn:aws:execute-api:us-east-1: 371714329866:cwh4e3qr8l/dev/GET/usuario",
+    "authorizationToken": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkbmkiOiI2Nzg5MDk5OSIsIm5vbWJyZSI6IlJvYmVydGEiLCJhcGVsbGlkbyI6IkZlcm7DoW5kZXoiLCJtYWlsIjoicm9iZXJ0YS5wZXJlekBleGFtcGxlLmNvbSIsImNlbHVsYXIiOiIxMTY3ODk0MzIxIiwicm9sIjoiYWx1bW5vIiwiaWF0IjoxNzUxMjI4OTM5fQ.DHXyJOX6tZqFXnj7sVWwMPk7GfyL5ssF2cxg9Unx0Xs"
+}
