@@ -15,19 +15,10 @@ functions:
   helloWorld:
     handler: index.handler
    
-  obtenerUsuarios:
-    handler: functions/usuario/obtenerUsuarios.handler   
         
 
   usuarioLogin:
-    handler: functions/login/usuarioLogin.handler    
-
-  agregarUsuario:
-    handler: functions/usuario/agregarUsuario.handler
-    package:
-      individually: true
-      include:
-        - functions/usuario/agregarUsuario.js
+    handler: functions/login/usuarioLogin.handler
 
   cargarDataS3:
     handler: utils/cargarDataS3.handler
@@ -43,6 +34,18 @@ functions:
       include:
         - functions/auth/lambdaAutorizer.js
 
+#  USUARIOS
+  agregarUsuario:
+    handler: functions/usuario/agregarUsuario.handler
+    package:
+      individually: true
+      include:
+        - functions/usuario/agregarUsuario.js
+
+  obtenerUsuarios:
+    handler: functions/usuario/obtenerUsuarios.handler
+
+#  RESERVAS
   agregarReserva:
     handler: functions/reserva/agregarReserva.handler
     package:
@@ -70,3 +73,32 @@ functions:
       individually: true
       include:
         - functions/reserva/eliminarReserva.js
+
+#  DOCENTE
+  agregarDocente:
+    handler: functions/docente/agregarDocente.handler
+    package:
+      individually: true
+      include:
+        - functions/docente/agregarDocente.js
+
+  obtenerDocentes:
+    handler: functions/docente/obtenerDocentes.handler
+    package:
+      individually: true
+      include:
+        - functions/docente/obtenerDocentes.js
+  
+  modificarDocente:
+    handler: functions/docente/modificarDocente.handler
+    package:
+      individually: true
+      include:
+        - functions/docente/modificarDocente.js
+
+  eliminarDocente:
+    handler: functions/docente/eliminarDocente.handler
+    package:
+      individually: true
+      include:
+        - functions/docente/eliminarDocente.js

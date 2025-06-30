@@ -65,10 +65,18 @@ async function buscarUsuarioPorDniOMail(dni, mail) {
   return result.rows[0] || null;
 }
 
+// RESERVAS
 async function agregarReserva(reserva) {}
 async function obtenerReservas() {}
 async function modificarReserva(id, camposNuevos) {}
 async function elimianReserva(id) {}
+
+// DOCENTES
+async function agregarDocente(docente) {}
+async function obtenerDocentes() {}
+
+async function modificarDocente(id, camposNuevos) {}
+async function eliminarDocente(id) {}
 
 module.exports = {
   agregarUsuario,
@@ -78,4 +86,9 @@ module.exports = {
   obtenerReservas,
   modificarReserva,
   elimianReserva,
+  agregarDocente,
+  obtenerDocentes,
+  modificarDocente,
+  eliminarDocente,
+  buscarUsuarioPorDniOMail,
 };
