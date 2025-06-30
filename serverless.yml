@@ -42,3 +42,31 @@ functions:
       individually: true
       include:
         - functions/auth/lambdaAutorizer.js
+
+  agregarReserva:
+    handler: functions/reserva/agregarReserva.handler
+    package:
+      individually: true
+      include:
+        - functions/reserva/agregarReserva.js
+
+  obtenerReservas:
+    handler: functions/reserva/obtenerReservas.handler
+    package:
+      individually: true
+      include:
+        - functions/reserva/obtenerReservas.js
+  
+  modificarReserva:
+    handler: functions/reserva/modificarReserva.handler
+    package:
+      individually: true
+      include:
+        - functions/reserva/modificarReserva.js
+
+  eliminarReserva:
+    handler: functions/reserva/eliminarReserva.handler
+    package:
+      individually: true
+      include:
+        - functions/reserva/eliminarReserva.js
