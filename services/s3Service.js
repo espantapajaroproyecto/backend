@@ -201,7 +201,7 @@ async function actualizar({ key, propiedad = "id", valor, nuevosValores }) {
   return { actualizado: true };
 }
 
-// Usuarios
+// USUARIOS
 async function agregarUsuario(user) {
   return await agregar(TABLAS.USUARIO_KEY, user);
 }
@@ -295,6 +295,8 @@ async function agregarReserva(reserva) {
   return await agregar(TABLAS.RESERVA_KEY, reserva);
 }
 
+// RESERVAS
+
 async function obtenerReservas() {
   const obtenerParams = {
     key: TABLAS.RESERVA_KEY,
@@ -321,6 +323,47 @@ async function eliminarReserva(id) {
   return await eliminar(modificarParams);
 }
 
+// DOCENTES
+async function obtenerDocentes() {
+  const obtenerParams = {
+    key: TABLAS.PROFESOR_KEY,
+    propiedad: null,
+    valor: null,
+    populate: true,
+  };
+  return await obtener(obtenerParams);
+}
+
+async function agregarDocente(docente) {
+  return await agregar(TABLAS.PROFESOR_KEY, docente);
+}
+
+async function eliminarDocente(id) {
+  const eliminarUsuarioParams = {
+    key: TABLAS.USUARIO_KEY,
+    valor: id,
+  };
+  const eliminarProfesorParams = {
+    key: TABLAS.PROFESOR_KEY,
+    propiedad: "usuario_id",
+    valor: id,
+  };
+
+  await eliminar(eliminarUsuarioParams);
+  await eliminar(eliminarProfesorParams);
+}
+
+async function modificarDocente(id, camposActualizados) {
+  const modificarParams = {
+    key: TABLAS.PROFESOR_KEY,
+    propiedad : "usuario_id",
+    valor: id,
+    nuevosValores: camposActualizados,
+  };
+  return await actualizar(modificarParams);
+}
+
+
 module.exports = {
   agregarUsuario,
   obtenerUsuarioPorDNI,
@@ -331,5 +374,9 @@ module.exports = {
   agregarReserva,
   obtenerReservas,
   modificarReserva,
-  eliminarReserva
+  eliminarReserva,
+  obtenerDocentes,
+  agregarDocente,
+  eliminarDocente,
+  modificarDocente
 };
