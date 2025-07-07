@@ -1,10 +1,21 @@
+DROP DATABASE IF EXISTS sistema_clases;
+
+CREATE DATABASE sistema_clases;
+
 USE sistema_clases;
 
--- TABLAS PRINCIPALES EN SINGULAR
 CREATE TABLE IF NOT EXISTS rol (
   id INT AUTO_INCREMENT PRIMARY KEY,
   nombre VARCHAR(50) NOT NULL UNIQUE
-);
+); 
+-- ✅
+
+INSERT INTO rol (id, nombre) VALUES
+(1, 'admin'),
+(2, 'profesor'),
+(3, 'alumno')
+ON DUPLICATE KEY UPDATE nombre = VALUES(nombre);  -- evita duplicados si ya existen
+-- ✅
 
 CREATE TABLE IF NOT EXISTS usuario (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -12,31 +23,224 @@ CREATE TABLE IF NOT EXISTS usuario (
   nombre VARCHAR(100) NOT NULL,
   apellido VARCHAR(100) NOT NULL,
   mail VARCHAR(100) NOT NULL UNIQUE,
-  password VARCHAR(255) NOT NULL,
+  contrasenia VARCHAR(255) NOT NULL,
   celular VARCHAR(20),
   rol_id INT NOT NULL,
   FOREIGN KEY (rol_id) REFERENCES rol(id)
-);
+); 
+-- ✅
+
+INSERT INTO usuario (dni, nombre, apellido, mail, contrasenia, celular, rol_id) VALUES
+('67890999', 'Roberta', 'Fernández', 'roberta.perez@example.com', '$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe', '1167894321', 1),
+('67890123', 'Laura', 'Fernández', 'laura.fernandez@example.com', '$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe', '1167894322', 3),
+('67890124', 'Fernanda', 'Fernández', 'fernanda.fernandez@example.com', '$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe', '1167894323', 2);
+-- ✅
 
 CREATE TABLE IF NOT EXISTS institucion_educativa (
   id INT AUTO_INCREMENT PRIMARY KEY,
   nombre VARCHAR(100) NOT NULL UNIQUE
-);
+); -- ✅
 
-CREATE TABLE IF NOT EXISTS alumno (
-  id INT PRIMARY KEY,
-  institucion_id INT,
-  FOREIGN KEY (id) REFERENCES usuario(id),
-  FOREIGN KEY (institucion_id) REFERENCES institucion_educativa(id)
-);
+INSERT INTO institucion_educativa (nombre) VALUES
+  ('CNBA'),
+  ('Pellegrini'),
+  ('Ilse'),
+  ('Agronomía'),
+  ('Devoto School'),
+  ('IEA'),
+  ('Virgen Niña'),
+  ('Juan B Justo'),
+  ('Carlos Steeb'),
+  ('Ceferino Namuncurá'); -- ✅
 
 CREATE TABLE IF NOT EXISTS profesor (
-  id INT PRIMARY KEY,
+  usuario_id INT PRIMARY KEY,
   habilitado BOOLEAN NOT NULL DEFAULT TRUE,
   valor_hora DECIMAL(8,2) NOT NULL,
-  FOREIGN KEY (id) REFERENCES usuario(id)
-);
+  FOREIGN KEY (usuario_id) REFERENCES usuario(id)
+); 
+-- ✅
 
+INSERT INTO profesor (usuario_id, habilitado, valor_hora) VALUES
+  (2, TRUE, 50.00);
+-- ✅
+
+CREATE TABLE IF NOT EXISTS alumno (
+  usuario_id INT PRIMARY KEY,
+  institucion_id INT,
+  FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE,
+  FOREIGN KEY (institucion_id) REFERENCES institucion_educativa(id)
+);
+-- ✅
+
+INSERT INTO alumno (usuario_id, institucion_id) VALUES
+  (1, 1);
+-- ✅
+
+CREATE TABLE IF NOT EXISTS nivel (
+  id INT PRIMARY KEY,
+  nombre VARCHAR(50) NOT NULL UNIQUE
+);
+-- ✅
+
+INSERT INTO nivel (id, nombre) VALUES
+(1, 'Primario'),
+(2, 'Secundario');
+-- ✅
+
+CREATE TABLE IF NOT EXISTS grado (
+  id INT PRIMARY KEY,
+  numero INT NOT NULL,
+  nivel_id INT NOT NULL,
+  FOREIGN KEY (nivel_id) REFERENCES nivel(id)
+);
+-- ✅
+
+INSERT INTO grado (id, numero, nivel_id) VALUES
+(1, 1, 1),
+(2, 2, 1),
+(3, 3, 1),
+(4, 4, 1),
+(5, 5, 1),
+(6, 6, 1),
+(7, 7, 1),
+(8, 1, 2),
+(9, 2, 2),
+(10, 3, 2),
+(11, 4, 2),
+(12, 5, 2);
+-- ✅
+
+CREATE TABLE IF NOT EXISTS materia (
+  id INT PRIMARY KEY,
+  nombre VARCHAR(100) NOT NULL,
+  grado_id INT NOT NULL,
+  habilitado BOOLEAN NOT NULL DEFAULT TRUE,
+  FOREIGN KEY (grado_id) REFERENCES grado(id)
+);
+-- ✅
+
+INSERT INTO materia (id, nombre, grado_id, habilitado) VALUES
+(1, 'Castellano/Lengua', 1, TRUE),
+(2, 'Historia', 2, TRUE),
+(3, 'Latín', 3, TRUE),
+(4, 'GEOGRAFÍA', 2, TRUE),
+(5, 'MATEMÁTICA', 1, TRUE),
+(6, 'FÍSICA', 4, TRUE),
+(7, 'QUÍMICA', 4, TRUE),
+(8, 'HISTORIA DEL ARTE', 3, TRUE),
+(9, 'BIOLOGÍA', 3, TRUE),
+(10, 'EDUCACIÓN PARA LA SALUD', 2, TRUE),
+(11, 'EDUCACIÓN CIUDADANA', 1, TRUE),
+(12, 'INGLÉS', 1, TRUE),
+(13, 'LITERATURA ESPAÑOLA', 3, TRUE),
+(14, 'LITERATURA HISPANOAMERICANA/ARGENTINA', 3, TRUE);
+-- ✅
+
+CREATE TABLE IF NOT EXISTS tema (
+  id INT PRIMARY KEY,
+  nombre VARCHAR(100) NOT NULL,
+  materia_id INT NOT NULL,
+  FOREIGN KEY (materia_id) REFERENCES materia(id)
+);
+-- ✅
+
+INSERT INTO tema (id, nombre, materia_id) VALUES
+(1, 'Análisis sintáctico', 1),
+(2, 'Género lírico / poesía', 1),
+(3, 'Pronombres', 1),
+(4, '¿Qué es la historia?', 2),
+(5, 'Edad Media / Feudalismo', 2),
+(6, 'Invasiones bárbaras', 2),
+(7, 'Trecera declinación', 3),
+(8, 'Adjetivos de 2° clase', 3),
+(9, 'Odisea', 3),
+(10, 'Tito Livio', 3);
+-- ✅
+
+CREATE TABLE IF NOT EXISTS aula (
+  id INT PRIMARY KEY,
+  numero INT NOT NULL,
+  nombre VARCHAR(100) NOT NULL,
+  disponible BOOLEAN NOT NULL DEFAULT TRUE
+);
+-- ✅
+
+INSERT INTO aula (id, numero, nombre, disponible) VALUES
+(1, 101, 'Aula Norte', TRUE);
+-- ✅
+
+CREATE TABLE IF NOT EXISTS pc (
+  id INT PRIMARY KEY,
+  tipo VARCHAR(50) NOT NULL,
+  disponible BOOLEAN NOT NULL DEFAULT TRUE
+);
+-- ✅
+
+INSERT INTO pc (id, tipo, disponible) VALUES
+(1, 'ESCRITORIO', TRUE),
+(2, 'LAPTOP', TRUE);
+-- ✅
+
+CREATE TABLE IF NOT EXISTS reserva (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  fecha_hora DATETIME NOT NULL,
+  tiempo TIME NOT NULL,
+  profesor_id INT NOT NULL, -- ✅
+  alumno_id INT NOT NULL, -- ✅
+  materia_id INT NOT NULL, -- ✅
+  tema_id INT NOT NULL, -- ✅
+  aula_id INT,  -- ✅
+  estado ENUM('PENDIENTE','CONFIRMADA','CANCELADA') NOT NULL DEFAULT 'PENDIENTE',
+  observaciones TEXT,
+  modalidad BOOLEAN NOT NULL,
+  pc_id INT, -- ✅
+  en_instituto BOOLEAN NOT NULL DEFAULT TRUE,
+  grupal BOOLEAN NOT NULL DEFAULT FALSE,
+  FOREIGN KEY (profesor_id) REFERENCES profesor(usuario_id),
+  FOREIGN KEY (alumno_id) REFERENCES alumno(usuario_id),
+  FOREIGN KEY (materia_id) REFERENCES materia(id),
+  FOREIGN KEY (tema_id) REFERENCES tema(id),
+  FOREIGN KEY (aula_id) REFERENCES aula(id),
+  FOREIGN KEY (pc_id) REFERENCES pc(id)
+);
+-- ✅
+
+INSERT INTO reserva (
+  id,
+  fecha_hora,
+  tiempo,
+  profesor_id,
+  alumno_id,
+  materia_id,
+  tema_id,
+  aula_id,
+  estado,
+  observaciones,
+  modalidad,
+  pc_id,
+  en_instituto,
+  grupal
+) VALUES (
+  1,
+  '2025-07-01 10:00:00',
+  '01:00:00',
+  2,
+  1,
+  1,
+  1,
+  1,
+  'PENDIENTE',
+  'Primera clase de fracciones.',
+  TRUE,
+  1,
+  TRUE,
+  FALSE
+);
+-- ✅
+
+
+/*
 CREATE TABLE IF NOT EXISTS nivel (
   id INT AUTO_INCREMENT PRIMARY KEY,
   nombre VARCHAR(50) NOT NULL UNIQUE
@@ -108,57 +312,59 @@ CREATE TABLE IF NOT EXISTS instituto_pc (
   FOREIGN KEY (pc_id) REFERENCES pc(id)
 );
 
-CREATE TABLE IF NOT EXISTS reserva (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  fecha_hora DATETIME NOT NULL,
-  tiempo TIME NOT NULL,
-  profesor_id INT NOT NULL,
-  alumno_id INT NOT NULL,
-  materia_id INT NOT NULL,
-  tema_id INT NOT NULL,
-  aula_id INT,
-  estado ENUM('PENDIENTE','CONFIRMADA','CANCELADA') NOT NULL DEFAULT 'PENDIENTE',
-  observaciones TEXT,
-  modalidad BOOLEAN NOT NULL,
-  pc_id INT,
-  en_instituto BOOLEAN NOT NULL DEFAULT TRUE,
-  grupal BOOLEAN NOT NULL DEFAULT FALSE,
-  FOREIGN KEY (profesor_id) REFERENCES profesor(id),
-  FOREIGN KEY (alumno_id) REFERENCES alumno(id),
-  FOREIGN KEY (materia_id) REFERENCES materia(id),
-  FOREIGN KEY (tema_id) REFERENCES tema(id),
-  FOREIGN KEY (aula_id) REFERENCES aula(id),
-  FOREIGN KEY (pc_id) REFERENCES pc(id)
+
+SELECT u.*, r.* as rol
+FROM usuario u
+JOIN rol r ON r.id = u.rol_id
+
+INSERT INTO reserva (  id,
+  fecha_hora,
+  tiempo,
+  profesor_id,
+  alumno_id,
+  materia_id,
+  tema_id,
+  aula_id,
+  estado,
+  observaciones,
+  modalidad,
+  pc_id,
+  en_instituto,
+  grupal
+) VALUES (
+  1,
+  '2025-07-01T10:00:00',
+  '01:00:00',
+  1,
+  2,
+  1,
+  1,
+  1,
+  'PENDIENTE',
+  'Primera clase de fracciones.',
+  true,
+  1,
+  true,
+  false
 );
 
--- PRECARGA DE DATOS
-INSERT IGNORE INTO rol (nombre) VALUES ('alumno'),('profesor'),('admin');
 
-INSERT INTO usuario (dni,nombre,apellido,mail,password,celular,rol_id) VALUES
-('12345678','Juan','Pérez','juan@ejemplo.com','hashalumno','099123456', (SELECT id FROM rol WHERE nombre='alumno')),
-('23456789','Ana','Gómez','ana@ejemplo.com','hashdocente','098765432', (SELECT id FROM rol WHERE nombre='profesor')),
-('34567890','Carlos','Ruiz','carlos@ejemplo.com','hashcoordinador','091112233', (SELECT id FROM rol WHERE nombre='admin'));
+INSERT INTO profesor (
+  id,
+  habilitado,
+  valor_hora
+) VALUES (
+  2,
+  true,
+  50.00
+);
 
-INSERT INTO institucion_educativa (nombre) VALUES
-('CNBA'),('Pellegrini'),('Ilse'),('Agronomía'),('Devoto School'),
-('IEA'),('Virgen Niña'),('Juan B Justo'),('Carlos Steeb'),('Ceferino Namuncurá');
+CREATE TABLE IF NOT EXISTS profesor (
+  usuario_id INT PRIMARY KEY,
+  habilitado BOOLEAN NOT NULL DEFAULT TRUE,
+  valor_hora DECIMAL(8,2) NOT NULL,
+  FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE
+);
 
-INSERT IGNORE INTO nivel (nombre) VALUES ('Primario'),('Secundario');
 
-INSERT IGNORE INTO grado (numero,nivel_id)
-SELECT num, (SELECT id FROM nivel WHERE nombre='Primario') FROM (SELECT 1 AS num UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7) t;
-INSERT IGNORE INTO grado (numero,nivel_id)
-SELECT num, (SELECT id FROM nivel WHERE nombre='Secundario') FROM (SELECT 1 AS num UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5) t;
-
--- Materias y Temas de ejemplo
-INSERT IGNORE INTO materia (nombre,grado_id)
-VALUES ('Castellano/Lengua', 1);
-
-INSERT IGNORE INTO tema (nombre,materia_id)
-VALUES ('Análisis sintáctico', (SELECT id FROM materia WHERE nombre='Castellano/Lengua' AND grado_id=(SELECT id FROM grado WHERE numero=1 AND nivel_id=(SELECT id FROM nivel WHERE nombre='Primario'))));
-
-INSERT IGNORE INTO materia (nombre,grado_id)
-VALUES ('Historia', 1);
-
-INSERT IGNORE INTO tema (nombre,materia_id)
-VALUES ('¿Qué es la historia?', (SELECT id FROM materia WHERE nombre='Historia' AND grado_id=(SELECT id FROM grado WHERE numero=1 AND nivel_id=(SELECT id FROM nivel WHERE nombre='Primario'))));
+ */
