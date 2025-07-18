@@ -92,7 +92,7 @@ async function agregarReserva(reserva) {
       reserva.materia_id,
       reserva.tema_id,
       reserva.aula_id,
-      reserva.estado || 'PENDIENTE',
+      reserva.estado || "PENDIENTE",
       reserva.observaciones || null,
       reserva.modalidad !== undefined ? reserva.modalidad : true,
       reserva.pc_id || null,
@@ -137,7 +137,7 @@ async function modificarReserva(id, camposNuevos) {
     if (campos.length === 0) return null;
 
     valores.push(id);
-    const sql = `UPDATE reserva SET ${campos.join(', ')} WHERE id = ?`;
+    const sql = `UPDATE reserva SET ${campos.join(", ")} WHERE id = ?`;
     const [result] = await connection.execute(sql, valores);
     return result.affectedRows;
   } finally {
@@ -201,7 +201,7 @@ async function modificarDocente(id, camposNuevos) {
     if (campos.length === 0) return null;
 
     valores.push(id);
-    const sql = `UPDATE docente SET ${campos.join(', ')} WHERE id = ?`;
+    const sql = `UPDATE docente SET ${campos.join(", ")} WHERE id = ?`;
     const [result] = await connection.execute(sql, valores);
     return result.affectedRows;
   } finally {
@@ -220,6 +220,103 @@ async function eliminarDocente(id) {
   }
 }
 
+// CONFIGURACIONES - GRADOS - MATERIAS - NIVELES - AULAS - PCS - TEMAS
+async function obtenerConfiguraciones() {
+  const connection = await mysql.createConnection(connectionConfig);
+  try {
+    const sql = `          
+      SELECT JSON_OBJECT(
+          'grados', (
+            SELECT JSON_ARRAYAGG(
+              JSON_OBJECT(
+                'id', g.id,
+                'numero', g.numero,
+                'nivel_id', g.nivel_id,
+                'nivel', JSON_OBJECT(
+                  'id', n.id,
+                  'nombre', n.nombre
+                )
+              )
+            )
+            FROM grado g
+            JOIN nivel n ON g.nivel_id = n.id
+          ),
+          'materias', (
+            SELECT JSON_ARRAYAGG(
+              JSON_OBJECT(
+                'id', m.id,
+                'nombre', m.nombre,
+                'grado_id', m.grado_id,
+                'habilitado', m.habilitado,
+                'grado', JSON_OBJECT(
+                  'id', g.id,
+                  'numero', g.numero,
+                  'nivel_id', g.nivel_id
+                )
+              )
+            )
+            FROM materia m
+            JOIN grado g ON m.grado_id = g.id
+          ),
+          'niveles', (
+            SELECT JSON_ARRAYAGG(
+              JSON_OBJECT(
+                'id', id,
+                'nombre', nombre
+              )
+            )
+            FROM nivel
+          ),
+          'aulas', (
+            SELECT JSON_ARRAYAGG(
+              JSON_OBJECT(
+                'id', id,
+                'numero', numero,
+                'nombre', nombre,
+                'disponible', disponible
+              )
+            )
+            FROM aula
+          ),
+          'pcs', (
+            SELECT JSON_ARRAYAGG(
+              JSON_OBJECT(
+                'id', id,
+                'tipo', tipo,
+                'disponible', disponible
+              )
+            )
+            FROM pc
+          ),
+          'temas', (
+          SELECT JSON_ARRAYAGG(
+          JSON_OBJECT(
+            'id', t.id,
+            'nombre', t.nombre,
+            'materia_id', mt.id,
+            'materia', JSON_OBJECT(
+            'id', mt.id,
+            'nombre', mt.nombre,
+            'grado_id', mt.grado_id,
+            'habilitado', mt.habilitado
+            )
+          )
+          )
+          FROM tema t
+          JOIN materia mt ON t.materia_id = mt.id
+        )
+      ) AS configuraciones;
+          `;
+    let [results] = await connection.execute(sql);
+    if (results.length > 0) {
+      return results[0];
+    }
+    return [];
+  } finally {
+    await connection.end();
+  }
+}
+
 module.exports = {
   agregarUsuario,
   obtenerUsuarioPorDNI,
@@ -233,4 +330,5 @@ module.exports = {
   modificarDocente,
   eliminarDocente,
   buscarUsuarioPorDniOMail,
+  obtenerConfiguraciones,
 };

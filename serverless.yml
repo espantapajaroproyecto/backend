@@ -102,3 +102,10 @@ functions:
       individually: true
       include:
         - functions/docente/eliminarDocente.js
+#  CONFIGURACIONES
+  obtenerConfiguraciones:
+      handler: functions/configuracion/obtenerConfiguraciones.handler
+      package:
+        individually: true
+        include:
+          - functions/configuracion/obtenerConfiguraciones.js

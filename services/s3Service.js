@@ -17,6 +17,7 @@ const TABLAS = {
   AULA_KEY: "aulas",
   PC_KEY: "pcs",
   RESERVA_KEY: "reservas",
+  DISPONIBLE_KEY: "reservas",
 };
 
 const tablasRelacion = {
@@ -33,13 +34,17 @@ const tablasRelacion = {
   materias: [{ key: "grados", propiedad: "grado_id" }],
   temas: [{ key: "materias", propiedad: "materia_id" }],
   profesor_materia: [
-    { key: "profesores", propiedad: "profesor_id" },
+    { key: "profesores", propiedad: "usuario_id" },
     { key: "materias", propiedad: "materia_id" },
+  ],
+  profesor_disponible: [
+    { key: "profesores", propiedad: "usuario_id" },
+    { key: "disponibles", propiedad: "disponible_id" },
   ],
   aulas: [],
   pc: [],
   reservas: [
-    { key: "profesores", propiedad: "profesor_id" },
+    { key: "profesores", propiedad: "usuario_id" },
     { key: "alumnos", propiedad: "alumno_id" },
     { key: "materias", propiedad: "materia_id" },
     { key: "temas", propiedad: "tema_id" },
@@ -356,13 +361,54 @@ async function eliminarDocente(id) {
 async function modificarDocente(id, camposActualizados) {
   const modificarParams = {
     key: TABLAS.PROFESOR_KEY,
-    propiedad : "usuario_id",
+    propiedad: "usuario_id",
     valor: id,
     nuevosValores: camposActualizados,
   };
   return await actualizar(modificarParams);
 }
 
+// CONFIGURACION
+
+async function obtenerConfiguraciones() {
+  try {
+    const configuraciones = {};
+    const errores = {};
+
+    const keys = [
+      { key: TABLAS.GRADO_KEY, nombre: "grados" },
+      { key: TABLAS.MATERIA_KEY, nombre: "materias" },
+      { key: TABLAS.NIVEL_KEY, nombre: "niveles" },
+      { key: TABLAS.AULA_KEY, nombre: "aulas" },
+      { key: TABLAS.PC_KEY, nombre: "pcs" },
+      { key: TABLAS.TEMA_KEY, nombre: "temas" },
+    ];
+
+    const promesas = keys.map(({ key }) =>
+      obtener({
+        key,
+        propiedad: null,
+        valor: null,
+        populate: true,
+      })
+    );
+
+    const resultados = await Promise.allSettled(promesas);
+
+    resultados.forEach((resultado, index) => {
+      const nombre = keys[index].nombre;
+      if (resultado.status === "fulfilled") {
+        configuraciones[nombre] = resultado.value;
+      } else {
+        errores[nombre] = resultado.reason;
+      }
+    });
+
+    return { configuraciones, errores };
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 module.exports = {
   agregarUsuario,
@@ -378,5 +424,6 @@ module.exports = {
   obtenerDocentes,
   agregarDocente,
   eliminarDocente,
-  modificarDocente
+  modificarDocente,
+  obtenerConfiguraciones,
 };

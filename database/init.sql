@@ -204,6 +204,19 @@ CREATE TABLE IF NOT EXISTS reserva (
   FOREIGN KEY (aula_id) REFERENCES aula(id),
   FOREIGN KEY (pc_id) REFERENCES pc(id)
 );
+
+
+CREATE TABLE disponible (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  usuario_id INT NOT NULL,
+  fecha DATE NOT NULL,
+  inicio TIME NOT NULL,
+  fin TIME NOT NULL,
+  en_uso BOOLEAN NOT NULL DEFAULT FALSE,
+  FOREIGN KEY (usuario_id) REFERENCES usuario(id)
+); -- ✅
+
+
 -- ✅
 
 INSERT INTO reserva (
@@ -237,6 +250,11 @@ INSERT INTO reserva (
   TRUE,
   FALSE
 );
+-- ✅
+
+INSERT INTO disponible (usuario_id, fecha, inicio, fin, en_uso) VALUES
+(2, '2025-07-10', '08:00', '12:00', FALSE),
+(2, '2025-07-10', '14:00', '18:00', FALSE);
 -- ✅
 
 

@@ -1,0 +1,14 @@
+[
+  {
+    "usuario_id": 2,
+    "disponible_id": 1,
+    "esPresencial": false,
+    "enInstituto": false
+  },
+  {
+    "usuario_id": 2,
+    "disponible_id": 2,
+    "esPresencial": true,
+    "enInstituto": true
+  }
+]
