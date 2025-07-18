@@ -4,18 +4,18 @@ const s3Service = require('../../services/s3Service');
 
 module.exports.handler = async (event) => {  
   const useS3 = process.env.USE_S3 == 'true';
-  const obtenerDocentes = useS3 ? s3Service.obtenerDocentes : dbService.obtenerDocentes;
+  const obtenerDisponibles = useS3 ? s3Service.obtenerDisponibles : dbService.obtenerDisponibles;
 
   try {
-    const results = await obtenerDocentes();
+    const results = await obtenerDisponibles();
 
-    return {
+    return { 
       statusCode: 200,
       body: JSON.stringify(
         {
           message: useS3
-            ? 'Docentes cargados desde S3'
-            : 'Docentes cargados desde Aurora',
+            ? 'Disponibles cargados desde S3'
+            : 'Disponibles cargados desde Aurora',
           results,
         },
         null,

@@ -209,13 +209,21 @@ CREATE TABLE IF NOT EXISTS reserva (
 CREATE TABLE disponible (
   id INT PRIMARY KEY AUTO_INCREMENT,
   usuario_id INT NOT NULL,
-  fecha DATE NOT NULL,
+  fecha DATETIME NOT NULL,
   inicio TIME NOT NULL,
   fin TIME NOT NULL,
   en_uso BOOLEAN NOT NULL DEFAULT FALSE,
   FOREIGN KEY (usuario_id) REFERENCES usuario(id)
 ); -- ✅
 
+CREATE TABLE profesor_tiene_disponible (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  profesor_id INT NOT NULL,
+  disponible_id INT NOT NULL,
+  FOREIGN KEY (profesor_id) REFERENCES profesor(usuario_id),
+  FOREIGN KEY (disponible_id) REFERENCES disponible(id),
+  UNIQUE KEY unique_profesor_disponible (profesor_id, disponible_id)
+); -- ✅
 
 -- ✅
 

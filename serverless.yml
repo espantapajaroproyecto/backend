@@ -109,3 +109,18 @@ functions:
         individually: true
         include:
           - functions/configuracion/obtenerConfiguraciones.js
+
+# DISPONIBLES
+  obtenerDisponibles:
+    handler: functions/disponible/obtenerDisponibles.handler
+    package:
+      individually: true
+      include:
+        - functions/disponible/obtenerDisponibles.js
+
+  obtenerDisponiblesPor:
+    handler: functions/disponible/obtenerDisponiblesPor.handler
+    package:
+      individually: true
+      include:
+        - functions/disponible/obtenerDisponiblesPor.js          

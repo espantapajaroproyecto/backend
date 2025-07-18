@@ -14,10 +14,11 @@ const TABLAS = {
   MATERIA_KEY: "materias",
   TEMA_KEY: "temas",
   PROFESOR_MATERIA_KEY: "profesor_materia",
+  PROFESOR_TIENE_DISPONIBLE_KEY: "profesor_tiene_disponible",
   AULA_KEY: "aulas",
   PC_KEY: "pcs",
   RESERVA_KEY: "reservas",
-  DISPONIBLE_KEY: "reservas",
+  DISPONIBLE_KEY: "disponibles",
 };
 
 const tablasRelacion = {
@@ -26,19 +27,20 @@ const tablasRelacion = {
   institucion_educativas: [],
   alumnos: [
     { key: "usuarios", propiedad: "usuario_id" },
-    { key: "instituciones_educativas", propiedad: "institucion_id" },
+    { key: "instituciones_educativas", propiedad: "usuario_id" },
   ],
   profesores: [{ key: "usuarios", propiedad: "usuario_id" }],
   niveles: [],
   grados: [{ key: "niveles", propiedad: "nivel_id" }],
   materias: [{ key: "grados", propiedad: "grado_id" }],
+  disponibles: [],
   temas: [{ key: "materias", propiedad: "materia_id" }],
   profesor_materia: [
     { key: "profesores", propiedad: "usuario_id" },
     { key: "materias", propiedad: "materia_id" },
   ],
-  profesor_disponible: [
-    { key: "profesores", propiedad: "usuario_id" },
+  profesor_tiene_disponible: [
+    { key: "usuarios", propiedad: "usuario_id" },
     { key: "disponibles", propiedad: "disponible_id" },
   ],
   aulas: [],
@@ -116,18 +118,25 @@ async function obtener({
 
   // Relación de claves a traer
   const relaciones = tablasRelacion[key];
+
   const relatedDataMap = {};
 
   // Cargar datos relacionados
-  await Promise.all(
+  await Promise.allSettled(
     relaciones.map(async ({ key: relatedKey }) => {
-      const response = await s3
-        .getObject({ Bucket: BUCKET, Key: relatedKey + ".json" })
-        .promise();
-      const relatedData = JSON.parse(response.Body.toString());
-      relatedDataMap[relatedKey] = Object.fromEntries(
-        relatedData.map((obj) => [obj.id, obj])
-      );
+      try {
+        const response = await s3
+          .getObject({ Bucket: BUCKET, Key: relatedKey + ".json" })
+          .promise();
+
+        const relatedData = JSON.parse(response.Body.toString());
+
+        relatedDataMap[relatedKey] = Object.fromEntries(
+          relatedData.map((obj) => [obj.id, obj])
+        );
+      } catch (err) {
+        console.error(`Error cargando ${relatedKey}:`, err); // ✅ debug útil
+      }
     })
   );
 
@@ -145,7 +154,6 @@ async function obtener({
     });
     return newObj;
   });
-  console.log({ result });
 
   return Array.isArray(result) ? populated : populated[0];
 }
@@ -336,7 +344,42 @@ async function obtenerDocentes() {
     valor: null,
     populate: true,
   };
-  return await obtener(obtenerParams);
+  const docentes = await obtener(obtenerParams);
+  console.log(JSON.stringify(docentes));
+
+  obtenerParams.key = TABLAS.PROFESOR_TIENE_DISPONIBLE_KEY;
+  const disponiblesDocentes = await obtener(obtenerParams);
+
+  obtenerParams.key = TABLAS.PROFESOR_MATERIA_KEY;
+  const materiaDocentes = await obtener(obtenerParams);
+
+
+  for (let i = 0; i < disponiblesDocentes.length; i++) {
+    const disponibleDocente = disponiblesDocentes[i];
+    for (let j = 0; j < docentes.length; j++) {
+      const docente = docentes[j];
+      if (disponibleDocente?.usuario_id == docente?.usuario_id) {
+        console.log({ disponible: disponibleDocente.disponible });
+        const { disponible } = disponibleDocente;
+        let { disponibles } = docente;
+        console.log(disponible);
+        console.log(disponibles);
+        
+        if (!disponibles) {
+          disponibles = [disponible];
+        } else {
+          disponibles.push(disponible);
+        }
+        docentes[j] = {
+          ...docente,
+          disponibles,
+        };
+      }
+    }
+  }
+  console.log(JSON.stringify(docentes));
+
+  return docentes;
 }
 
 async function agregarDocente(docente) {
@@ -410,6 +453,17 @@ async function obtenerConfiguraciones() {
   }
 }
 
+// DISPONIBLES
+async function obtenerDisponibles() {
+  const obtenerParams = {
+    key: TABLAS.DISPONIBLE_KEY,
+    propiedad: null,
+    valor: null,
+    populate: true,
+  };
+  return await obtener(obtenerParams);
+}
+
 module.exports = {
   agregarUsuario,
   obtenerUsuarioPorDNI,
@@ -426,4 +480,5 @@ module.exports = {
   eliminarDocente,
   modificarDocente,
   obtenerConfiguraciones,
+  obtenerDisponibles,
 };

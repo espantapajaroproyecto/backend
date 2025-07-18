@@ -317,6 +317,33 @@ async function obtenerConfiguraciones() {
   }
 }
 
+async function obtenerDisponibles() {
+  const connection = await mysql.createConnection(connectionConfig);
+  try {
+    const sql = `          
+        SELECT JSON_ARRAYAGG(
+          JSON_OBJECT(
+            'id', d.id,
+            'fecha', DATE_FORMAT(d.fecha, '%Y-%m-%d'),
+            'inicio', TIME_FORMAT(d.inicio, '%H:%i'),
+            'fin', TIME_FORMAT(d.fin, '%H:%i'),
+            'en_uso', d.en_uso
+          )
+        ) AS disponibles
+        FROM sistema_clases.disponible d;
+          `;
+    let [results] = await connection.execute(sql);
+    if (results.length > 0) {
+      console.log(JSON.stringify(results));
+
+      return results[0]?.disponibles || [];
+    }
+    return [];
+  } finally {
+    await connection.end();
+  }
+}
+
 module.exports = {
   agregarUsuario,
   obtenerUsuarioPorDNI,
@@ -331,4 +358,5 @@ module.exports = {
   eliminarDocente,
   buscarUsuarioPorDniOMail,
   obtenerConfiguraciones,
+  obtenerDisponibles,
 };
