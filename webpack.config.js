@@ -3,7 +3,7 @@ const path = require("path");
 const ZipPlugin = require("zip-webpack-plugin");
 
 // Buscar todos los entry points dinámicamente
-const functionsDir = path.resolve(__dirname, "functions");
+const functionsDir = path.resolve(__dirname, "functions", "configuracion");
 
 const getEntries = () => {
   const entries = {};

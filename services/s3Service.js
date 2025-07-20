@@ -474,7 +474,7 @@ async function obtenerDisponiblesPor(cuerpo) {
   } = cuerpo;
   const configuraciones = {};
   const errores = {};
-  const respuesta = [];
+  let respuesta = [];
   const keys = [
     { key: TABLAS.GRADO_KEY, nombre: "grados" },
     { key: TABLAS.MATERIA_KEY, nombre: "materias" },
@@ -584,13 +584,21 @@ async function obtenerDisponiblesPor(cuerpo) {
   }
 
   if (fechaInicio && fechaFin) {
-    profesoresDisponibles = profesoresDisponibles.filter((profesorDisponible) => {
-      return disp.fecha >= fechaInicio && disp.fecha <= fechaFin;
+    profesoresDisponibles = profesoresDisponibles.filter((elemento) => {
+      const { profesorDisponible } = elemento;
+      const { disponible } = profesorDisponible;
+
+      const estaEnFecha =
+        disponible.fecha >= fechaInicio &&
+        disponible.fecha <= fechaFin;
+      console.log(estaEnFecha);
+
+      return estaEnFecha;
     });
   }
-  console.log({ profesoresDisponibles });
 
-  return profesoresDisponibles;
+  respuesta = profesoresDisponibles.map((elemento) => { return  elemento.profesorDisponible.disponible})
+  return respuesta;
 }
 
 module.exports = {

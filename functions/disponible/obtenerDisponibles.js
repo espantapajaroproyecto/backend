@@ -13,7 +13,7 @@ const CAMPOS_REQUERIDOS = [
 
 module.exports.handler = async (event) => {
   const useS3 = process.env.USE_S3 == "true";
-  const cuerpo = JSON.parse(event.body);
+  const cuerpo = event?.body && JSON.parse(event?.body);
 
   const obtenerDispponibles = useS3
     ? s3Service.obtenerDisponibles
@@ -61,7 +61,7 @@ module.exports.handler = async (event) => {
       statusCode: 500,
       body: JSON.stringify(
         {
-          message: "Error al obtener los docentes",
+          message: "Error al obtener los Disponibles",
           error: error.message,
         },
         null,
