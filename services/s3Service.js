@@ -13,8 +13,8 @@ const TABLAS = {
   GRADO_KEY: "grados",
   MATERIA_KEY: "materias",
   TEMA_KEY: "temas",
-  PROFESOR_MATERIA_KEY: "profesor_materia",
   PROFESOR_TIENE_DISPONIBLE_KEY: "profesor_tiene_disponible",
+  PROFESOR_TIENE_MATERIA_KEY: "profesor_tiene_materia",
   AULA_KEY: "aulas",
   PC_KEY: "pcs",
   RESERVA_KEY: "reservas",
@@ -35,13 +35,13 @@ const tablasRelacion = {
   materias: [{ key: "grados", propiedad: "grado_id" }],
   disponibles: [],
   temas: [{ key: "materias", propiedad: "materia_id" }],
-  profesor_materia: [
-    { key: "profesores", propiedad: "usuario_id" },
-    { key: "materias", propiedad: "materia_id" },
-  ],
   profesor_tiene_disponible: [
     { key: "usuarios", propiedad: "usuario_id" },
     { key: "disponibles", propiedad: "disponible_id" },
+  ],
+  profesor_tiene_materia: [
+    { key: "usuarios", propiedad: "usuario_id" },
+    { key: "materias", propiedad: "materia_id" },
   ],
   aulas: [],
   pc: [],
@@ -105,7 +105,7 @@ async function obtener({
     result = data.find((e) => e[propiedad] == valor) || null;
     if (!populate || !tablasRelacion[key]) return result ? { ...result } : null;
   }
-  console.log({ result });
+
   if (!result) {
     return result;
   }
@@ -125,9 +125,12 @@ async function obtener({
   await Promise.allSettled(
     relaciones.map(async ({ key: relatedKey }) => {
       try {
+        // console.log({ relatedKey, key });
+
         const response = await s3
           .getObject({ Bucket: BUCKET, Key: relatedKey + ".json" })
           .promise();
+        // console.log({ response });
 
         const relatedData = JSON.parse(response.Body.toString());
 
@@ -135,13 +138,15 @@ async function obtener({
           relatedData.map((obj) => [obj.id, obj])
         );
       } catch (err) {
+        console.log(err.message);
+
         console.error(`Error cargando ${relatedKey}:`, err); // ✅ debug útil
       }
     })
   );
 
   // Realizar populate
-  console.log({ registros, propiedad });
+
   if (registros) {
   }
   const populated = registros.map((obj) => {
@@ -209,7 +214,6 @@ async function actualizar({ key, propiedad = "id", valor, nuevosValores }) {
       ContentType: "application/json",
     })
     .promise();
-  console.log(JSON.stringify(nuevosDatos));
 
   return { actualizado: true };
 }
@@ -309,7 +313,6 @@ async function agregarReserva(reserva) {
 }
 
 // RESERVAS
-
 async function obtenerReservas() {
   const obtenerParams = {
     key: TABLAS.RESERVA_KEY,
@@ -345,7 +348,6 @@ async function obtenerDocentes() {
     populate: true,
   };
   const docentes = await obtener(obtenerParams);
-  console.log(JSON.stringify(docentes));
 
   obtenerParams.key = TABLAS.PROFESOR_TIENE_DISPONIBLE_KEY;
   const disponiblesDocentes = await obtener(obtenerParams);
@@ -353,18 +355,14 @@ async function obtenerDocentes() {
   obtenerParams.key = TABLAS.PROFESOR_MATERIA_KEY;
   const materiaDocentes = await obtener(obtenerParams);
 
-
   for (let i = 0; i < disponiblesDocentes.length; i++) {
     const disponibleDocente = disponiblesDocentes[i];
     for (let j = 0; j < docentes.length; j++) {
       const docente = docentes[j];
       if (disponibleDocente?.usuario_id == docente?.usuario_id) {
-        console.log({ disponible: disponibleDocente.disponible });
         const { disponible } = disponibleDocente;
         let { disponibles } = docente;
-        console.log(disponible);
-        console.log(disponibles);
-        
+
         if (!disponibles) {
           disponibles = [disponible];
         } else {
@@ -377,7 +375,6 @@ async function obtenerDocentes() {
       }
     }
   }
-  console.log(JSON.stringify(docentes));
 
   return docentes;
 }
@@ -412,7 +409,6 @@ async function modificarDocente(id, camposActualizados) {
 }
 
 // CONFIGURACION
-
 async function obtenerConfiguraciones() {
   try {
     const configuraciones = {};
@@ -422,6 +418,7 @@ async function obtenerConfiguraciones() {
       { key: TABLAS.GRADO_KEY, nombre: "grados" },
       { key: TABLAS.MATERIA_KEY, nombre: "materias" },
       { key: TABLAS.NIVEL_KEY, nombre: "niveles" },
+      { key: TABLAS.TEMA_KEY, nombre: "temas" },
       { key: TABLAS.AULA_KEY, nombre: "aulas" },
       { key: TABLAS.PC_KEY, nombre: "pcs" },
       { key: TABLAS.TEMA_KEY, nombre: "temas" },
@@ -463,6 +460,138 @@ async function obtenerDisponibles() {
   };
   return await obtener(obtenerParams);
 }
+async function obtenerDisponiblesPor(cuerpo) {
+  const {
+    gradoId,
+    fechaInicio,
+    fechaFin,
+    materiaId,
+    temaId,
+    nivelId,
+    profesorId,
+    modalidad,
+    frecuencia,
+  } = cuerpo;
+  const configuraciones = {};
+  const errores = {};
+  const respuesta = [];
+  const keys = [
+    { key: TABLAS.GRADO_KEY, nombre: "grados" },
+    { key: TABLAS.MATERIA_KEY, nombre: "materias" },
+    { key: TABLAS.TEMA_KEY, nombre: "temas" },
+    { key: TABLAS.NIVEL_KEY, nombre: "niveles" },
+    { key: TABLAS.PROFESOR_TIENE_MATERIA_KEY, nombre: "profesoresMaterias" },
+    { key: TABLAS.DISPONIBLE_KEY, nombre: "disponibles" },
+    { key: TABLAS.PROFESOR_KEY, nombre: "profesores" },
+    {
+      key: TABLAS.PROFESOR_TIENE_DISPONIBLE_KEY,
+      nombre: "profesoresDisponibles",
+    },
+  ];
+
+  const promesas = keys.map(({ key }) =>
+    obtener({
+      key,
+      propiedad: null,
+      valor: null,
+      populate: true,
+    })
+  );
+
+  const resultados = await Promise.allSettled(promesas);
+  resultados.forEach((resultado, index) => {
+    const nombre = keys[index].nombre;
+    if (resultado.status === "fulfilled") {
+      configuraciones[nombre] = resultado.value;
+    } else {
+      errores[nombre] = resultado.reason;
+    }
+  });
+
+  const nivelEducativo = configuraciones.niveles.find((nivel) => {
+    return nivel.id == nivelId;
+  });
+
+  const grado = configuraciones.grados.find((grado) => {
+    return grado.id == gradoId;
+  });
+
+  const checkearNivelGrado =
+    nivelEducativo && grado && grado.nivel_id == nivelEducativo.id;
+
+  if (!checkearNivelGrado) {
+    return respuesta;
+  }
+
+  const materia = configuraciones.materias.find((materia) => {
+    return materia.id == materiaId;
+  });
+
+  const checkearMateriaGrado = grado && materia && materia.grado_id == grado.id;
+  if (!checkearMateriaGrado) {
+    return respuesta;
+  }
+
+  const tema = configuraciones.temas.find((tema) => {
+    return tema.id == temaId;
+  });
+
+  const checkearTemaMateria = materia && tema && tema.materia_id == materia.id;
+  if (!checkearTemaMateria) {
+    return respuesta;
+  }
+
+  let profesoresMateria = configuraciones.profesoresMaterias.filter(
+    (profesorMateria) => {
+      return profesorMateria.materia_id == materiaId;
+    }
+  );
+
+  if (profesoresMateria.length == 0) {
+    return respuesta;
+  }
+  if (profesorId) {
+    profesoresMateria = [
+      profesoresMateria.find((profesorMateria) => {
+        return profesorMateria.usuario_id == profesorId;
+      }),
+    ];
+  }
+  console.log({ profesoresMateria });
+
+  let profesoresDisponibles = [];
+  for (let i = 0; i < profesoresMateria.length; i++) {
+    const profesorMateria = profesoresMateria[i];
+    const { usuario_id } = profesorMateria;
+
+    const disponiblesProfesor = [];
+
+    for (let j = 0; j < configuraciones.profesoresDisponibles.length; j++) {
+      const profesorDisponible = configuraciones.profesoresDisponibles[j];
+
+      if (profesorDisponible.usuario_id == usuario_id) {
+        disponiblesProfesor.push({ profesorDisponible, profesorMateria });
+      }
+    }
+
+    if (disponiblesProfesor.length > 0) {
+      profesoresDisponibles.push(...disponiblesProfesor);
+    }
+  }
+
+  if (profesoresDisponibles.length == 0) {
+    return respuesta;
+  }
+
+  if (fechaInicio && fechaFin) {
+    profesoresDisponibles = profesoresDisponibles.filter((profesorDisponible) => {
+      return disp.fecha >= fechaInicio && disp.fecha <= fechaFin;
+    });
+  }
+  console.log({ profesoresDisponibles });
+
+  return profesoresDisponibles;
+}
 
 module.exports = {
   agregarUsuario,
@@ -481,4 +610,5 @@ module.exports = {
   modificarDocente,
   obtenerConfiguraciones,
   obtenerDisponibles,
+  obtenerDisponiblesPor,
 };

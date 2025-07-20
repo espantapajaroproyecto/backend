@@ -6,7 +6,6 @@ module.exports.handler = async (event) => {
   const useS3 = process.env.USE_S3 == "true";
 
   try {
-    console.log();
     // {
     //   gradoId: "2" // gradoId : 2
     //   fechaInicio: "2025-07-18" // opcional
@@ -14,7 +13,7 @@ module.exports.handler = async (event) => {
     //   materiaId: "7"
     //   temaId: "3"
     //   nivelId: "1" // nivelId
-    //   preferenciaDocente: "", // profesorId
+    //   profesorId: "", // profesorId
     //   modalidad: "PRESENCIAL"
     //   frecuencia: "FIJA"
     // }

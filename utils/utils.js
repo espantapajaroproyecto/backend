@@ -29,9 +29,38 @@ const ESTADO_RESERVA = {
   CANCELADA: "CANCELADA",
 };
 
+const MODALIDAD_CLASE = {
+  PRESENCIAL: "PRESENCIAL",
+  VIRTUAL: "VIRTUAL",
+};
+
+const FRECUENCIA_CLASE = {
+  FIJA: "FIJA",
+  PUNTUAL: "PUNTUAL",
+};
+
+const validarCuerpoEvento = (cuerpo, camposRequeridos = []) => {
+  if (camposRequeridos.length == 0) {
+    return false;
+  }
+
+  const camposFaltantes = camposRequeridos.filter(
+    (campo) => !cuerpo[campo] || cuerpo[campo].toString().trim() === ""
+  );
+
+  if (camposFaltantes.length > 0) {
+    return false;
+  }
+
+  return true;
+};
+
 module.exports = {
   validarLoginInput,
   hashPassword,
   compararContrasenias,
+  validarCuerpoEvento,
   ESTADO_RESERVA,
+  MODALIDAD_CLASE,
+  FRECUENCIA_CLASE,
 };

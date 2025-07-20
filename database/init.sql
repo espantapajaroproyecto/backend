@@ -225,6 +225,18 @@ CREATE TABLE profesor_tiene_disponible (
   UNIQUE KEY unique_profesor_disponible (profesor_id, disponible_id)
 ); -- ✅
 
+CREATE TABLE profesor_tiene_materia (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  profesor_id INT NOT NULL,
+  materia_id INT NOT NULL,
+  FOREIGN KEY (profesor_id) REFERENCES profesor(usuario_id),
+  FOREIGN KEY (materia_id) REFERENCES materia(id),
+  UNIQUE KEY unique_profesor_materia (profesor_id, materia_id)
+); -- ✅
+
+INSERT INTO profesor_tiene_materia (profesor_id, materia_id) VALUES
+  (2, 1),
+  (2, 2);
 -- ✅
 
 INSERT INTO reserva (
@@ -295,13 +307,6 @@ CREATE TABLE IF NOT EXISTS tema (
   FOREIGN KEY (materia_id) REFERENCES materia(id)
 );
 
-CREATE TABLE IF NOT EXISTS profesor_materia (
-  profesor_id INT,
-  materia_id INT,
-  PRIMARY KEY (profesor_id, materia_id),
-  FOREIGN KEY (profesor_id) REFERENCES profesor(id),
-  FOREIGN KEY (materia_id) REFERENCES materia(id)
-);
 
 CREATE TABLE IF NOT EXISTS aula (
   id INT AUTO_INCREMENT PRIMARY KEY,
