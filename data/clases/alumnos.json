@@ -1,4 +1,7 @@
 [
-    { "usuario_id": 1, "institucion_id": 1 }
-  ]
-  
+  {
+    "id": 1,
+    "usuario_id": 1,
+    "institucion_id": 1
+  }
+]

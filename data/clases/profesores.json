@@ -1,4 +1,8 @@
 [
-    { "usuario_id": 2, "habilitado": true, "valor_hora": 50.00 }
-  ]
-  
+  {
+    "id": 1,
+    "usuario_id": 2,
+    "habilitado": true,
+    "valor_hora": 50.00
+  }
+]

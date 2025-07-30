@@ -1,21 +1,46 @@
-require('dotenv').config()
-const dbService = require('../../services/dbService');
-const s3Service = require('../../services/s3Service');
+require("dotenv").config();
+const dbService = require("../../services/dbService");
+const s3Service = require("../../services/s3Service");
+const { validarCuerpoEvento } = require("../../utils/utils");
 
-module.exports.handler = async (event) => {  
-  const useS3 = process.env.USE_S3 == 'true';
-  const obtenerReservas = useS3 ? s3Service.obtenerReservas : dbService.obtenerReservas;
+const CAMPOS_REQUERIDOS = ["usuarioId"];
 
+module.exports.handler = async (event) => {
+  const useS3 = process.env.USE_S3 == "true";
+  const cuerpo = event?.body && JSON.parse(event?.body);
+
+  const obtenerReservas = useS3
+    ? s3Service.obtenerReservas
+    : dbService.obtenerReservas;
+
+  const obtenerReservasPorUsuarioId = useS3
+    ? s3Service.obtenerReservasPorUsuarioId
+    : dbService.obtenerReservasPorUsuarioId;
+    
+  if (cuerpo && !validarCuerpoEvento(cuerpo, CAMPOS_REQUERIDOS)) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify(
+        {
+          message: "Error Faltan campos requeridos",
+        },
+        null,
+        2
+      ),
+    };
+  }
   try {
-    const results = await obtenerReservas();
+    const results = !cuerpo
+      ? await obtenerReservas()
+      : await obtenerReservasPorUsuarioId(cuerpo);
 
     return {
       statusCode: 200,
       body: JSON.stringify(
         {
           message: useS3
-            ? 'Reservas cargados desde S3'
-            : 'Reservas cargados desde Aurora',
+            ? "Reservas cargados desde S3"
+            : "Reservas cargados desde Aurora",
           results,
         },
         null,
@@ -23,13 +48,13 @@ module.exports.handler = async (event) => {
       ),
     };
   } catch (error) {
-    console.error('DB error:', error);
+    console.error("DB error:", error);
 
     return {
       statusCode: 500,
       body: JSON.stringify(
         {
-          message: 'Error al obtener los reservas',
+          message: "Error al obtener los reservas",
           error: error.message,
         },
         null,

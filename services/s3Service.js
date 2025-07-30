@@ -1,4 +1,5 @@
 const AWS = require("aws-sdk");
+const { ROLES_BASE } = require("../utils/utils");
 const s3 = new AWS.S3();
 
 const BUCKET = process.env.S3_BUCKET;
@@ -39,19 +40,24 @@ const tablasRelacion = {
     { key: "usuarios", propiedad: "usuario_id" },
     { key: "disponibles", propiedad: "disponible_id" },
   ],
+  alumno_tiene_reserva: [
+    { key: "alumnos", propiedad: "id" },
+    { key: "reservas", propiedad: "reserva_id" },
+  ],
   profesor_tiene_materia: [
-    { key: "usuarios", propiedad: "usuario_id" },
+    { key: "profesores", propiedad: "profesor_id" },
     { key: "materias", propiedad: "materia_id" },
   ],
   aulas: [],
   pc: [],
   reservas: [
-    { key: "profesores", propiedad: "usuario_id" },
+    { key: "profesores", propiedad: "profesor_id" },
     { key: "alumnos", propiedad: "alumno_id" },
     { key: "materias", propiedad: "materia_id" },
     { key: "temas", propiedad: "tema_id" },
     { key: "aulas", propiedad: "aula_id" },
     { key: "pcs", propiedad: "pc_id" },
+    { key: "usuarios", propiedad: "usuario_id" },
   ],
 };
 
@@ -102,7 +108,10 @@ async function obtener({
 
   // Si hay filtro (como obtenerPor), lo aplicamos
   if (propiedad && valor !== null) {
-    result = data.find((e) => e[propiedad] == valor) || null;
+    result =
+      data.filter((e) => {
+        return e[propiedad] == valor;
+      }) || null;
     if (!populate || !tablasRelacion[key]) return result ? { ...result } : null;
   }
 
@@ -125,12 +134,9 @@ async function obtener({
   await Promise.allSettled(
     relaciones.map(async ({ key: relatedKey }) => {
       try {
-        // console.log({ relatedKey, key });
-
         const response = await s3
           .getObject({ Bucket: BUCKET, Key: relatedKey + ".json" })
           .promise();
-        // console.log({ response });
 
         const relatedData = JSON.parse(response.Body.toString());
 
@@ -138,17 +144,11 @@ async function obtener({
           relatedData.map((obj) => [obj.id, obj])
         );
       } catch (err) {
-        console.log(err.message);
-
         console.error(`Error cargando ${relatedKey}:`, err); // ✅ debug útil
       }
     })
   );
 
-  // Realizar populate
-
-  if (registros) {
-  }
   const populated = registros.map((obj) => {
     const newObj = { ...obj };
     relaciones.forEach(({ key: relatedKey, propiedad }) => {
@@ -352,14 +352,16 @@ async function obtenerDocentes() {
   obtenerParams.key = TABLAS.PROFESOR_TIENE_DISPONIBLE_KEY;
   const disponiblesDocentes = await obtener(obtenerParams);
 
-  obtenerParams.key = TABLAS.PROFESOR_MATERIA_KEY;
+  obtenerParams.key = TABLAS.PROFESOR_TIENE_MATERIA_KEY;
   const materiaDocentes = await obtener(obtenerParams);
 
   for (let i = 0; i < disponiblesDocentes.length; i++) {
     const disponibleDocente = disponiblesDocentes[i];
     for (let j = 0; j < docentes.length; j++) {
       const docente = docentes[j];
-      if (disponibleDocente?.usuario_id == docente?.usuario_id) {
+
+      delete docente?.contrasenia;
+      if (disponibleDocente?.usuario_id == docente?.id) {
         const { disponible } = disponibleDocente;
         let { disponibles } = docente;
 
@@ -390,7 +392,7 @@ async function eliminarDocente(id) {
   };
   const eliminarProfesorParams = {
     key: TABLAS.PROFESOR_KEY,
-    propiedad: "usuario_id",
+    propiedad: "id",
     valor: id,
   };
 
@@ -401,7 +403,7 @@ async function eliminarDocente(id) {
 async function modificarDocente(id, camposActualizados) {
   const modificarParams = {
     key: TABLAS.PROFESOR_KEY,
-    propiedad: "usuario_id",
+    propiedad: "id",
     valor: id,
     nuevosValores: camposActualizados,
   };
@@ -460,6 +462,7 @@ async function obtenerDisponibles() {
   };
   return await obtener(obtenerParams);
 }
+
 async function obtenerDisponiblesPor(cuerpo) {
   const {
     gradoId,
@@ -507,6 +510,7 @@ async function obtenerDisponiblesPor(cuerpo) {
       errores[nombre] = resultado.reason;
     }
   });
+  console.log({ configuraciones });
 
   const nivelEducativo = configuraciones.niveles.find((nivel) => {
     return nivel.id == nivelId;
@@ -553,23 +557,24 @@ async function obtenerDisponiblesPor(cuerpo) {
   if (profesorId) {
     profesoresMateria = [
       profesoresMateria.find((profesorMateria) => {
-        return profesorMateria.usuario_id == profesorId;
+        return profesorMateria.id == profesorId;
       }),
     ];
   }
-  console.log({ profesoresMateria });
 
   let profesoresDisponibles = [];
   for (let i = 0; i < profesoresMateria.length; i++) {
     const profesorMateria = profesoresMateria[i];
-    const { usuario_id } = profesorMateria;
+    console.log({ profesorMateria });
+
+    const { id } = profesorMateria;
 
     const disponiblesProfesor = [];
 
     for (let j = 0; j < configuraciones.profesoresDisponibles.length; j++) {
       const profesorDisponible = configuraciones.profesoresDisponibles[j];
 
-      if (profesorDisponible.usuario_id == usuario_id) {
+      if (profesorDisponible.id == id) {
         disponiblesProfesor.push({ profesorDisponible, profesorMateria });
       }
     }
@@ -589,16 +594,54 @@ async function obtenerDisponiblesPor(cuerpo) {
       const { disponible } = profesorDisponible;
 
       const estaEnFecha =
-        disponible.fecha >= fechaInicio &&
-        disponible.fecha <= fechaFin;
-      console.log(estaEnFecha);
+        disponible.fecha >= fechaInicio && disponible.fecha <= fechaFin;
 
       return estaEnFecha;
     });
   }
 
-  respuesta = profesoresDisponibles.map((elemento) => { return  elemento.profesorDisponible.disponible})
+  respuesta = profesoresDisponibles.map((elemento) => {
+    return elemento.profesorDisponible.disponible;
+  });
   return respuesta;
+}
+
+async function obtenerReservasPorUsuarioId(cuerpo) {
+  const { usuarioId } = cuerpo;
+  const reservas = [];
+  try {
+    const obtenerParamsProfesor = {
+      key: TABLAS.RESERVA_KEY,
+      propiedad: "profesor_id",
+      valor: usuarioId,
+      populate: true,
+    };
+
+    const obtenerParamsAlumno = {
+      key: TABLAS.RESERVA_KEY,
+      propiedad: "alumno_id", // ⚠️ probablemente querías usar "alumno_id" aquí
+      valor: usuarioId,
+      populate: true,
+    };
+
+    const [profesorResult, alumnoResult] = await Promise.allSettled([
+      obtener(obtenerParamsProfesor),
+      obtener(obtenerParamsAlumno),
+    ]);
+
+    const reservasProfesor =
+      profesorResult.status === "fulfilled" ? profesorResult.value : [];
+
+    const reservasAlumno =
+      alumnoResult.status === "fulfilled" ? alumnoResult.value : [];
+
+    const reservasTotales = [...reservasProfesor, ...reservasAlumno];
+
+    return reservasTotales.length > 0 ? reservasTotales : [];
+  } catch (error) {
+    console.error("Error al obtener reservas:", error);
+    throw error;
+  }
 }
 
 module.exports = {
@@ -619,4 +662,5 @@ module.exports = {
   obtenerConfiguraciones,
   obtenerDisponibles,
   obtenerDisponiblesPor,
+  obtenerReservasPorUsuarioId,
 };

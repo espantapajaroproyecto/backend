@@ -28,5 +28,15 @@
     "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
     "celular": "1167894323",
     "rol_id": "2"
+  },
+  {
+    "id": 4,
+    "dni": "67890124",
+    "nombre": "Fernanda",
+    "apellido": "Fernández",
+    "mail": "fernanda.fernandez@example.com",
+    "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
+    "celular": "1167894323",
+    "rol_id": "2"
   }
 ]

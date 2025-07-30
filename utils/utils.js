@@ -54,6 +54,11 @@ const validarCuerpoEvento = (cuerpo, camposRequeridos = []) => {
 
   return true;
 };
+const ROLES_BASE = {
+  ALUMNO: "alumno",
+  PROFESOR: "profesor",
+  ADMIN: "admin",
+};
 
 module.exports = {
   validarLoginInput,
@@ -63,4 +68,5 @@ module.exports = {
   ESTADO_RESERVA,
   MODALIDAD_CLASE,
   FRECUENCIA_CLASE,
+  ROLES_BASE,  
 };

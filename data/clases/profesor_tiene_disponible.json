@@ -1,12 +1,12 @@
 [
-  { "usuario_id": 2, "disponible_id": 1 },
-  { "usuario_id": 2, "disponible_id": 2 },
-  { "usuario_id": 2, "disponible_id": 3 },
-  { "usuario_id": 2, "disponible_id": 4 },
-  { "usuario_id": 2, "disponible_id": 5 },
-  { "usuario_id": 2, "disponible_id": 6 },
-  { "usuario_id": 2, "disponible_id": 7 },
-  { "usuario_id": 2, "disponible_id": 8 },
-  { "usuario_id": 2, "disponible_id": 9 },
-  { "usuario_id": 2, "disponible_id": 10 }
+  { "profesor_id": 2, "disponible_id": 1 },
+  { "profesor_id": 2, "disponible_id": 2 },
+  { "profesor_id": 2, "disponible_id": 3 },
+  { "profesor_id": 2, "disponible_id": 4 },
+  { "profesor_id": 2, "disponible_id": 5 },
+  { "profesor_id": 2, "disponible_id": 6 },
+  { "profesor_id": 2, "disponible_id": 7 },
+  { "profesor_id": 2, "disponible_id": 8 },
+  { "profesor_id": 2, "disponible_id": 9 },
+  { "profesor_id": 2, "disponible_id": 10 }
 ]

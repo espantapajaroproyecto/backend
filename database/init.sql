@@ -54,6 +54,7 @@ INSERT INTO institucion_educativa (nombre) VALUES
   ('Ceferino Namuncurá'); -- ✅
 
 CREATE TABLE IF NOT EXISTS profesor (
+  id INT AUTO_INCREMENT PRIMARY KEY,
   usuario_id INT PRIMARY KEY,
   habilitado BOOLEAN NOT NULL DEFAULT TRUE,
   valor_hora DECIMAL(8,2) NOT NULL,
@@ -66,6 +67,7 @@ INSERT INTO profesor (usuario_id, habilitado, valor_hora) VALUES
 -- ✅
 
 CREATE TABLE IF NOT EXISTS alumno (
+  id INT AUTO_INCREMENT PRIMARY KEY,
   usuario_id INT PRIMARY KEY,
   institucion_id INT,
   FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE,
@@ -197,8 +199,8 @@ CREATE TABLE IF NOT EXISTS reserva (
   pc_id INT, -- ✅
   en_instituto BOOLEAN NOT NULL DEFAULT TRUE,
   grupal BOOLEAN NOT NULL DEFAULT FALSE,
-  FOREIGN KEY (profesor_id) REFERENCES profesor(usuario_id),
-  FOREIGN KEY (alumno_id) REFERENCES alumno(usuario_id),
+  FOREIGN KEY (profesor_id) REFERENCES profesor(id),
+  FOREIGN KEY (alumno_id) REFERENCES alumno(id),
   FOREIGN KEY (materia_id) REFERENCES materia(id),
   FOREIGN KEY (tema_id) REFERENCES tema(id),
   FOREIGN KEY (aula_id) REFERENCES aula(id),
@@ -220,7 +222,7 @@ CREATE TABLE profesor_tiene_disponible (
   id INT AUTO_INCREMENT PRIMARY KEY,
   profesor_id INT NOT NULL,
   disponible_id INT NOT NULL,
-  FOREIGN KEY (profesor_id) REFERENCES profesor(usuario_id),
+  FOREIGN KEY (profesor_id) REFERENCES profesor(id),
   FOREIGN KEY (disponible_id) REFERENCES disponible(id),
   UNIQUE KEY unique_profesor_disponible (profesor_id, disponible_id)
 ); -- ✅
@@ -229,10 +231,31 @@ CREATE TABLE profesor_tiene_materia (
   id INT AUTO_INCREMENT PRIMARY KEY,
   profesor_id INT NOT NULL,
   materia_id INT NOT NULL,
-  FOREIGN KEY (profesor_id) REFERENCES profesor(usuario_id),
+  FOREIGN KEY (profesor_id) REFERENCES profesor(id),
   FOREIGN KEY (materia_id) REFERENCES materia(id),
   UNIQUE KEY unique_profesor_materia (profesor_id, materia_id)
 ); -- ✅
+
+CREATE TABLE alumno_tiene_reserva (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  alumno_id INT NOT NULL,
+  reserva_id INT NOT NULL,
+  FOREIGN KEY (alumno_id) REFERENCES alumno(id),
+  FOREIGN KEY (reserva_id) REFERENCES reserva(id),
+  UNIQUE KEY unique_alumno_reserva (alumno_id, reserva_id)
+); --
+
+CREATE TABLE profesor_tiene_reserva (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  profesor_id INT NOT NULL,
+  reserva_id INT NOT NULL,
+  FOREIGN KEY (profesor_id) REFERENCES profesor(profesor_id),
+  FOREIGN KEY (reserva_id) REFERENCES reserva(id),
+  UNIQUE KEY unique_profesor_reserva (profesor_id, reserva_id)
+); --
+
+INSERT INTO alumno_tiene_reserva (alumno_id, reserva_id) VALUES
+  (1, 1);
 
 INSERT INTO profesor_tiene_materia (profesor_id, materia_id) VALUES
   (2, 1),

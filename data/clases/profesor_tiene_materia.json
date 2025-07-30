@@ -1,10 +1,10 @@
 [
   {
-    "usuario_id": 2,
+    "profesor_id": 2,
     "materia_id": 1
   },
   {
-    "usuario_id": 3,
+    "profesor_id": 3,
     "materia_id": 2
   }
 ]
