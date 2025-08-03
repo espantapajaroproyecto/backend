@@ -31,7 +31,7 @@ module.exports.handler = async (event) => {
       };
     }
 
-    const useS3 = process.env.USE_S3 === "true";
+    const useS3 = process.env.USE_S3 == "true";
     const modificarReserva = useS3
       ? s3Service.modificarReserva
       : dbService.modificarReserva;
@@ -53,8 +53,7 @@ module.exports.handler = async (event) => {
     };
 
     const actualizada = await modificarReserva(id, camposActualizados);
-    console.log(actualizada);
-    
+   
 
     return {
       statusCode: 200,

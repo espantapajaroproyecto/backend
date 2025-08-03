@@ -68,7 +68,7 @@
       "fecha_hora": "2025-07-01T10:00:00",
       "tiempo": "01:00:00",
       "profesor_id": 1,
-      "alumno_id": 2,
+      "alumno_id": 1,
       "materia_id": 1,
       "tema_id": 1,
       "aula_id": 1,

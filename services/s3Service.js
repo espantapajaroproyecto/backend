@@ -28,7 +28,6 @@ const tablasRelacion = {
   institucion_educativas: [],
   alumnos: [
     { key: "usuarios", propiedad: "usuario_id" },
-    { key: "instituciones_educativas", propiedad: "usuario_id" },
   ],
   profesores: [{ key: "usuarios", propiedad: "usuario_id" }],
   niveles: [],
@@ -139,7 +138,6 @@ async function obtener({
           .promise();
 
         const relatedData = JSON.parse(response.Body.toString());
-
         relatedDataMap[relatedKey] = Object.fromEntries(
           relatedData.map((obj) => [obj.id, obj])
         );
@@ -320,7 +318,8 @@ async function obtenerReservas() {
     valor: null,
     populate: true,
   };
-  return await obtener(obtenerParams);
+  const reservas = await obtener(obtenerParams)
+  return reservas.length == 0 ? [] : populateReservarAlumnoProfesor(reservas);
 }
 
 async function modificarReserva(id, camposActualizados) {
@@ -547,6 +546,8 @@ async function obtenerDisponiblesPor(cuerpo) {
 
   let profesoresMateria = configuraciones.profesoresMaterias.filter(
     (profesorMateria) => {
+      console.log(profesorMateria);
+
       return profesorMateria.materia_id == materiaId;
     }
   );
@@ -554,27 +555,35 @@ async function obtenerDisponiblesPor(cuerpo) {
   if (profesoresMateria.length == 0) {
     return respuesta;
   }
+  console.log(profesorId);
+
   if (profesorId) {
-    profesoresMateria = [
-      profesoresMateria.find((profesorMateria) => {
-        return profesorMateria.id == profesorId;
-      }),
-    ];
+    const filtradoPorProfesor = profesoresMateria.find((profesorMateria) => {
+      return profesorMateria.profesor_id == profesorId;
+    })
+    console.log({ filtradoPorProfesor });
+    if (filtradoPorProfesor) {
+      profesoresMateria = [filtradoPorProfesor]
+    } else {
+      profesoresMateria = []
+    }
   }
 
   let profesoresDisponibles = [];
+  console.log({ profesoresMateria });
+
   for (let i = 0; i < profesoresMateria.length; i++) {
     const profesorMateria = profesoresMateria[i];
-    console.log({ profesorMateria });
 
-    const { id } = profesorMateria;
+    const { profesor_id } = profesorMateria;
 
     const disponiblesProfesor = [];
 
     for (let j = 0; j < configuraciones.profesoresDisponibles.length; j++) {
       const profesorDisponible = configuraciones.profesoresDisponibles[j];
+      console.log(profesorDisponible);
 
-      if (profesorDisponible.id == id) {
+      if (profesorDisponible.profesor_id == profesor_id) {
         disponiblesProfesor.push({ profesorDisponible, profesorMateria });
       }
     }
@@ -606,20 +615,74 @@ async function obtenerDisponiblesPor(cuerpo) {
   return respuesta;
 }
 
+const populateReservarAlumnoProfesor = async (reservas) => {
+  const respuesta = []
+  for (let i = 0; i < reservas.length; i++) {
+    const reserva = reservas[i];
+    const { profesor, alumno } = reserva
+    const { usuario_id: alumno_usuario_id } = alumno
+    const { usuario_id: profesor_usuario_id } = profesor
+
+    const obtenerUsuarioProfesor = {
+      key: TABLAS.USUARIO_KEY,
+      propiedad: "id",
+      valor: profesor_usuario_id,
+      populate: true,
+    };
+
+    const obtenerUsuarioAlumno = {
+      key: TABLAS.USUARIO_KEY,
+      propiedad: "id", // ⚠️ probablemente querías usar "alumno_id" aquí
+      valor: alumno_usuario_id,
+      populate: true,
+    };
+    const [profesorUsuarioResult, alumnoUsuarioResult] = await Promise.allSettled([
+      obtener(obtenerUsuarioProfesor),
+      obtener(obtenerUsuarioAlumno),
+    ]);
+    console.log({ profesorUsuarioResult, alumnoUsuarioResult });
+
+    const profesorUsuarioData =
+      profesorUsuarioResult.status === "fulfilled" ? profesorUsuarioResult.value : [];
+
+    const alumnoUsuarioData =
+      alumnoUsuarioResult.status === "fulfilled" ? alumnoUsuarioResult.value : [];
+
+    console.log({ alumnoUsuarioData });
+    console.log({ profesorUsuarioData });
+
+
+    if (profesorUsuarioData.length === 1) {
+      const mergedProfesor = { ...profesor, ...profesorUsuarioData[0] }
+      reserva.profesor = mergedProfesor;
+      delete reserva.profesor.contrasenia;
+    }
+
+    if (alumnoUsuarioData.length === 1) {
+      const mergedAlumno = { ...alumno, ...alumnoUsuarioData[0] }
+      console.log(mergedAlumno);
+      reserva.alumno = mergedAlumno;
+      delete reserva.alumno.contrasenia;
+    }
+    respuesta.push(reserva)
+  }
+  return respuesta;
+}
+
 async function obtenerReservasPorUsuarioId(cuerpo) {
   const { usuarioId } = cuerpo;
-  const reservas = [];
+  let reservas = [];
   try {
     const obtenerParamsProfesor = {
-      key: TABLAS.RESERVA_KEY,
-      propiedad: "profesor_id",
+      key: TABLAS.PROFESOR_KEY,
+      propiedad: "usuario_id",
       valor: usuarioId,
       populate: true,
     };
 
     const obtenerParamsAlumno = {
-      key: TABLAS.RESERVA_KEY,
-      propiedad: "alumno_id", // ⚠️ probablemente querías usar "alumno_id" aquí
+      key: TABLAS.ALUMNO_KEY,
+      propiedad: "usuario_id", // ⚠️ probablemente querías usar "alumno_id" aquí
       valor: usuarioId,
       populate: true,
     };
@@ -629,15 +692,35 @@ async function obtenerReservasPorUsuarioId(cuerpo) {
       obtener(obtenerParamsAlumno),
     ]);
 
-    const reservasProfesor =
+    const profesorData =
       profesorResult.status === "fulfilled" ? profesorResult.value : [];
 
-    const reservasAlumno =
+    const alumnoData =
       alumnoResult.status === "fulfilled" ? alumnoResult.value : [];
 
-    const reservasTotales = [...reservasProfesor, ...reservasAlumno];
 
-    return reservasTotales.length > 0 ? reservasTotales : [];
+    if (profesorData.length == 0 && alumnoData.length == 0) {
+      return reservas;
+    }
+    const usuarioEsProfesor = profesorData.length > 0
+    const usuarioEsAlumno = alumnoData.length > 0
+
+    const id = usuarioEsProfesor ? profesorData[0].id : alumnoData[0].id
+    const obtenerReservasUsuaio = {
+      key: TABLAS.RESERVA_KEY,
+      propiedad: usuarioEsProfesor ? "profesor_id" : "alumno_id", // ⚠️ probablemente querías usar "alumno_id" aquí
+      valor: id,
+      populate: true,
+    };
+    const reservarResult = await obtener(obtenerReservasUsuaio)
+
+    if (reservarResult.length == 0) {
+      return reservas
+    }
+    reservas = populateReservarAlumnoProfesor(reservarResult)
+    console.log(reservas);
+
+    return reservas;
   } catch (error) {
     console.error("Error al obtener reservas:", error);
     throw error;
