@@ -12,13 +12,13 @@ module.exports.handler = async (event) => {
 
     const body = JSON.parse(event.body);
     const { dni, contrasenia } = JSON.parse(event.body);
-    const { valid, message } = UTILS.validarLoginInput(usuario, contrasenia);
-    if (!valid) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({ message }),
-      };
-    }
+    // const { valid, message } = UTILS.validarLoginInput(usuario, contrasenia);
+    // if (!valid) {
+    //   return {
+    //     statusCode: 400,
+    //     body: JSON.stringify({ message }),
+    //   };
+    // }
 
     const useS3 = process.env.USE_S3 === "true";
     const obtenerUsuarioPorDNI = useS3

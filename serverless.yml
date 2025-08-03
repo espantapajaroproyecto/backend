@@ -27,6 +27,13 @@ functions:
       include:
         - utils/cargarDataS3.js
   
+  playground:
+    handler: utils/playground.handler
+    package:
+      individually: true
+      include:
+        - utils/playground.js
+  
   lambdaAutorizer:
     handler: functions/auth/lambdaAutorizer.handler
     package:
