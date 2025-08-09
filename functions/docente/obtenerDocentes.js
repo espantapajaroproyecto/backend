@@ -1,13 +1,17 @@
 require('dotenv').config()
 const dbService = require('../../services/dbService');
 const s3Service = require('../../services/s3Service');
+const { validarCuerpoEvento } = require("../../utils/utils");
 
-module.exports.handler = async (event) => {  
+const CAMPOS_REQUERIDOS = ["profesorId"];
+
+module.exports.handler = async (event) => {
   const useS3 = process.env.USE_S3 == 'true';
+  const cuerpo = event?.body && JSON.parse(event?.body);
   const obtenerDocentes = useS3 ? s3Service.obtenerDocentes : dbService.obtenerDocentes;
 
   try {
-    const results = await obtenerDocentes();
+    const results = await obtenerDocentes(cuerpo);
 
     return {
       statusCode: 200,

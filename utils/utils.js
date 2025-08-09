@@ -60,6 +60,10 @@ const ROLES_BASE = {
   ADMIN: "admin",
 };
 
+const obtenerValorSeguro = (result, valorPorDefecto = []) => {
+  return result?.status === "fulfilled" ? result.value : valorPorDefecto;
+}
+
 module.exports = {
   validarLoginInput,
   hashPassword,
@@ -69,4 +73,5 @@ module.exports = {
   MODALIDAD_CLASE,
   FRECUENCIA_CLASE,
   ROLES_BASE,  
+  obtenerValorSeguro
 };

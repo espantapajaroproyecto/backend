@@ -38,5 +38,155 @@
     "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
     "celular": "1167894323",
     "rol_id": "2"
+  },
+  {
+    "id": 5,
+    "dni": "67890111",
+    "nombre": "Gloria",
+    "apellido": "",
+    "mail": "gloria@example.com",
+    "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
+    "celular": "1160001001",
+    "rol_id": 1
+  },
+  {
+    "id": 6,
+    "dni": "67890112",
+    "nombre": "Mariano",
+    "apellido": "",
+    "mail": "mariano@example.com",
+    "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
+    "celular": "1160001002",
+    "rol_id": 1
+  },
+  {
+    "id": 7,
+    "dni": "67890113",
+    "nombre": "Nico",
+    "apellido": "",
+    "mail": "nico@example.com",
+    "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
+    "celular": "1160001003",
+    "rol_id": 1
+  },
+  {
+    "id": 8,
+    "dni": "67890114",
+    "nombre": "Lucas",
+    "apellido": "",
+    "mail": "lucas@example.com",
+    "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
+    "celular": "1160001004",
+    "rol_id": 1
+  },
+  {
+    "id": 9,
+    "dni": "67890115",
+    "nombre": "Meme",
+    "apellido": "",
+    "mail": "meme@example.com",
+    "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
+    "celular": "1160001005",
+    "rol_id": 1
+  },
+  {
+    "id": 10,
+    "dni": "67890116",
+    "nombre": "Bruno",
+    "apellido": "Sivori",
+    "mail": "bruno.sivori@example.com",
+    "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
+    "celular": "1160001006",
+    "rol_id": 1
+  },
+  {
+    "id": 11,
+    "dni": "67890117",
+    "nombre": "Mile",
+    "apellido": "",
+    "mail": "mile@example.com",
+    "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
+    "celular": "1160001007",
+    "rol_id": 1
+  },
+  {
+    "id": 12,
+    "dni": "67890118",
+    "nombre": "Augusto",
+    "apellido": "",
+    "mail": "augusto@example.com",
+    "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
+    "celular": "1160001008",
+    "rol_id": 1
+  },
+  {
+    "id": 13,
+    "dni": "67890119",
+    "nombre": "Camo",
+    "apellido": "",
+    "mail": "camo@example.com",
+    "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
+    "celular": "1160001009",
+    "rol_id": 1
+  },
+  {
+    "id": 14,
+    "dni": "67890120",
+    "nombre": "Myoren",
+    "apellido": "",
+    "mail": "myoren@example.com",
+    "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
+    "celular": "1160001010",
+    "rol_id": 1
+  },
+  {
+    "id": 15,
+    "dni": "67890121",
+    "nombre": "Bianca",
+    "apellido": "",
+    "mail": "bianca@example.com",
+    "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
+    "celular": "1160001011",
+    "rol_id": 1
+  },
+  {
+    "id": 16,
+    "dni": "67890122",
+    "nombre": "Mati",
+    "apellido": "",
+    "mail": "mati@example.com",
+    "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
+    "celular": "1160001012",
+    "rol_id": 1
+  },
+  {
+    "id": 17,
+    "dni": "67890123",
+    "nombre": "Morena",
+    "apellido": "",
+    "mail": "morena@example.com",
+    "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
+    "celular": "1160001013",
+    "rol_id": 1
+  },
+  {
+    "id": 18,
+    "dni": "67890124",
+    "nombre": "Seba",
+    "apellido": "",
+    "mail": "seba@example.com",
+    "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
+    "celular": "1160001014",
+    "rol_id": 1
+  },
+  {
+    "id": 19,
+    "dni": "67890125",
+    "nombre": "Viole",
+    "apellido": "",
+    "mail": "viole@example.com",
+    "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
+    "celular": "1160001015",
+    "rol_id": 1
   }
 ]

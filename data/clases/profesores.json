@@ -4,5 +4,59 @@
     "usuario_id": 2,
     "habilitado": true,
     "valor_hora": 50.00
+  },
+  {
+    "id": 2,
+    "usuario_id": 3,
+    "habilitado": true,
+    "valor_hora": 60.00
+  },
+  {
+    "id": 3,
+    "usuario_id": 4,
+    "habilitado": true,
+    "valor_hora": 55.00
+  },
+  {
+    "id": 4,
+    "usuario_id": 5,
+    "habilitado": true,
+    "valor_hora": 52.50
+  },
+  {
+    "id": 5,
+    "usuario_id": 6,
+    "habilitado": true,
+    "valor_hora": 58.00
+  },
+  {
+    "id": 6,
+    "usuario_id": 7,
+    "habilitado": true,
+    "valor_hora": 65.00
+  },
+  {
+    "id": 7,
+    "usuario_id": 8,
+    "habilitado": true,
+    "valor_hora": 60.00
+  },
+  {
+    "id": 8,
+    "usuario_id": 9,
+    "habilitado": true,
+    "valor_hora": 54.00
+  },
+  {
+    "id": 9,
+    "usuario_id": 10,
+    "habilitado": true,
+    "valor_hora": 56.50
+  },
+  {
+    "id": 10,
+    "usuario_id": 11,
+    "habilitado": true,
+    "valor_hora": 53.00
   }
 ]

@@ -1,10 +1,48 @@
 [
-  {
-    "profesor_id": 2,
-    "materia_id": 1
-  },
-  {
-    "profesor_id": 3,
-    "materia_id": 2
-  }
+  { "profesor_id": 1, "materia_id": 1 },
+  { "profesor_id": 1, "materia_id": 2 },
+  { "profesor_id": 1, "materia_id": 3 },
+
+  { "profesor_id": 2, "materia_id": 4 },
+  { "profesor_id": 2, "materia_id": 5 },
+  { "profesor_id": 2, "materia_id": 6 },
+
+  { "profesor_id": 3, "materia_id": 7 },
+  { "profesor_id": 3, "materia_id": 8 },
+
+  { "profesor_id": 4, "materia_id": 9 },
+  { "profesor_id": 4, "materia_id": 10 },
+
+  { "profesor_id": 5, "materia_id": 11 },
+  { "profesor_id": 5, "materia_id": 12 },
+
+  { "profesor_id": 6, "materia_id": 13 },
+  { "profesor_id": 6, "materia_id": 14 },
+
+  { "profesor_id": 7, "materia_id": 1 },
+  { "profesor_id": 7, "materia_id": 5 },
+
+  { "profesor_id": 8, "materia_id": 2 },
+  { "profesor_id": 8, "materia_id": 4 },
+
+  { "profesor_id": 9, "materia_id": 6 },
+  { "profesor_id": 9, "materia_id": 7 },
+
+  { "profesor_id": 10, "materia_id": 3 },
+  { "profesor_id": 10, "materia_id": 8 },
+
+  { "profesor_id": 11, "materia_id": 9 },
+  { "profesor_id": 11, "materia_id": 10 },
+
+  { "profesor_id": 12, "materia_id": 12 },
+  { "profesor_id": 12, "materia_id": 11 },
+
+  { "profesor_id": 13, "materia_id": 13 },
+  { "profesor_id": 13, "materia_id": 14 },
+
+  { "profesor_id": 14, "materia_id": 1 },
+  { "profesor_id": 14, "materia_id": 4 },
+
+  { "profesor_id": 15, "materia_id": 6 },
+  { "profesor_id": 15, "materia_id": 9 }
 ]

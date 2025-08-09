@@ -3,5 +3,25 @@
     "id": 1,
     "usuario_id": 1,
     "institucion_id": 1
+  },
+  {
+    "id": 2,
+    "usuario_id": 5,
+    "institucion_id": 1
+  },
+  {
+    "id": 3,
+    "usuario_id": 6,
+    "institucion_id": 1
+  },
+  {
+    "id": 4,
+    "usuario_id": 7,
+    "institucion_id": 1
+  },
+  {
+    "id": 5,
+    "usuario_id": 8,
+    "institucion_id": 1
   }
 ]

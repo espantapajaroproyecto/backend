@@ -1,5 +1,5 @@
 const AWS = require("aws-sdk");
-const { ROLES_BASE } = require("../utils/utils");
+const { ROLES_BASE, obtenerValorSeguro } = require("../utils/utils");
 const s3 = new AWS.S3();
 
 const BUCKET = process.env.S3_BUCKET;
@@ -339,43 +339,81 @@ async function eliminarReserva(id) {
 }
 
 // DOCENTES
-async function obtenerDocentes() {
-  const obtenerParams = {
-    key: TABLAS.PROFESOR_KEY,
-    propiedad: null,
-    valor: null,
-    populate: true,
-  };
-  const docentes = await obtener(obtenerParams);
+async function obtenerDocentes(cuerpo = { "profesorId": undefined }) {
+  const { profesorId } = cuerpo;
 
-  obtenerParams.key = TABLAS.PROFESOR_TIENE_DISPONIBLE_KEY;
-  const disponiblesDocentes = await obtener(obtenerParams);
+  let docentes = []
+  const [docentesResult, disponiblesDocentesResult, materiaDocentesResult] = await Promise.allSettled([
+    obtener({
+      key: TABLAS.PROFESOR_KEY,
+      propiedad: null,
+      valor: null,
+      populate: true,
+    }),
+    obtener({
+      key: TABLAS.PROFESOR_TIENE_DISPONIBLE_KEY,
+      propiedad: null,
+      valor: null,
+      populate: true,
+    }),
+    obtener({
+      key: TABLAS.PROFESOR_TIENE_MATERIA_KEY,
+      propiedad: null,
+      valor: null,
+      populate: true,
+    }),
+  ]);
+  console.log({docentesResult});
+  console.log({disponiblesDocentesResult});
+  console.log({materiaDocentesResult});
 
-  obtenerParams.key = TABLAS.PROFESOR_TIENE_MATERIA_KEY;
-  const materiaDocentes = await obtener(obtenerParams);
+  
+  const docentesData = obtenerValorSeguro(docentesResult);
+  const disponibleDocenteData = obtenerValorSeguro(disponiblesDocentesResult);
+  const materiaDocentesData = obtenerValorSeguro(materiaDocentesResult);
+  console.log({docentesData});
+  console.log({disponibleDocenteData});
+  console.log({materiaDocentesData});
 
-  for (let i = 0; i < disponiblesDocentes.length; i++) {
-    const disponibleDocente = disponiblesDocentes[i];
-    for (let j = 0; j < docentes.length; j++) {
-      const docente = docentes[j];
+  if (docentesData.length == 0) {
+    return docentes
+  }
+  for (let i = 0; i < docentesData.length; i++) {
+    const docente = docentesData[i];
 
-      delete docente?.contrasenia;
-      if (disponibleDocente?.usuario_id == docente?.id) {
-        const { disponible } = disponibleDocente;
-        let { disponibles } = docente;
+    const { id } = docente
 
-        if (!disponibles) {
-          disponibles = [disponible];
-        } else {
-          disponibles.push(disponible);
-        }
-        docentes[j] = {
-          ...docente,
-          disponibles,
-        };
+    if (disponibleDocenteData.length > 0) {
+      docente.disponibles = disponibleDocenteData.filter((disponible) => {
+        return disponible.profesor_id == id
       }
+      ).map((elemento) => {
+        return elemento.disponible
+      }
+      )
+    }
+    if (materiaDocentesData.length > 0) {
+      docente.materias = materiaDocentesData.filter((materia) => {
+        return materia.profesor_id == id
+      }
+      ).map((elemento) => {
+        return elemento.materia
+      }
+      )
+    }
+    delete docente.usuario.contrasenia
+
+    if (profesorId && id == profesorId) {
+      console.log("-----------aca");
+      
+      docentes = []
+      docentes.push(docente)
+      break;
+    } else {
+      docentes.push(docente)
     }
   }
+
 
   return docentes;
 }
