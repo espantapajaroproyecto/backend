@@ -26,9 +26,7 @@ const tablasRelacion = {
   roles: [],
   usuarios: [{ key: "roles", propiedad: "rol_id" }],
   institucion_educativas: [],
-  alumnos: [
-    { key: "usuarios", propiedad: "usuario_id" },
-  ],
+  alumnos: [{ key: "usuarios", propiedad: "usuario_id" }],
   profesores: [{ key: "usuarios", propiedad: "usuario_id" }],
   niveles: [],
   grados: [{ key: "niveles", propiedad: "nivel_id" }],
@@ -62,6 +60,8 @@ const tablasRelacion = {
 
 async function agregar(key, dataNueva) {
   try {
+    console.log(`Agregando a ${key}:`, dataNueva);
+    
     const respuesta = await s3
       .getObject({ Bucket: BUCKET, Key: key + ".json" })
       .promise();
@@ -74,8 +74,13 @@ async function agregar(key, dataNueva) {
 
     const maxId = data.reduce((max, d) => (d.id > max ? d.id : max), 0);
     const newId = Number(maxId) + 1;
+    console.log();
+    
     const dataWithId = { id: newId, ...dataNueva };
+    console.log(data);
+    
     data.push(dataWithId);
+    console.log(data);
 
     await s3
       .putObject({
@@ -318,7 +323,7 @@ async function obtenerReservas() {
     valor: null,
     populate: true,
   };
-  const reservas = await obtener(obtenerParams)
+  const reservas = await obtener(obtenerParams);
   return reservas.length == 0 ? [] : populateReservarAlumnoProfesor(reservas);
 }
 
@@ -489,6 +494,111 @@ async function obtenerConfiguraciones() {
   }
 }
 
+async function guardarConfiguraciones(config) {
+  console.log({config});
+  
+  try {
+    // Para cada tipo de configuración presente, agregamos su contenido
+    if (config.niveles && Array.isArray(config.niveles)) {
+      for (const nivel of config.niveles) {
+        await agregar(TABLAS.NIVEL_KEY, nivel);
+      }
+    }
+
+    if (config.grados && Array.isArray(config.grados)) {
+      for (const grado of config.grados) {
+        await agregar(TABLAS.GRADO_KEY, grado);
+      }
+    }
+
+    if (config.materias && Array.isArray(config.materias)) {
+      for (const materia of config.materias) {
+        await agregar(TABLAS.MATERIA_KEY, materia);
+      }
+    }
+
+    if (config.temas && Array.isArray(config.temas)) {
+      for (const tema of config.temas) {
+        await agregar(TABLAS.TEMA_KEY, tema);
+      }
+    }
+
+    if (config.aulas && Array.isArray(config.aulas)) {
+      for (const aula of config.aulas) {
+        console.log(aula);
+        
+        await agregar(TABLAS.AULA_KEY, aula);
+      }
+    }
+
+    if (config.pcs && Array.isArray(config.pcs)) {
+      for (const pc of config.pcs) {
+        await agregar(TABLAS.PC_KEY, pc);
+      }
+    }
+
+    return { message: "Configuraciones guardadas correctamente en S3" };
+  } catch (error) {
+    console.error("Error guardando configuraciones en S3:", error);
+    throw error;
+  }
+}
+
+async function eliminarConfiguraciones(tipo, id) {
+  const keyMap = {
+    niveles: TABLAS.NIVEL_KEY,
+    grados: TABLAS.GRADO_KEY,
+    materias: TABLAS.MATERIA_KEY,
+    temas: TABLAS.TEMA_KEY,
+    aulas: TABLAS.AULA_KEY,
+    pcs: TABLAS.PC_KEY,
+  };
+
+  const eliminarConfiguracion = {
+    key: keyMap[tipo],
+    valor: id,
+  };
+
+  await eliminar(eliminarConfiguracion);
+}
+async function modificarConfiguracion(tipo, id, datosActualizados) {
+  try {
+    const key = `${tipo}.json`;
+
+    // Obtener archivo desde S3
+    const respuesta = await s3
+      .getObject({ Bucket: BUCKET, Key: key })
+      .promise();
+
+    const jsonString = respuesta.Body.toString("utf-8");
+    let items = JSON.parse(jsonString);
+
+    // Buscar índice del elemento
+    const index = items.findIndex(item => item.id === Number(id));
+    if (index === -1) {
+      throw new Error(`No se encontró elemento con ID ${id} en ${tipo}`);
+    }
+
+    // Actualizar el elemento
+    items[index] = { ...items[index], ...datosActualizados };
+
+    // Guardar en S3
+    await s3
+      .putObject({
+        Bucket: BUCKET,
+        Key: key,
+        Body: JSON.stringify(items, null, 2),
+        ContentType: "application/json",
+      })
+      .promise();
+
+    console.log(`Elemento con ID ${id} modificado en ${tipo} en S3`);
+  } catch (error) {
+    console.error(`Error modificando ${tipo} en S3:`, error);
+    throw error;
+  }
+}
+
 // DISPONIBLES
 async function obtenerDisponibles() {
   const obtenerParams = {
@@ -598,12 +708,12 @@ async function obtenerDisponiblesPor(cuerpo) {
   if (profesorId) {
     const filtradoPorProfesor = profesoresMateria.find((profesorMateria) => {
       return profesorMateria.profesor_id == profesorId;
-    })
+    });
     console.log({ filtradoPorProfesor });
     if (filtradoPorProfesor) {
-      profesoresMateria = [filtradoPorProfesor]
+      profesoresMateria = [filtradoPorProfesor];
     } else {
-      profesoresMateria = []
+      profesoresMateria = [];
     }
   }
 
@@ -654,12 +764,12 @@ async function obtenerDisponiblesPor(cuerpo) {
 }
 
 const populateReservarAlumnoProfesor = async (reservas) => {
-  const respuesta = []
+  const respuesta = [];
   for (let i = 0; i < reservas.length; i++) {
     const reserva = reservas[i];
-    const { profesor, alumno } = reserva
-    const { usuario_id: alumno_usuario_id } = alumno
-    const { usuario_id: profesor_usuario_id } = profesor
+    const { profesor, alumno } = reserva;
+    const { usuario_id: alumno_usuario_id } = alumno;
+    const { usuario_id: profesor_usuario_id } = profesor;
 
     const obtenerUsuarioProfesor = {
       key: TABLAS.USUARIO_KEY,
@@ -674,38 +784,42 @@ const populateReservarAlumnoProfesor = async (reservas) => {
       valor: alumno_usuario_id,
       populate: true,
     };
-    const [profesorUsuarioResult, alumnoUsuarioResult] = await Promise.allSettled([
-      obtener(obtenerUsuarioProfesor),
-      obtener(obtenerUsuarioAlumno),
-    ]);
+    const [profesorUsuarioResult, alumnoUsuarioResult] =
+      await Promise.allSettled([
+        obtener(obtenerUsuarioProfesor),
+        obtener(obtenerUsuarioAlumno),
+      ]);
     console.log({ profesorUsuarioResult, alumnoUsuarioResult });
 
     const profesorUsuarioData =
-      profesorUsuarioResult.status === "fulfilled" ? profesorUsuarioResult.value : [];
+      profesorUsuarioResult.status === "fulfilled"
+        ? profesorUsuarioResult.value
+        : [];
 
     const alumnoUsuarioData =
-      alumnoUsuarioResult.status === "fulfilled" ? alumnoUsuarioResult.value : [];
+      alumnoUsuarioResult.status === "fulfilled"
+        ? alumnoUsuarioResult.value
+        : [];
 
     console.log({ alumnoUsuarioData });
     console.log({ profesorUsuarioData });
 
-
     if (profesorUsuarioData.length === 1) {
-      const mergedProfesor = { ...profesor, ...profesorUsuarioData[0] }
+      const mergedProfesor = { ...profesor, ...profesorUsuarioData[0] };
       reserva.profesor = mergedProfesor;
       delete reserva.profesor.contrasenia;
     }
 
     if (alumnoUsuarioData.length === 1) {
-      const mergedAlumno = { ...alumno, ...alumnoUsuarioData[0] }
+      const mergedAlumno = { ...alumno, ...alumnoUsuarioData[0] };
       console.log(mergedAlumno);
       reserva.alumno = mergedAlumno;
       delete reserva.alumno.contrasenia;
     }
-    respuesta.push(reserva)
+    respuesta.push(reserva);
   }
   return respuesta;
-}
+};
 
 async function obtenerReservasPorUsuarioId(cuerpo) {
   const { usuarioId } = cuerpo;
@@ -736,26 +850,25 @@ async function obtenerReservasPorUsuarioId(cuerpo) {
     const alumnoData =
       alumnoResult.status === "fulfilled" ? alumnoResult.value : [];
 
-
     if (profesorData.length == 0 && alumnoData.length == 0) {
       return reservas;
     }
-    const usuarioEsProfesor = profesorData.length > 0
-    const usuarioEsAlumno = alumnoData.length > 0
+    const usuarioEsProfesor = profesorData.length > 0;
+    const usuarioEsAlumno = alumnoData.length > 0;
 
-    const id = usuarioEsProfesor ? profesorData[0].id : alumnoData[0].id
+    const id = usuarioEsProfesor ? profesorData[0].id : alumnoData[0].id;
     const obtenerReservasUsuaio = {
       key: TABLAS.RESERVA_KEY,
       propiedad: usuarioEsProfesor ? "profesor_id" : "alumno_id", // ⚠️ probablemente querías usar "alumno_id" aquí
       valor: id,
       populate: true,
     };
-    const reservarResult = await obtener(obtenerReservasUsuaio)
+    const reservarResult = await obtener(obtenerReservasUsuaio);
 
     if (reservarResult.length == 0) {
-      return reservas
+      return reservas;
     }
-    reservas = populateReservarAlumnoProfesor(reservarResult)
+    reservas = populateReservarAlumnoProfesor(reservarResult);
     console.log(reservas);
 
     return reservas;
@@ -784,4 +897,7 @@ module.exports = {
   obtenerDisponibles,
   obtenerDisponiblesPor,
   obtenerReservasPorUsuarioId,
+  guardarConfiguraciones,
+  eliminarConfiguraciones,
+  modificarConfiguracion
 };

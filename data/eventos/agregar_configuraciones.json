@@ -1,0 +1,3 @@
+{
+  "body": "{\"materias\":[{\"nombre\":\"Castellano/Lengua\",\"grado_id\":1,\"habilitado\":true}],\"temas\":[{\"nombre\":\"Análisis sintáctico\",\"materia_id\":1}],\"aulas\":[{\"numero\":1010,\"nombre\":\"Aula 10\",\"disponible\":true}]}"
+}

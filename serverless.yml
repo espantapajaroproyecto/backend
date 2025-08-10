@@ -1,5 +1,5 @@
 service: aws-node-http-api-project
-frameworkVersion: '3.40.0'
+frameworkVersion: "3.40.0"
 
 provider:
   name: aws
@@ -7,15 +7,12 @@ provider:
   region: us-east-1
   stage: dev
 
-package:   
+package:
   individually: true
-
 
 functions:
   helloWorld:
     handler: index.handler
-   
-        
 
   usuarioLogin:
     handler: functions/login/usuarioLogin.handler
@@ -26,14 +23,14 @@ functions:
       individually: true
       include:
         - utils/cargarDataS3.js
-  
+
   playground:
     handler: utils/playground.handler
     package:
       individually: true
       include:
         - utils/playground.js
-  
+
   lambdaAutorizer:
     handler: functions/auth/lambdaAutorizer.handler
     package:
@@ -41,7 +38,7 @@ functions:
       include:
         - functions/auth/lambdaAutorizer.js
 
-#  USUARIOS
+  #  USUARIOS
   agregarUsuario:
     handler: functions/usuario/agregarUsuario.handler
     package:
@@ -52,7 +49,7 @@ functions:
   obtenerUsuarios:
     handler: functions/usuario/obtenerUsuarios.handler
 
-#  RESERVAS
+  #  RESERVAS
   agregarReserva:
     handler: functions/reserva/agregarReserva.handler
     package:
@@ -66,7 +63,7 @@ functions:
       individually: true
       include:
         - functions/reserva/obtenerReservas.js
-  
+
   modificarReserva:
     handler: functions/reserva/modificarReserva.handler
     package:
@@ -81,7 +78,7 @@ functions:
       include:
         - functions/reserva/eliminarReserva.js
 
-#  DOCENTE
+  #  DOCENTE
   agregarDocente:
     handler: functions/docente/agregarDocente.handler
     package:
@@ -95,7 +92,7 @@ functions:
       individually: true
       include:
         - functions/docente/obtenerDocentes.js
-  
+
   modificarDocente:
     handler: functions/docente/modificarDocente.handler
     package:
@@ -109,15 +106,36 @@ functions:
       individually: true
       include:
         - functions/docente/eliminarDocente.js
-#  CONFIGURACIONES
+  #  CONFIGURACIONES
   obtenerConfiguraciones:
-      handler: functions/configuracion/obtenerConfiguraciones.handler
-      package:
-        individually: true
-        include:
-          - functions/configuracion/obtenerConfiguraciones.js
+    handler: functions/configuracion/obtenerConfiguraciones.handler
+    package:
+      individually: true
+      include:
+        - functions/configuracion/obtenerConfiguraciones.js
 
-# DISPONIBLES
+  agregarConfiguraciones:
+    handler: functions/configuracion/agregarConfiguraciones.handler
+    package:
+      individually: true
+      include:
+        - functions/configuracion/agregarConfiguraciones.js
+
+  modificarConfiguraciones:
+    handler: functions/configuracion/modificarConfiguraciones.handler
+    package:
+      individually: true
+      include:
+        - functions/configuracion/modificarConfiguraciones.js
+
+  eliminarConfiguraciones:
+    handler: functions/configuracion/eliminarConfiguraciones.handler
+    package:
+      individually: true
+      include:
+        - functions/configuracion/eliminarConfiguraciones.js
+
+  # DISPONIBLES
   obtenerDisponibles:
     handler: functions/disponible/obtenerDisponibles.handler
     package:
@@ -130,4 +148,4 @@ functions:
     package:
       individually: true
       include:
-        - functions/disponible/obtenerDisponiblesPor.js          
+        - functions/disponible/obtenerDisponiblesPor.js
