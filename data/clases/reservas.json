@@ -10,7 +10,7 @@
     "aula_id": 1,
     "estado": "PENDIENTE",
     "observaciones": "Primera clase de fracciones.",
-    "modalidad": true,
+    "es_presencial": true,
     "pc_id": 1,
     "en_instituto": true,
     "grupal": false
@@ -26,7 +26,7 @@
     "aula_id": 2,
     "estado": "PENDIENTE",
     "observaciones": "Repaso de geometría básica.",
-    "modalidad": true,
+    "es_presencial": true,
     "pc_id": 2,
     "en_instituto": false,
     "grupal": false
@@ -42,7 +42,7 @@
     "aula_id": 3,
     "estado": "PENDIENTE",
     "observaciones": "Introducción a álgebra.",
-    "modalidad": true,
+    "es_presencial": true,
     "pc_id": 3,
     "en_instituto": true,
     "grupal": false
@@ -58,7 +58,7 @@
     "aula_id": 4,
     "estado": "PENDIENTE",
     "observaciones": "Práctica de problemas con porcentajes.",
-    "modalidad": true,
+    "es_presencial": true,
     "pc_id": 4,
     "en_instituto": true,
     "grupal": false
@@ -74,7 +74,7 @@
     "aula_id": 5,
     "estado": "PENDIENTE",
     "observaciones": "Revisión previa a examen.",
-    "modalidad": true,
+    "es_presencial": true,
     "pc_id": 5,
     "en_instituto": false,
     "grupal": false

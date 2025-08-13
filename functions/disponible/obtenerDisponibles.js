@@ -7,7 +7,7 @@ const CAMPOS_REQUERIDOS = [
   "materiaId",
   "temaId",
   "nivelId",
-  "modalidad",
+  "es_presencial",
   "frecuencia",
 ];
 

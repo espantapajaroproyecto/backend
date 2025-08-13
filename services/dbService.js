@@ -82,7 +82,7 @@ async function agregarReserva(reserva) {
   const connection = await mysql.createConnection(connectionConfig);
   try {
     const sql = `INSERT INTO reserva 
-      (fecha_hora, tiempo, profesor_id, alumno_id, materia_id, tema_id, aula_id, estado, observaciones, modalidad, pc_id, en_instituto, grupal)
+      (fecha_hora, tiempo, profesor_id, alumno_id, materia_id, tema_id, aula_id, estado, observaciones, es_presencial, pc_id, en_instituto, grupal)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
     const values = [
       reserva.fecha_hora,
@@ -94,7 +94,7 @@ async function agregarReserva(reserva) {
       reserva.aula_id,
       reserva.estado || "PENDIENTE",
       reserva.observaciones || null,
-      reserva.modalidad !== undefined ? reserva.modalidad : true,
+      reserva.es_presencial !== undefined ? reserva.es_presencial : true,
       reserva.pc_id || null,
       reserva.en_instituto !== undefined ? reserva.en_instituto : true,
       reserva.grupal !== undefined ? reserva.grupal : false,

@@ -34,7 +34,7 @@ const tablasRelacion = {
   disponibles: [],
   temas: [{ key: "materias", propiedad: "materia_id" }],
   profesor_tiene_disponible: [
-    { key: "usuarios", propiedad: "usuario_id" },
+    { key: "profesores", propiedad: "profesor_id" },
     { key: "disponibles", propiedad: "disponible_id" },
   ],
   alumno_tiene_reserva: [
@@ -61,7 +61,7 @@ const tablasRelacion = {
 async function agregar(key, dataNueva) {
   try {
     console.log(`Agregando a ${key}:`, dataNueva);
-    
+
     const respuesta = await s3
       .getObject({ Bucket: BUCKET, Key: key + ".json" })
       .promise();
@@ -75,10 +75,10 @@ async function agregar(key, dataNueva) {
     const maxId = data.reduce((max, d) => (d.id > max ? d.id : max), 0);
     const newId = Number(maxId) + 1;
     console.log();
-    
+
     const dataWithId = { id: newId, ...dataNueva };
     console.log(data);
-    
+
     data.push(dataWithId);
     console.log(data);
 
@@ -344,81 +344,80 @@ async function eliminarReserva(id) {
 }
 
 // DOCENTES
-async function obtenerDocentes(cuerpo = { "profesorId": undefined }) {
+async function obtenerDocentes(cuerpo = { profesorId: undefined }) {
   const { profesorId } = cuerpo;
 
-  let docentes = []
-  const [docentesResult, disponiblesDocentesResult, materiaDocentesResult] = await Promise.allSettled([
-    obtener({
-      key: TABLAS.PROFESOR_KEY,
-      propiedad: null,
-      valor: null,
-      populate: true,
-    }),
-    obtener({
-      key: TABLAS.PROFESOR_TIENE_DISPONIBLE_KEY,
-      propiedad: null,
-      valor: null,
-      populate: true,
-    }),
-    obtener({
-      key: TABLAS.PROFESOR_TIENE_MATERIA_KEY,
-      propiedad: null,
-      valor: null,
-      populate: true,
-    }),
-  ]);
-  console.log({docentesResult});
-  console.log({disponiblesDocentesResult});
-  console.log({materiaDocentesResult});
+  let docentes = [];
+  const [docentesResult, disponiblesDocentesResult, materiaDocentesResult] =
+    await Promise.allSettled([
+      obtener({
+        key: TABLAS.PROFESOR_KEY,
+        propiedad: null,
+        valor: null,
+        populate: true,
+      }),
+      obtener({
+        key: TABLAS.PROFESOR_TIENE_DISPONIBLE_KEY,
+        propiedad: null,
+        valor: null,
+        populate: true,
+      }),
+      obtener({
+        key: TABLAS.PROFESOR_TIENE_MATERIA_KEY,
+        propiedad: null,
+        valor: null,
+        populate: true,
+      }),
+    ]);
+  console.log({ docentesResult });
+  console.log({ disponiblesDocentesResult });
+  console.log({ materiaDocentesResult });
 
-  
   const docentesData = obtenerValorSeguro(docentesResult);
   const disponibleDocenteData = obtenerValorSeguro(disponiblesDocentesResult);
   const materiaDocentesData = obtenerValorSeguro(materiaDocentesResult);
-  console.log({docentesData});
-  console.log({disponibleDocenteData});
-  console.log({materiaDocentesData});
+  console.log({ docentesData });
+  console.log({ disponibleDocenteData });
+  console.log({ materiaDocentesData });
 
   if (docentesData.length == 0) {
-    return docentes
+    return docentes;
   }
   for (let i = 0; i < docentesData.length; i++) {
     const docente = docentesData[i];
 
-    const { id } = docente
+    const { id } = docente;
 
     if (disponibleDocenteData.length > 0) {
-      docente.disponibles = disponibleDocenteData.filter((disponible) => {
-        return disponible.profesor_id == id
-      }
-      ).map((elemento) => {
-        return elemento.disponible
-      }
-      )
+      docente.disponibles = disponibleDocenteData
+        .filter((disponible) => {
+          return disponible.profesor_id == id;
+        })
+        .map((elemento) => {
+          return elemento.disponible;
+        });
     }
     if (materiaDocentesData.length > 0) {
-      docente.materias = materiaDocentesData.filter((materia) => {
-        return materia.profesor_id == id
-      }
-      ).map((elemento) => {
-        return elemento.materia
-      }
-      )
+      docente.materias = materiaDocentesData
+        .filter((materia) => {
+          return materia.profesor_id == id;
+        })
+        .map((elemento) => {
+          return elemento.materia;
+        });
     }
-    delete docente.usuario.contrasenia
+    delete docente.usuario.contrasenia;
 
     if (profesorId && id == profesorId) {
       console.log("-----------aca");
-      
-      docentes = []
-      docentes.push(docente)
+
+      docentes = [];
+      docentes.push(docente);
       break;
     } else {
-      docentes.push(docente)
+      docentes.push(docente);
     }
   }
-
 
   return docentes;
 }
@@ -495,8 +494,8 @@ async function obtenerConfiguraciones() {
 }
 
 async function guardarConfiguraciones(config) {
-  console.log({config});
-  
+  console.log({ config });
+
   try {
     // Para cada tipo de configuración presente, agregamos su contenido
     if (config.niveles && Array.isArray(config.niveles)) {
@@ -526,7 +525,7 @@ async function guardarConfiguraciones(config) {
     if (config.aulas && Array.isArray(config.aulas)) {
       for (const aula of config.aulas) {
         console.log(aula);
-        
+
         await agregar(TABLAS.AULA_KEY, aula);
       }
     }
@@ -574,7 +573,7 @@ async function modificarConfiguracion(tipo, id, datosActualizados) {
     let items = JSON.parse(jsonString);
 
     // Buscar índice del elemento
-    const index = items.findIndex(item => item.id === Number(id));
+    const index = items.findIndex((item) => item.id === Number(id));
     if (index === -1) {
       throw new Error(`No se encontró elemento con ID ${id} en ${tipo}`);
     }
@@ -601,13 +600,44 @@ async function modificarConfiguracion(tipo, id, datosActualizados) {
 
 // DISPONIBLES
 async function obtenerDisponibles() {
-  const obtenerParams = {
-    key: TABLAS.DISPONIBLE_KEY,
+  const obtenerProfesoresParams = {
+    key: TABLAS.PROFESOR_KEY,
     propiedad: null,
     valor: null,
     populate: true,
   };
-  return await obtener(obtenerParams);
+
+  const obtenerProfesorDisponibles = {
+    key: TABLAS.PROFESOR_TIENE_DISPONIBLE_KEY,
+    propiedad: null,
+    valor: null,
+    populate: true,
+  };
+
+  const [profesoresResult, profesorDisponibleResult] = await Promise.allSettled(
+    [obtener(obtenerProfesoresParams), obtener(obtenerProfesorDisponibles)]
+  );
+
+  const profesoresData = obtenerValorSeguro(profesoresResult).map(
+    (elemento) => {
+      const { usuario, id: profesor_id } = elemento;
+      delete usuario.contrasenia;
+      delete usuario.id;
+      delete elemento.usuario;
+      return { ...elemento, ...usuario, profesor_id };
+    }
+  );
+  const profesorDisponibleData = obtenerValorSeguro(
+    profesorDisponibleResult
+  ).map((elemento) => {
+    let { disponible, profesor } = elemento;
+    profesor = profesoresData.find((profesor) => {
+      return profesor.id == elemento.profesor_id;
+    });
+    return { disponible, profesor };
+  });
+
+  return profesorDisponibleData;
 }
 
 async function obtenerDisponiblesPor(cuerpo) {
@@ -619,7 +649,7 @@ async function obtenerDisponiblesPor(cuerpo) {
     temaId,
     nivelId,
     profesorId,
-    modalidad,
+    es_presencial,
     frecuencia,
   } = cuerpo;
   const configuraciones = {};
@@ -657,7 +687,6 @@ async function obtenerDisponiblesPor(cuerpo) {
       errores[nombre] = resultado.reason;
     }
   });
-  console.log({ configuraciones });
 
   const nivelEducativo = configuraciones.niveles.find((nivel) => {
     return nivel.id == nivelId;
@@ -695,7 +724,6 @@ async function obtenerDisponiblesPor(cuerpo) {
   let profesoresMateria = configuraciones.profesoresMaterias.filter(
     (profesorMateria) => {
       console.log(profesorMateria);
-
       return profesorMateria.materia_id == materiaId;
     }
   );
@@ -703,13 +731,10 @@ async function obtenerDisponiblesPor(cuerpo) {
   if (profesoresMateria.length == 0) {
     return respuesta;
   }
-  console.log(profesorId);
-
   if (profesorId) {
     const filtradoPorProfesor = profesoresMateria.find((profesorMateria) => {
       return profesorMateria.profesor_id == profesorId;
     });
-    console.log({ filtradoPorProfesor });
     if (filtradoPorProfesor) {
       profesoresMateria = [filtradoPorProfesor];
     } else {
@@ -718,19 +743,12 @@ async function obtenerDisponiblesPor(cuerpo) {
   }
 
   let profesoresDisponibles = [];
-  console.log({ profesoresMateria });
-
   for (let i = 0; i < profesoresMateria.length; i++) {
     const profesorMateria = profesoresMateria[i];
-
     const { profesor_id } = profesorMateria;
-
     const disponiblesProfesor = [];
-
     for (let j = 0; j < configuraciones.profesoresDisponibles.length; j++) {
       const profesorDisponible = configuraciones.profesoresDisponibles[j];
-      console.log(profesorDisponible);
-
       if (profesorDisponible.profesor_id == profesor_id) {
         disponiblesProfesor.push({ profesorDisponible, profesorMateria });
       }
@@ -758,7 +776,7 @@ async function obtenerDisponiblesPor(cuerpo) {
   }
 
   respuesta = profesoresDisponibles.map((elemento) => {
-    return elemento.profesorDisponible.disponible;
+    return elemento.profesorDisponible;
   });
   return respuesta;
 }
@@ -899,5 +917,5 @@ module.exports = {
   obtenerReservasPorUsuarioId,
   guardarConfiguraciones,
   eliminarConfiguraciones,
-  modificarConfiguracion
+  modificarConfiguracion,
 };

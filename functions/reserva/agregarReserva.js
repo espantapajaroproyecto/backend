@@ -18,7 +18,7 @@ module.exports.handler = async (event) => {
       aula_id,
       estado = ESTADO_RESERVA.PEDIENTE,
       observaciones = "",
-      modalidad,
+      es_presencial,
       pc_id,
       en_instituto,
       grupal,
@@ -33,7 +33,7 @@ module.exports.handler = async (event) => {
       !materia_id ||
       !tema_id ||
       !aula_id ||
-      modalidad === undefined ||
+      es_presencial === undefined ||
       en_instituto === undefined ||
       grupal === undefined ||
       !pc_id
@@ -59,7 +59,7 @@ module.exports.handler = async (event) => {
       aula_id,
       estado,
       observaciones,
-      modalidad,
+      es_presencial,
       pc_id,
       en_instituto,
       grupal,

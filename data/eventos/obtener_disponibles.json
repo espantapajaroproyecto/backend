@@ -1,3 +1,3 @@
 {
-  "body": "{\"gradoId\":\"1\",\"materiaId\":\"1\",\"temaId\":\"1\",\"nivelId\":\"1\",\"profesorId\":\"1\",\"modalidad\":\"PRESENCIAL\",\"frecuencia\":\"FIJA\",\"fechaInicio\":\"2025-07-18\",\"fechaFin\":\"2025-07-30\"}"
+  "body": "{\"gradoId\":\"1\",\"materiaId\":\"1\",\"temaId\":\"1\",\"nivelId\":\"1\",\"profesorId\":\"1\",\"es_presencial\":\"true\",\"frecuencia\":\"FIJA\",\"fechaInicio\":\"2025-07-18\",\"fechaFin\":\"2025-07-30\"}"
 }

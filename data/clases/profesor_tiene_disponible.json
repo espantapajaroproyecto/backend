@@ -1,56 +1,190 @@
 [
-  { "profesor_id": 1, "disponible_id": 1 },
-  { "profesor_id": 1, "disponible_id": 2 },
-  { "profesor_id": 1, "disponible_id": 3 },
-  { "profesor_id": 1, "disponible_id": 4 },
-  { "profesor_id": 1, "disponible_id": 5 },
-  { "profesor_id": 1, "disponible_id": 6 },
-  { "profesor_id": 1, "disponible_id": 7 },
-  { "profesor_id": 1, "disponible_id": 8 },
-  { "profesor_id": 1, "disponible_id": 9 },
-  { "profesor_id": 1, "disponible_id": 10 },
-
-  { "profesor_id": 2, "disponible_id": 2 },
-  { "profesor_id": 2, "disponible_id": 5 },
-  { "profesor_id": 2, "disponible_id": 6 },
-  { "profesor_id": 2, "disponible_id": 9 },
-  { "profesor_id": 2, "disponible_id": 10 },
-
-  { "profesor_id": 3, "disponible_id": 1 },
-  { "profesor_id": 3, "disponible_id": 3 },
-  { "profesor_id": 3, "disponible_id": 4 },
-  { "profesor_id": 3, "disponible_id": 7 },
-  { "profesor_id": 3, "disponible_id": 10 },
-
-  { "profesor_id": 4, "disponible_id": 1 },
-  { "profesor_id": 4, "disponible_id": 2 },
-  { "profesor_id": 4, "disponible_id": 6 },
-  { "profesor_id": 4, "disponible_id": 9 },
-  { "profesor_id": 4, "disponible_id": 10 },
-
-  { "profesor_id": 5, "disponible_id": 3 },
-  { "profesor_id": 5, "disponible_id": 4 },
-  { "profesor_id": 5, "disponible_id": 5 },
-  { "profesor_id": 5, "disponible_id": 7 },
-  { "profesor_id": 5, "disponible_id": 8 },
-
-  { "profesor_id": 6, "disponible_id": 2 },
-  { "profesor_id": 6, "disponible_id": 3 },
-  { "profesor_id": 6, "disponible_id": 6 },
-  { "profesor_id": 6, "disponible_id": 8 },
-  { "profesor_id": 6, "disponible_id": 9 },
-
-  { "profesor_id": 7, "disponible_id": 1 },
-  { "profesor_id": 7, "disponible_id": 4 },
-  { "profesor_id": 7, "disponible_id": 5 },
-  { "profesor_id": 7, "disponible_id": 7 },
-  { "profesor_id": 7, "disponible_id": 9 },
-
-  { "profesor_id": 8, "disponible_id": 1 },
-  { "profesor_id": 8, "disponible_id": 3 },
-  { "profesor_id": 8, "disponible_id": 6 },
-  { "profesor_id": 8, "disponible_id": 7 },
-  { "profesor_id": 8, "disponible_id": 10 },
-
-  { "profesor_id": 9, "disponible_id": 2 },
-  { "profesor_id": 9, "disponible_id": 3 },
+  {
+    "profesor_id": 1,
+    "disponible_id": 1
+  },
+  {
+    "profesor_id": 1,
+    "disponible_id": 2
+  },
+  {
+    "profesor_id": 1,
+    "disponible_id": 3
+  },
+  {
+    "profesor_id": 1,
+    "disponible_id": 4
+  },
+  {
+    "profesor_id": 1,
+    "disponible_id": 5
+  },
+  {
+    "profesor_id": 1,
+    "disponible_id": 6
+  },
+  {
+    "profesor_id": 1,
+    "disponible_id": 7
+  },
+  {
+    "profesor_id": 1,
+    "disponible_id": 8
+  },
+  {
+    "profesor_id": 1,
+    "disponible_id": 9
+  },
+  {
+    "profesor_id": 1,
+    "disponible_id": 10
+  },
+  {
+    "profesor_id": 2,
+    "disponible_id": 2
+  },
+  {
+    "profesor_id": 2,
+    "disponible_id": 5
+  },
+  {
+    "profesor_id": 2,
+    "disponible_id": 6
+  },
+  {
+    "profesor_id": 2,
+    "disponible_id": 9
+  },
+  {
+    "profesor_id": 2,
+    "disponible_id": 10
+  },
+  {
+    "profesor_id": 3,
+    "disponible_id": 1
+  },
+  {
+    "profesor_id": 3,
+    "disponible_id": 3
+  },
+  {
+    "profesor_id": 3,
+    "disponible_id": 4
+  },
+  {
+    "profesor_id": 3,
+    "disponible_id": 7
+  },
+  {
+    "profesor_id": 3,
+    "disponible_id": 10
+  },
+  {
+    "profesor_id": 4,
+    "disponible_id": 1
+  },
+  {
+    "profesor_id": 4,
+    "disponible_id": 2
+  },
+  {
+    "profesor_id": 4,
+    "disponible_id": 6
+  },
+  {
+    "profesor_id": 4,
+    "disponible_id": 9
+  },
+  {
+    "profesor_id": 4,
+    "disponible_id": 10
+  },
+  {
+    "profesor_id": 5,
+    "disponible_id": 3
+  },
+  {
+    "profesor_id": 5,
+    "disponible_id": 4
+  },
+  {
+    "profesor_id": 5,
+    "disponible_id": 5
+  },
+  {
+    "profesor_id": 5,
+    "disponible_id": 7
+  },
+  {
+    "profesor_id": 5,
+    "disponible_id": 8
+  },
+  {
+    "profesor_id": 6,
+    "disponible_id": 2
+  },
+  {
+    "profesor_id": 6,
+    "disponible_id": 3
+  },
+  {
+    "profesor_id": 6,
+    "disponible_id": 6
+  },
+  {
+    "profesor_id": 6,
+    "disponible_id": 8
+  },
+  {
+    "profesor_id": 6,
+    "disponible_id": 9
+  },
+  {
+    "profesor_id": 7,
+    "disponible_id": 1
+  },
+  {
+    "profesor_id": 7,
+    "disponible_id": 4
+  },
+  {
+    "profesor_id": 7,
+    "disponible_id": 5
+  },
+  {
+    "profesor_id": 7,
+    "disponible_id": 7
+  },
+  {
+    "profesor_id": 7,
+    "disponible_id": 9
+  },
+  {
+    "profesor_id": 8,
+    "disponible_id": 1
+  },
+  {
+    "profesor_id": 8,
+    "disponible_id": 3
+  },
+  {
+    "profesor_id": 8,
+    "disponible_id": 6
+  },
+  {
+    "profesor_id": 8,
+    "disponible_id": 7
+  },
+  {
+    "profesor_id": 8,
+    "disponible_id": 10
+  },
+  {
+    "profesor_id": 9,
+    "disponible_id": 2
+  },
+  {
+    "profesor_id": 9,
+    "disponible_id": 3
+  }
+]

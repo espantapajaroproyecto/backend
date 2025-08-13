@@ -195,7 +195,7 @@ CREATE TABLE IF NOT EXISTS reserva (
   aula_id INT,  -- ✅
   estado ENUM('PENDIENTE','CONFIRMADA','CANCELADA') NOT NULL DEFAULT 'PENDIENTE',
   observaciones TEXT,
-  modalidad BOOLEAN NOT NULL,
+  es_presencial BOOLEAN NOT NULL,
   pc_id INT, -- ✅
   en_instituto BOOLEAN NOT NULL DEFAULT TRUE,
   grupal BOOLEAN NOT NULL DEFAULT FALSE,
@@ -273,7 +273,7 @@ INSERT INTO reserva (
   aula_id,
   estado,
   observaciones,
-  modalidad,
+  es_presencial,
   pc_id,
   en_instituto,
   grupal
@@ -381,7 +381,7 @@ INSERT INTO reserva (  id,
   aula_id,
   estado,
   observaciones,
-  modalidad,
+  es_presencial,
   pc_id,
   en_instituto,
   grupal
