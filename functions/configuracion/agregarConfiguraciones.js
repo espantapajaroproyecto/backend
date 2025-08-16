@@ -7,10 +7,10 @@ module.exports.handler = async (event) => {
     console.log("event.body:", event.body);
     const body = JSON.parse(event.body);
 
-    const { grados, materias, niveles, temas, aulas } = body;
+    const { grados, materias, niveles, temas, aulas, pcs, instituciones_educativas } = body;
 
     // Validar que al menos una configuración esté presente
-    if (!grados && !materias && !niveles && !temas && !aulas) {
+    if (!grados && !materias && !niveles && !temas && !aulas && !pcs && !instituciones_educativas) {
       return {
         statusCode: 400,
         body: JSON.stringify({

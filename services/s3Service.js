@@ -409,8 +409,6 @@ async function obtenerDocentes(cuerpo = { profesorId: undefined }) {
     delete docente.usuario.contrasenia;
 
     if (profesorId && id == profesorId) {
-      console.log("-----------aca");
-
       docentes = [];
       docentes.push(docente);
       break;
@@ -464,7 +462,9 @@ async function obtenerConfiguraciones() {
       { key: TABLAS.TEMA_KEY, nombre: "temas" },
       { key: TABLAS.AULA_KEY, nombre: "aulas" },
       { key: TABLAS.PC_KEY, nombre: "pcs" },
-      { key: TABLAS.TEMA_KEY, nombre: "temas" },
+      { key: TABLAS.TEMA_KEY, nombre: "temas" },    
+      { key: TABLAS.INSTITUCION_EDUCATIVA_KEY, nombre: "instituciones_educativas" },
+
     ];
 
     const promesas = keys.map(({ key }) =>
@@ -551,6 +551,7 @@ async function eliminarConfiguraciones(tipo, id) {
     temas: TABLAS.TEMA_KEY,
     aulas: TABLAS.AULA_KEY,
     pcs: TABLAS.PC_KEY,
+    instituciones_educativas: TABLAS.INSTITUCION_EDUCATIVA_KEY,
   };
 
   const eliminarConfiguracion = {
@@ -658,6 +659,7 @@ async function obtenerDisponiblesPor(cuerpo) {
   const keys = [
     { key: TABLAS.GRADO_KEY, nombre: "grados" },
     { key: TABLAS.MATERIA_KEY, nombre: "materias" },
+    { key: TABLAS.INSTITUCION_EDUCATIVA_KEY, nombre: "instituciones_educativas" },
     { key: TABLAS.TEMA_KEY, nombre: "temas" },
     { key: TABLAS.NIVEL_KEY, nombre: "niveles" },
     { key: TABLAS.PROFESOR_TIENE_MATERIA_KEY, nombre: "profesoresMaterias" },

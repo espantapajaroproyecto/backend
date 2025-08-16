@@ -26,8 +26,10 @@ module.exports.handler = async (event) => {
       : dbService.obtenerUsuarioPorDNI;
 
     const user = await obtenerUsuarioPorDNI(dni);
+    console.log({ user });
 
-    if (!user) {
+
+    if (user.lenght == 0) {
       return {
         statusCode: 401,
         body: JSON.stringify({ message: "Usuario no encontrado" }),
@@ -36,7 +38,7 @@ module.exports.handler = async (event) => {
 
     const isValid = await UTILS.compararContrasenias(
       contrasenia,
-      user.contrasenia
+      user[0].contrasenia
     );
 
     if (!isValid) {
@@ -49,12 +51,13 @@ module.exports.handler = async (event) => {
     //JWT con rol incluido
     const token = jwt.sign(
       {
-        dni: user.dni,
-        nombre: user.nombre,
-        apellido: user.apellido,
-        mail: user.mail,
-        celular: user.celular,
-        rol: user?.rol?.nombre, // ej: "alumno", "profesor", "admin"
+        usuarioId: user[0].id,
+        dni: user[0].dni,
+        nombre: user[0].nombre,
+        apellido: user[0].apellido,
+        mail: user[0].mail,
+        celular: user[0].celular,
+        rol: user[0]?.rol?.nombre, // ej: "alumno", "profesor", "admin"
       },
       SECRET
       //{ expiresIn: '2h' }

@@ -17,7 +17,7 @@ module.exports.handler = async (event) => {
     }
 
     // Validar que el tipo sea uno válido
-    const tiposValidos = ["niveles", "grados", "materias", "temas", "aulas", "pcs"];
+    const tiposValidos = ["niveles", "grados", "materias", "temas", "aulas", "pcs", "instituciones_educativas"];
     if (!tiposValidos.includes(tipo)) {
       return {
         statusCode: 400,
