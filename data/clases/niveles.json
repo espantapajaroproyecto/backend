@@ -1,4 +1,14 @@
 [
-  { "id": 1, "nombre": "Primario" },
-  { "id": 2, "nombre": "Secundario" }
+  {
+    "id": 1,
+    "nombre": "Primario"
+  },
+  {
+    "id": 2,
+    "nombre": "Secundario"
+  },
+  {
+    "id": 3,
+    "nombre": "Universitario"
+  }
 ]

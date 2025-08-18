@@ -315,6 +315,15 @@ async function agregarReserva(reserva) {
   return await agregar(TABLAS.RESERVA_KEY, reserva);
 }
 
+async function modificarUsuario(id, camposActualizados) {
+    const modificarParams = {
+    key: TABLAS.USUARIO_KEY,
+    valor: id,
+    nuevosValores: camposActualizados,
+  };
+  return await actualizar(modificarParams);
+}
+
 // RESERVAS
 async function obtenerReservas() {
   const obtenerParams = {
@@ -335,6 +344,7 @@ async function modificarReserva(id, camposActualizados) {
   };
   return await actualizar(modificarParams);
 }
+
 async function eliminarReserva(id) {
   const modificarParams = {
     key: TABLAS.RESERVA_KEY,
@@ -462,9 +472,11 @@ async function obtenerConfiguraciones() {
       { key: TABLAS.TEMA_KEY, nombre: "temas" },
       { key: TABLAS.AULA_KEY, nombre: "aulas" },
       { key: TABLAS.PC_KEY, nombre: "pcs" },
-      { key: TABLAS.TEMA_KEY, nombre: "temas" },    
-      { key: TABLAS.INSTITUCION_EDUCATIVA_KEY, nombre: "instituciones_educativas" },
-
+      { key: TABLAS.TEMA_KEY, nombre: "temas" },
+      {
+        key: TABLAS.INSTITUCION_EDUCATIVA_KEY,
+        nombre: "instituciones_educativas",
+      },
     ];
 
     const promesas = keys.map(({ key }) =>
@@ -561,6 +573,7 @@ async function eliminarConfiguraciones(tipo, id) {
 
   await eliminar(eliminarConfiguracion);
 }
+
 async function modificarConfiguracion(tipo, id, datosActualizados) {
   try {
     const key = `${tipo}.json`;
@@ -653,13 +666,19 @@ async function obtenerDisponiblesPor(cuerpo) {
     es_presencial,
     frecuencia,
   } = cuerpo;
+
+  console.log({ cuerpo });
+
   const configuraciones = {};
   const errores = {};
   let respuesta = [];
   const keys = [
     { key: TABLAS.GRADO_KEY, nombre: "grados" },
     { key: TABLAS.MATERIA_KEY, nombre: "materias" },
-    { key: TABLAS.INSTITUCION_EDUCATIVA_KEY, nombre: "instituciones_educativas" },
+    {
+      key: TABLAS.INSTITUCION_EDUCATIVA_KEY,
+      nombre: "instituciones_educativas",
+    },
     { key: TABLAS.TEMA_KEY, nombre: "temas" },
     { key: TABLAS.NIVEL_KEY, nombre: "niveles" },
     { key: TABLAS.PROFESOR_TIENE_MATERIA_KEY, nombre: "profesoresMaterias" },
@@ -681,6 +700,7 @@ async function obtenerDisponiblesPor(cuerpo) {
   );
 
   const resultados = await Promise.allSettled(promesas);
+
   resultados.forEach((resultado, index) => {
     const nombre = keys[index].nombre;
     if (resultado.status === "fulfilled") {
@@ -693,7 +713,6 @@ async function obtenerDisponiblesPor(cuerpo) {
   const nivelEducativo = configuraciones.niveles.find((nivel) => {
     return nivel.id == nivelId;
   });
-
   const grado = configuraciones.grados.find((grado) => {
     return grado.id == gradoId;
   });
@@ -725,7 +744,6 @@ async function obtenerDisponiblesPor(cuerpo) {
 
   let profesoresMateria = configuraciones.profesoresMaterias.filter(
     (profesorMateria) => {
-      console.log(profesorMateria);
       return profesorMateria.materia_id == materiaId;
     }
   );
@@ -769,7 +787,6 @@ async function obtenerDisponiblesPor(cuerpo) {
     profesoresDisponibles = profesoresDisponibles.filter((elemento) => {
       const { profesorDisponible } = elemento;
       const { disponible } = profesorDisponible;
-
       const estaEnFecha =
         disponible.fecha >= fechaInicio && disponible.fecha <= fechaFin;
 
@@ -778,7 +795,23 @@ async function obtenerDisponiblesPor(cuerpo) {
   }
 
   respuesta = profesoresDisponibles.map((elemento) => {
-    return elemento.profesorDisponible;
+    console.log({ elemento });
+    let { profesorDisponible, profesorMateria } = elemento;
+    let { disponible, profesor } = profesorDisponible;
+    let { materia } = profesorMateria;
+
+    profesor = configuraciones.profesores.find((profesorData) => {
+      console.log({ profesorData, profesor });
+
+      return profesorData.id == profesor.id;
+    });
+
+    console.log({ profesor, disponible, materia });
+    const { usuario } = profesor;
+    profesor = { ...profesor, ...usuario };
+    delete profesor.usuario;
+    delete profesor.contrasenia;
+    return { disponible, profesor };
   });
   return respuesta;
 }
@@ -920,4 +953,5 @@ module.exports = {
   guardarConfiguraciones,
   eliminarConfiguraciones,
   modificarConfiguracion,
+  modificarUsuario,
 };

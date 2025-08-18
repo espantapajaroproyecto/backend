@@ -1,19 +1,23 @@
 require("dotenv").config();
 const dbService = require("../../services/dbService");
 const s3Service = require("../../services/s3Service");
-const { validarCuerpoEvento } = require("../../utils/utils");
+const { validarCuerpoEvento, makeHeader } = require("../../utils/utils");
 const CAMPOS_REQUERIDOS = [
-  "gradoId",
-  "materiaId",
-  "temaId",
-  "nivelId",
-  "es_presencial",
-  "frecuencia",
+  // "gradoId",
+  // "materiaId",
+  // "temaId",
+  // "nivelId",
+  // "es_presencial",
+  // "frecuencia",
 ];
 
 module.exports.handler = async (event) => {
   const useS3 = process.env.USE_S3 == "true";
-  const cuerpo = event?.body && JSON.parse(event?.body);
+  console.log({ event });
+
+  const params = event?.queryStringParameters || null;
+
+  console.log({ params });
 
   const obtenerDispponibles = useS3
     ? s3Service.obtenerDisponibles
@@ -22,27 +26,14 @@ module.exports.handler = async (event) => {
   const obtenerDisponiblesPor = useS3
     ? s3Service.obtenerDisponiblesPor
     : dbService.obtenerDisponiblesPor;
-
-  if (cuerpo && !validarCuerpoEvento(cuerpo, CAMPOS_REQUERIDOS)) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify(
-        {
-          message: "Error Faltan campos requeridos",
-        },
-        null,
-        2
-      ),
-    };
-  }
   try {
-    const results = !cuerpo
+    const results = !params
       ? await obtenerDispponibles()
-      : await obtenerDisponiblesPor(cuerpo);
-    console.log(results);
+      : await obtenerDisponiblesPor(params);
 
     return {
       statusCode: 200,
+      headers: makeHeader(),
       body: JSON.stringify(
         {
           message: useS3
@@ -59,14 +50,11 @@ module.exports.handler = async (event) => {
 
     return {
       statusCode: 500,
-      body: JSON.stringify(
-        {
-          message: "Error al obtener los Disponibles",
-          error: error.message,
-        },
-        null,
-        2
-      ),
+      headers: makeHeader(),
+      body: JSON.stringify({
+        message: "Error al obtener los Disponibles",
+        error: error.message,
+      }),
     };
   }
 };

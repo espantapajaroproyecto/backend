@@ -9,6 +9,6 @@
   { "id": 8, "numero": 1, "nivel_id": 2 },
   { "id": 9, "numero": 2, "nivel_id": 2 },
   { "id": 10, "numero": 3, "nivel_id": 2 },
-  { "id": 11, "numero": 4, "nivel_id": 2 },
-  { "id": 12, "numero": 5, "nivel_id": 2 }
+  { "id": 11, "numero": "CBC", "nivel_id": 3 },
+  { "id": 12, "numero": "Carrera", "nivel_id": 3 }
 ]

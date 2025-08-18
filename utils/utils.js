@@ -64,7 +64,19 @@ const ROLES_BASE = {
 
 const obtenerValorSeguro = (result, valorPorDefecto = []) => {
   return result?.status === "fulfilled" ? result.value : valorPorDefecto;
-}
+};
+
+const makeHeader = (
+  allowOrigin = "*",
+  allowHeaders = "Content-Type",
+  allowMethods = "GET,OPTIONS"
+) => {
+  return {
+    "Access-Control-Allow-Origin": allowOrigin,
+    "Access-Control-Allow-Headers": allowHeaders,
+    "Access-Control-Allow-Methods": allowMethods,
+  };
+};
 
 module.exports = {
   validarLoginInput,
@@ -74,6 +86,7 @@ module.exports = {
   ESTADO_RESERVA,
   MODALIDAD_CLASE,
   FRECUENCIA_CLASE,
-  ROLES_BASE,  
-  obtenerValorSeguro
+  ROLES_BASE,
+  obtenerValorSeguro,
+  makeHeader
 };

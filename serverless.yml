@@ -49,6 +49,13 @@ functions:
   obtenerUsuarios:
     handler: functions/usuario/obtenerUsuarios.handler
 
+  modificarUsuario:
+    handler: functions/usuario/modificarUsuario.handler
+    package:
+      individually: true
+      include:
+        - functions/usuario/modificarUsuario.js
+
   #  RESERVAS
   agregarReserva:
     handler: functions/reserva/agregarReserva.handler
