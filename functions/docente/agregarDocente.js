@@ -9,13 +9,13 @@ const SECRET = process.env.JWT_SECRET;
 
 module.exports.handler = async (event) => {
   try {
-    console.log("event.body:", event.body);
+    
     const body = JSON.parse(event.body);
 
     const {
       nombre,
       apellido,
-      usuario,
+      usuarioId,
       contrasenia,
       celular,
       dni,
@@ -32,7 +32,7 @@ module.exports.handler = async (event) => {
       !mail ||
       !contrasenia ||
       !celular ||
-      !usuario
+      !usuarioId
     ) {
       return {
         statusCode: 400,
@@ -99,7 +99,7 @@ module.exports.handler = async (event) => {
       SECRET
       //{ expiresIn: '2h' }
     );
-    // console.log([token]);
+    // 
 
     return {
       statusCode: 201,

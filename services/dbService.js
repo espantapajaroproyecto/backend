@@ -334,7 +334,7 @@ async function obtenerDisponibles() {
           `;
     let [results] = await connection.execute(sql);
     if (results.length > 0) {
-      console.log(JSON.stringify(results));
+      
 
       return results[0]?.disponibles || [];
     }

@@ -59,7 +59,7 @@ exports.handler = async (event) => {
     const principalId = decoded.sub || "usuario";
     const role = decoded.rol || "desconocido";
 
-    console.log(`Rol: ${role} | ARN: ${event.methodArn}`);
+    
 
     if (isAuthorized(role, event.methodArn)) {
       return generatePolicy(principalId, "Allow", event.methodArn, decoded);

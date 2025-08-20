@@ -4,7 +4,7 @@ const s3Service = require("../../services/s3Service");
 
 module.exports.handler = async (event) => {
   try {
-    console.log("event.body:", event.body);
+    
     const body = JSON.parse(event.body);
 
     const { tipo, id, ...datosActualizados } = body;

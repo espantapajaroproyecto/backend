@@ -9,7 +9,7 @@ const SECRET = process.env.JWT_SECRET;
 
 module.exports.handler = async (event) => {
   try {
-    console.log("event.body:", event.body);
+    
     const body = JSON.parse(event.body);
     const { dni, nombre, apellido, mail, contrasenia, celular, rol_id } = body;
 
@@ -81,7 +81,7 @@ module.exports.handler = async (event) => {
       SECRET
       //{ expiresIn: '2h' }
     );
-    console.log([token]);
+    
 
     return {
       statusCode: 201,

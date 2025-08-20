@@ -13,11 +13,11 @@ const CAMPOS_REQUERIDOS = [
 
 module.exports.handler = async (event) => {
   const useS3 = process.env.USE_S3 == "true";
-  console.log({ event });
+  
 
   const params = event?.queryStringParameters || null;
 
-  console.log({ params });
+  
 
   const obtenerDispponibles = useS3
     ? s3Service.obtenerDisponibles

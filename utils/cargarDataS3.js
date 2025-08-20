@@ -20,10 +20,10 @@ const BUCKET_NAME = "proyecto-espantapajaro-bucket";
 const S3_PREFIX = "/";
 
 export const handler = async () => {
-  console.log("Iniciando limpieza del bucket...");
+  
   await limpiarS3Carpeta(BUCKET_NAME, S3_PREFIX);
 
-  console.log("Subiendo archivos locales...");
+  
   const archivosSubidos = await subirArchivosLocales(BUCKET_NAME, S3_PREFIX);
 
   return {
@@ -42,7 +42,7 @@ async function limpiarS3Carpeta(bucket, prefix) {
   }));
 
   if (!listar.Contents || listar.Contents.length === 0) {
-    console.log("No hay archivos que eliminar.");
+    
     return;
   }
 
@@ -53,7 +53,7 @@ async function limpiarS3Carpeta(bucket, prefix) {
     Delete: { Objects: objetosAEliminar },
   }));
 
-  console.log(`${objetosAEliminar.length} archivos eliminados de S3.`);
+  
 }
 
 async function subirArchivosLocales(bucket, s3Prefix) {
@@ -74,7 +74,7 @@ async function subirArchivosLocales(bucket, s3Prefix) {
       ContentType: "application/json",
     }));
 
-    console.log(`Archivo subido: ${archivo}`);
+    
     subidos.push(key);
   }
 

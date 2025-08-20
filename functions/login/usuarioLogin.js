@@ -8,7 +8,7 @@ const SECRET = process.env.JWT_SECRET;
 
 module.exports.handler = async (event) => {
   try {
-    console.log({ event });
+    
 
     const body = JSON.parse(event.body);
     const { dni, contrasenia } = JSON.parse(event.body);
@@ -26,7 +26,7 @@ module.exports.handler = async (event) => {
       : dbService.obtenerUsuarioPorDNI;
 
     const user = await obtenerUsuarioPorDNI(dni);
-    console.log({ user });
+    
 
 
     if (user.lenght == 0) {
@@ -62,7 +62,7 @@ module.exports.handler = async (event) => {
       SECRET
       //{ expiresIn: '2h' }
     );
-    console.log({ token });
+    
 
     return {
       statusCode: 200,

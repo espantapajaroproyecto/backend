@@ -10,7 +10,7 @@ module.exports.handler = async (event) => {
 
   try {
     const results = await obtenerConfiguraciones();
-    console.log({ results });
+    
 
     return {
       statusCode: 200,

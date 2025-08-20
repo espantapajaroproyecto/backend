@@ -156,3 +156,32 @@ functions:
       individually: true
       include:
         - functions/disponible/obtenerDisponiblesPor.js
+
+  #  ALUMNOS
+  obtenerAlumnos:
+    handler: functions/alumno/obtenerAlumnos.handler
+    package:
+      individually: true
+      include:
+        - functions/alumno/obtenerAlumnos.js
+
+  agregarAlumno:
+    handler: functions/alumno/agregarAlumno.handler
+    package:
+      individually: true
+      include:
+        - functions/alumno/agregarAlumno.js
+
+  modificarAlumno:
+    handler: functions/alumno/modificarAlumno.handler
+    package:
+      individually: true
+      include:
+        - functions/alumno/modificarAlumno.js
+
+  eliminarAlumno:
+    handler: functions/alumno/eliminarAlumno.handler
+    package:
+      individually: true
+      include:
+        - functions/alumno/eliminarAlumno.js

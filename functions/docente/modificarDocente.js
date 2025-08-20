@@ -5,7 +5,7 @@ const { hashPassword } = require("../../utils/utils");
 
 module.exports.handler = async (event) => {
   try {
-    console.log("event.body:", event.body);
+    
     const body = JSON.parse(event.body);
 
     const { id, habilitado, valor_hora, dni, nombre, apellido, mail, celular } =

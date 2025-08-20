@@ -9,6 +9,7 @@ const TABLAS = {
   USUARIO_KEY: "usuarios",
   INSTITUCION_EDUCATIVA_KEY: "instituciones_educativas",
   ALUMNO_KEY: "alumnos",
+  ALUMNO_TIENE_RESERVA_KEY: "alumno_tiene_reserva",
   PROFESOR_KEY: "profesores",
   NIVEL_KEY: "niveles",
   GRADO_KEY: "grados",
@@ -60,8 +61,6 @@ const tablasRelacion = {
 
 async function agregar(key, dataNueva) {
   try {
-    console.log(`Agregando a ${key}:`, dataNueva);
-
     const respuesta = await s3
       .getObject({ Bucket: BUCKET, Key: key + ".json" })
       .promise();
@@ -74,13 +73,9 @@ async function agregar(key, dataNueva) {
 
     const maxId = data.reduce((max, d) => (d.id > max ? d.id : max), 0);
     const newId = Number(maxId) + 1;
-    console.log();
 
     const dataWithId = { id: newId, ...dataNueva };
-    console.log(data);
-
     data.push(dataWithId);
-    console.log(data);
 
     await s3
       .putObject({
@@ -90,6 +85,7 @@ async function agregar(key, dataNueva) {
         ContentType: "application/json",
       })
       .promise();
+    return dataWithId;
   } catch (error) {
     console.error(error);
     throw error;
@@ -261,6 +257,7 @@ async function buscarUsuarioPorDniOMail(dni, mail) {
 
   // Obtener los usuarios
   const response = await s3.getObject({ Bucket: BUCKET, Key: s3Key }).promise();
+
   const usuarios = JSON.parse(response.Body.toString());
 
   // Buscar por DNI o mail
@@ -316,7 +313,7 @@ async function agregarReserva(reserva) {
 }
 
 async function modificarUsuario(id, camposActualizados) {
-    const modificarParams = {
+  const modificarParams = {
     key: TABLAS.USUARIO_KEY,
     valor: id,
     nuevosValores: camposActualizados,
@@ -354,6 +351,17 @@ async function eliminarReserva(id) {
 }
 
 // DOCENTES
+async function obtenerDocentesPorMateriaId(materiaId) {
+  const obtenerParams = {
+    key: TABLAS.PROFESOR_TIENE_MATERIA_KEY,
+    propiedad: "materia_id",
+    valor: materiaId,
+    populate: true,
+  };
+  const docentes = await obtener(obtenerParams);
+  return docentes;
+}
+
 async function obtenerDocentes(cuerpo = { profesorId: undefined }) {
   const { profesorId } = cuerpo;
 
@@ -379,16 +387,10 @@ async function obtenerDocentes(cuerpo = { profesorId: undefined }) {
         populate: true,
       }),
     ]);
-  console.log({ docentesResult });
-  console.log({ disponiblesDocentesResult });
-  console.log({ materiaDocentesResult });
 
   const docentesData = obtenerValorSeguro(docentesResult);
   const disponibleDocenteData = obtenerValorSeguro(disponiblesDocentesResult);
   const materiaDocentesData = obtenerValorSeguro(materiaDocentesResult);
-  console.log({ docentesData });
-  console.log({ disponibleDocenteData });
-  console.log({ materiaDocentesData });
 
   if (docentesData.length == 0) {
     return docentes;
@@ -426,7 +428,6 @@ async function obtenerDocentes(cuerpo = { profesorId: undefined }) {
       docentes.push(docente);
     }
   }
-
   return docentes;
 }
 
@@ -506,8 +507,6 @@ async function obtenerConfiguraciones() {
 }
 
 async function guardarConfiguraciones(config) {
-  console.log({ config });
-
   try {
     // Para cada tipo de configuración presente, agregamos su contenido
     if (config.niveles && Array.isArray(config.niveles)) {
@@ -536,8 +535,6 @@ async function guardarConfiguraciones(config) {
 
     if (config.aulas && Array.isArray(config.aulas)) {
       for (const aula of config.aulas) {
-        console.log(aula);
-
         await agregar(TABLAS.AULA_KEY, aula);
       }
     }
@@ -604,8 +601,6 @@ async function modificarConfiguracion(tipo, id, datosActualizados) {
         ContentType: "application/json",
       })
       .promise();
-
-    console.log(`Elemento con ID ${id} modificado en ${tipo} en S3`);
   } catch (error) {
     console.error(`Error modificando ${tipo} en S3:`, error);
     throw error;
@@ -666,8 +661,6 @@ async function obtenerDisponiblesPor(cuerpo) {
     es_presencial,
     frecuencia,
   } = cuerpo;
-
-  console.log({ cuerpo });
 
   const configuraciones = {};
   const errores = {};
@@ -795,18 +788,14 @@ async function obtenerDisponiblesPor(cuerpo) {
   }
 
   respuesta = profesoresDisponibles.map((elemento) => {
-    console.log({ elemento });
     let { profesorDisponible, profesorMateria } = elemento;
     let { disponible, profesor } = profesorDisponible;
     let { materia } = profesorMateria;
 
     profesor = configuraciones.profesores.find((profesorData) => {
-      console.log({ profesorData, profesor });
-
       return profesorData.id == profesor.id;
     });
 
-    console.log({ profesor, disponible, materia });
     const { usuario } = profesor;
     profesor = { ...profesor, ...usuario };
     delete profesor.usuario;
@@ -842,7 +831,6 @@ const populateReservarAlumnoProfesor = async (reservas) => {
         obtener(obtenerUsuarioProfesor),
         obtener(obtenerUsuarioAlumno),
       ]);
-    console.log({ profesorUsuarioResult, alumnoUsuarioResult });
 
     const profesorUsuarioData =
       profesorUsuarioResult.status === "fulfilled"
@@ -854,9 +842,6 @@ const populateReservarAlumnoProfesor = async (reservas) => {
         ? alumnoUsuarioResult.value
         : [];
 
-    console.log({ alumnoUsuarioData });
-    console.log({ profesorUsuarioData });
-
     if (profesorUsuarioData.length === 1) {
       const mergedProfesor = { ...profesor, ...profesorUsuarioData[0] };
       reserva.profesor = mergedProfesor;
@@ -865,7 +850,7 @@ const populateReservarAlumnoProfesor = async (reservas) => {
 
     if (alumnoUsuarioData.length === 1) {
       const mergedAlumno = { ...alumno, ...alumnoUsuarioData[0] };
-      console.log(mergedAlumno);
+
       reserva.alumno = mergedAlumno;
       delete reserva.alumno.contrasenia;
     }
@@ -922,13 +907,104 @@ async function obtenerReservasPorUsuarioId(cuerpo) {
       return reservas;
     }
     reservas = populateReservarAlumnoProfesor(reservarResult);
-    console.log(reservas);
 
     return reservas;
   } catch (error) {
     console.error("Error al obtener reservas:", error);
     throw error;
   }
+}
+
+// ALUMNOS
+async function agregarAlumno(alumno) {
+  return await agregar(TABLAS.ALUMNO_KEY, alumno);
+}
+
+async function eliminarAlumno(id) {
+  const eliminarUsuarioParams = {
+    key: TABLAS.USUARIO_KEY,
+    valor: id,
+  };
+  const eliminarAlumnoParams = {
+    key: TABLAS.ALUMNO_KEY,
+    propiedad: "id",
+    valor: id,
+  };
+
+  await eliminar(eliminarUsuarioParams);
+  await eliminar(eliminarAlumnoParams);
+}
+
+async function modificarAlumno(id, camposActualizados) {
+  const modificarParams = {
+    key: TABLAS.ALUMNO_KEY,
+    propiedad: "id",
+    valor: id,
+    nuevosValores: camposActualizados,
+  };
+  return await actualizar(modificarParams);
+}
+
+async function obtenerAlumnos(params) {
+  console.log(params);
+
+  const { alumnoId } = params;
+
+  let alumnos = [];
+  const [alumnoResult, reservasAlumnoResult] = await Promise.allSettled([
+    obtener({
+      key: TABLAS.ALUMNO_KEY,
+      propiedad: null,
+      valor: null,
+      populate: true,
+    }),
+    obtener({
+      key: TABLAS.ALUMNO_TIENE_RESERVA_KEY,
+      propiedad: null,
+      valor: null,
+      populate: true,
+    }),
+  ]);
+
+  const alumnosData = obtenerValorSeguro(alumnoResult);
+  const reservasAlumnoData = obtenerValorSeguro(reservasAlumnoResult);
+
+  if (alumnosData.length == 0) {
+    return alumnos;
+  }
+  for (let i = 0; i < alumnosData.length; i++) {
+    const alumno = alumnosData[i];
+    console.log(alumno);
+
+    const { id } = alumno;
+    console.log(id);
+
+    if (reservasAlumnoData.length > 0) {
+      alumno.reservas = reservasAlumnoData
+        .filter((elemento) => {
+          return elemento.reserva.alumno_id == id;
+        })
+        .map((elemento) => {
+          return elemento.reserva;
+        });
+    }
+
+    delete alumno.usuario.contrasenia;
+    console.log(alumnoId, id);
+
+    if (alumnoId && id == alumnoId) {
+      console.log("nope");
+
+      alumnos = [];
+      alumnos.push(alumno);
+      break;
+    } else {
+      console.log("really??");
+
+      alumnos.push(alumno);
+    }
+  }
+  return alumnos;
 }
 
 module.exports = {
@@ -954,4 +1030,8 @@ module.exports = {
   eliminarConfiguraciones,
   modificarConfiguracion,
   modificarUsuario,
+  agregarAlumno,
+  eliminarAlumno,
+  modificarAlumno,
+  obtenerAlumnos,
 };

@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const ZipPlugin = require("zip-webpack-plugin");
 
-console.log("webpack env function path: ", process.env.FUNCTION_DIR);
+
 
 // Buscar todos los entry points dinámicamente
 const functionsDir = path.resolve(__dirname, "functions", process.env.FUNCTION_DIR);

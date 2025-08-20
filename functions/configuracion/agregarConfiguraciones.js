@@ -4,7 +4,7 @@ const s3Service = require("../../services/s3Service");
 
 module.exports.handler = async (event) => {
   try {
-    console.log("event.body:", event.body);
+    
     const body = JSON.parse(event.body);
 
     const { grados, materias, niveles, temas, aulas, pcs, instituciones_educativas } = body;
@@ -74,7 +74,7 @@ module.exports.handler = async (event) => {
     const guardarConfiguraciones = useS3
       ? s3Service.guardarConfiguraciones
       : dbService.guardarConfiguraciones;
-    console.log("Guardando configuraciones:", {
+    
       niveles,
       grados,
       materias,

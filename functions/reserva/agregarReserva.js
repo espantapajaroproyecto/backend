@@ -5,7 +5,7 @@ const { ESTADO_RESERVA } = require("../../utils/utils");
 
 module.exports.handler = async (event) => {
   try {
-    console.log("event.body:", event.body);
+    
     const body = JSON.parse(event.body);
 
     const {
@@ -66,7 +66,7 @@ module.exports.handler = async (event) => {
     };
 
     const reserva = await agregarReserva(nuevaReserva);
-    console.log({ reserva });
+    
 
     return {
       statusCode: 201,
