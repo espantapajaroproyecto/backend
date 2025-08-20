@@ -163,26 +163,48 @@ async function obtener({
 }
 
 async function eliminar({ key, propiedad = "id", valor }) {
+  console.log({ key, propiedad, valor });
   const s3Key = key + ".json";
+  try {
+    // Leer datos actuales
+    const response = await s3
+      .getObject({ Bucket: BUCKET, Key: s3Key })
+      .promise();
+    const data = JSON.parse(response.Body.toString());
 
-  // Leer datos actuales
-  const response = await s3.getObject({ Bucket: BUCKET, Key: s3Key }).promise();
-  const data = JSON.parse(response.Body.toString());
+    let itemToDelete = null;
+    const nuevosDatos = [];
 
-  // Filtrar los datos sin el valor especificado
-  const nuevosDatos = data.filter((item) => item[propiedad] != valor);
+    for (let i = 0; i < data.length; i++) {
+      const element = data[i];
 
-  // Guardar nuevamente
-  await s3
-    .putObject({
-      Bucket: BUCKET,
-      Key: s3Key,
-      Body: JSON.stringify(nuevosDatos, null, 2),
-      ContentType: "application/json",
-    })
-    .promise();
+      const isItemToDelete =
+        String(element[propiedad]).trim() === String(valor).trim();
+      if (isItemToDelete) {
+        console.log({ element });
 
-  return { eliminado: true, cantidad: data.length - nuevosDatos.length };
+        itemToDelete = element;
+      } else {
+        nuevosDatos.push(element);
+      }
+    }
+
+    // Guardar nuevamente
+    await s3
+      .putObject({
+        Bucket: BUCKET,
+        Key: s3Key,
+        Body: JSON.stringify(nuevosDatos, null, 2),
+        ContentType: "application/json",
+      })
+      .promise();
+
+    return {
+      itemEliminado: itemToDelete,
+    };
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 async function actualizar({ key, propiedad = "id", valor, nuevosValores }) {
@@ -436,18 +458,32 @@ async function agregarDocente(docente) {
 }
 
 async function eliminarDocente(id) {
-  const eliminarUsuarioParams = {
-    key: TABLAS.USUARIO_KEY,
-    valor: id,
-  };
-  const eliminarProfesorParams = {
-    key: TABLAS.PROFESOR_KEY,
-    propiedad: "id",
-    valor: id,
-  };
+  try {
+    const eliminarUsuarioParams = {
+      key: TABLAS.USUARIO_KEY,
+      valor: id,
+      populate: true,
+    };
+    const eliminarProfesorParams = {
+      key: TABLAS.PROFESOR_KEY,
+      propiedad: "id",
+      populate: true,
+      valor: id,
+    };
 
-  await eliminar(eliminarUsuarioParams);
-  await eliminar(eliminarProfesorParams);
+    const profesorEliminado = await eliminar(eliminarProfesorParams);
+
+    if (profesorEliminado) {
+      console.log("Docente eliminado:", profesorEliminado);
+      const { itemEliminado } = profesorEliminado;
+      const { usuario_id } = itemEliminado;
+      eliminarUsuarioParams.valor = usuario_id;
+      const usuarioEliminado = await eliminar(eliminarUsuarioParams);
+      console.log({ usuarioEliminado });
+    }
+  } catch (error) {
+    console.log("Error al eliminar docente:", error);
+  }
 }
 
 async function modificarDocente(id, camposActualizados) {
@@ -945,7 +981,7 @@ async function modificarAlumno(id, camposActualizados) {
   return await actualizar(modificarParams);
 }
 
-async function obtenerAlumnos(params) {
+async function obtenerAlumnos(params = { alumnoId: undefined }) {
   console.log(params);
 
   const { alumnoId } = params;
@@ -968,8 +1004,10 @@ async function obtenerAlumnos(params) {
 
   const alumnosData = obtenerValorSeguro(alumnoResult);
   const reservasAlumnoData = obtenerValorSeguro(reservasAlumnoResult);
-
+  console.log(alumnosData, reservasAlumnoData);
   if (alumnosData.length == 0) {
+    console.log("no hay alumnos");
+
     return alumnos;
   }
   for (let i = 0; i < alumnosData.length; i++) {
@@ -977,8 +1015,6 @@ async function obtenerAlumnos(params) {
     console.log(alumno);
 
     const { id } = alumno;
-    console.log(id);
-
     if (reservasAlumnoData.length > 0) {
       alumno.reservas = reservasAlumnoData
         .filter((elemento) => {
@@ -990,17 +1026,12 @@ async function obtenerAlumnos(params) {
     }
 
     delete alumno.usuario.contrasenia;
-    console.log(alumnoId, id);
 
-    if (alumnoId && id == alumnoId) {
-      console.log("nope");
-
+    if (alumnoId == id) {
       alumnos = [];
       alumnos.push(alumno);
       break;
     } else {
-      console.log("really??");
-
       alumnos.push(alumno);
     }
   }
