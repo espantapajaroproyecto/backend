@@ -1024,8 +1024,9 @@ async function obtenerAlumnos(params = { alumnoId: undefined }) {
           return elemento.reserva;
         });
     }
+console.log({ alumno });
 
-    delete alumno.usuario.contrasenia;
+    delete alumno?.usuario?.contrasenia;
 
     if (alumnoId == id) {
       alumnos = [];
