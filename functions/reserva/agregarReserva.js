@@ -5,7 +5,6 @@ const { ESTADO_RESERVA } = require("../../utils/utils");
 
 module.exports.handler = async (event) => {
   try {
-    
     const body = JSON.parse(event.body);
 
     const {
@@ -16,6 +15,7 @@ module.exports.handler = async (event) => {
       materia_id,
       tema_id,
       aula_id,
+      disponible_id,
       estado = ESTADO_RESERVA.PEDIENTE,
       observaciones = "",
       es_presencial,
@@ -31,6 +31,7 @@ module.exports.handler = async (event) => {
       !profesor_id ||
       !alumno_id ||
       !materia_id ||
+      !disponible_id ||
       !tema_id ||
       !aula_id ||
       es_presencial === undefined ||
@@ -55,6 +56,7 @@ module.exports.handler = async (event) => {
       profesor_id,
       alumno_id,
       materia_id,
+      disponible_id,
       tema_id,
       aula_id,
       estado,
@@ -65,8 +67,8 @@ module.exports.handler = async (event) => {
       grupal,
     };
 
-    const reserva = await agregarReserva(nuevaReserva);
-    
+    const reservaResult = await agregarReserva(nuevaReserva);
+    console.log("Resultado de agregarReserva:", reservaResult);
 
     return {
       statusCode: 201,

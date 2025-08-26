@@ -61,10 +61,8 @@ module.exports.handler = async (event) => {
         rol_id: 1, // alumno
       };
       usuario = await agregarUsuario(usuario);
-      
     }
 
-    //JWT con rol incluido
     if (institucion_id) {
       if (usuario && usuario.id) {
         const { id } = usuario;
@@ -77,6 +75,7 @@ module.exports.handler = async (event) => {
 
     const token = jwt.sign(
       {
+        usuarioId: usuario.id,
         dni: usuario.dni,
         nombre: usuario.nombre,
         apellido: usuario.apellido,

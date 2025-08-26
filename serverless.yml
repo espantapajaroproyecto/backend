@@ -185,3 +185,17 @@ functions:
       individually: true
       include:
         - functions/alumno/eliminarAlumno.js
+
+  agregarReservaAlumno:
+    handler: functions/alumnoReserva/agregarReservaAlumno.handler
+    package:
+      individually: true
+      include:
+        - functions/alumnoReserva/agregarReservaAlumno.js
+
+  eliminarReservaAlumno:
+    handler: functions/alumnoReserva/eliminarReservaAlumno.handler
+    package:
+      individually: true
+      include:
+        - functions/alumnoReserva/eliminarReservaAlumno.js

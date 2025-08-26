@@ -4,7 +4,6 @@ const s3Service = require("../../services/s3Service");
 
 module.exports.handler = async (event) => {
   try {
-    
     const body = JSON.parse(event.body);
 
     const { id } = body;
@@ -21,8 +20,8 @@ module.exports.handler = async (event) => {
       ? s3Service.eliminarReserva
       : dbService.eliminarReserva;
 
-    await eliminarReserva(id);
-
+    const result = await eliminarReserva(id);
+    console.log("Resultado de eliminarReserva:", result);
     return {
       statusCode: 200,
       body: JSON.stringify({

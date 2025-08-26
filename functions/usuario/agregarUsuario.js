@@ -9,7 +9,6 @@ const SECRET = process.env.JWT_SECRET;
 
 module.exports.handler = async (event) => {
   try {
-    
     const body = JSON.parse(event.body);
     const { dni, nombre, apellido, mail, contrasenia, celular, rol_id } = body;
 
@@ -38,7 +37,7 @@ module.exports.handler = async (event) => {
     // Verificar si ya existe usuario con ese dni o mail
     let usuarioExistente = await buscarUsuario(dni, mail);
     if (usuarioExistente?.rol) {
-        usuarioExistente.rol = usuarioExistente.rol.nombre;
+      usuarioExistente.rol = usuarioExistente.rol.nombre;
     }
 
     if (usuarioExistente) {
@@ -71,6 +70,7 @@ module.exports.handler = async (event) => {
     //JWT con rol incluido
     const token = jwt.sign(
       {
+        usuarioId: user.id,
         dni: user.dni,
         nombre: user.nombre,
         apellido: user.apellido,
@@ -81,7 +81,6 @@ module.exports.handler = async (event) => {
       SECRET
       //{ expiresIn: '2h' }
     );
-    
 
     return {
       statusCode: 201,

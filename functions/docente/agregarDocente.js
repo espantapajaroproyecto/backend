@@ -9,7 +9,6 @@ const SECRET = process.env.JWT_SECRET;
 
 module.exports.handler = async (event) => {
   try {
-    
     const body = JSON.parse(event.body);
 
     const {
@@ -89,6 +88,7 @@ module.exports.handler = async (event) => {
 
     const token = jwt.sign(
       {
+        usuarioId: nuevoUsuario.id,
         dni: nuevoUsuario.dni,
         nombre: nuevoUsuario.nombre,
         apellido: nuevoUsuario.apellido,
@@ -99,7 +99,7 @@ module.exports.handler = async (event) => {
       SECRET
       //{ expiresIn: '2h' }
     );
-    // 
+    //
 
     return {
       statusCode: 201,

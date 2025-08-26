@@ -8,7 +8,10 @@
   { "id": 7, "numero": 7, "nivel_id": 1 },
   { "id": 8, "numero": 1, "nivel_id": 2 },
   { "id": 9, "numero": 2, "nivel_id": 2 },
-  { "id": 10, "numero": 3, "nivel_id": 2 },
-  { "id": 11, "numero": "CBC", "nivel_id": 3 },
-  { "id": 12, "numero": "Carrera", "nivel_id": 3 }
+  { "id": 11, "numero": 3, "nivel_id": 2 },
+  { "id": 12, "numero": 4, "nivel_id": 2 },
+  { "id": 13, "numero": 5, "nivel_id": 2 },
+  { "id": 14, "numero": 6, "nivel_id": 2 },
+  { "id": 15, "numero": "CBC", "nivel_id": 3 },
+  { "id": 16, "numero": "Carrera", "nivel_id": 3 }
 ]

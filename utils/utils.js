@@ -26,7 +26,7 @@ const compararContrasenias = async (inputPassword, storedHashedPassword) => {
 };
 
 const ESTADO_RESERVA = {
-  PEDIENTE: "PENDIENTE",
+  PENDIENTE: "PENDIENTE",
   CONFIRMADA: "CONFIRMADA",
   CANCELADA: "CANCELADA",
 };

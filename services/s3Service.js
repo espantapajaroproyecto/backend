@@ -204,6 +204,7 @@ async function eliminar({ key, propiedad = "id", valor }) {
     };
   } catch (error) {
     console.log(error);
+    throw error;
   }
 }
 
@@ -331,7 +332,64 @@ async function obtenerNombreRolPorId(id) {
 }
 
 async function agregarReserva(reserva) {
-  return await agregar(TABLAS.RESERVA_KEY, reserva);
+  try {
+    console.log({ reserva });
+    const {
+      fecha_hora,
+      tiempo,
+      profesor_id,
+      alumno_id,
+      materia_id,
+      disponible_id,
+      tema_id,
+      aula_id,
+      estado,
+      observaciones,
+      es_presencial,
+      pc_id,
+      en_instituto,
+      grupal,
+    } = reserva;
+    const profesorDisponibleParams = {
+      key: TABLAS.PROFESOR_TIENE_DISPONIBLE_KEY,
+      propiedad: "disponible_id",
+      valor: disponible_id,
+      populate: true,
+    };
+    const profesorDisponible = await obtener(profesorDisponibleParams);
+    console.log({ profesorDisponible });
+
+    if (profesorDisponible.length == 0) {
+      throw new Error(
+        `No se encontró disponible con ID ${disponible_id} para el profesor ${profesor_id}`
+      );
+    }
+
+    if (profesorDisponible[0].profesor.id != profesor_id) {
+      throw new Error(
+        `El disponible con ID ${disponible_id} no pertenece al profesor ${profesor_id}`
+      );
+    }
+    // hasta coincide profesor y disponible
+    // ahora conseguir las reservas del profesor en esa fecha
+    const fechaReserva = new Date(fecha_hora);
+
+    console.log();
+
+    // const reservaResult = await agregar(TABLAS.RESERVA_KEY, reserva);
+    // const { id: reserva_id, alumno_id } = reservaResult;
+
+    // const alumnoTieneReserva = { alumno_id, reserva_id };
+    // const alumnoReservaResult = await agregar(
+    //   TABLAS.ALUMNO_TIENE_RESERVA_KEY,
+    //   alumnoTieneReserva
+    // );
+
+    // return reservaResult;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 }
 
 async function modificarUsuario(id, camposActualizados) {
@@ -369,7 +427,23 @@ async function eliminarReserva(id) {
     key: TABLAS.RESERVA_KEY,
     valor: id,
   };
-  return await eliminar(modificarParams);
+
+  const eliminarAlumnoReservaParams = {
+    key: TABLAS.ALUMNO_TIENE_RESERVA_KEY,
+    propiedad: "reserva_id",
+    valor: id,
+  };
+
+  const [resultElimninarAlumnoReserva, resultElimninarReserva] =
+    Promise.allSettled([
+      eliminar(modificarParams),
+      eliminar(eliminarAlumnoReservaParams),
+    ]);
+
+  const eliminarReservaData = obtenerValorSeguro(resultElimninarAlumnoReserva);
+  const eliminarAlumnoReservaData = obtenerValorSeguro(resultElimninarReserva);
+
+  return { eliminarReservaData, eliminarAlumnoReservaData };
 }
 
 // DOCENTES
@@ -482,7 +556,8 @@ async function eliminarDocente(id) {
       console.log({ usuarioEliminado });
     }
   } catch (error) {
-    console.log("Error al eliminar docente:", error);
+    console.log(error);
+    throw error;
   }
 }
 
@@ -538,7 +613,8 @@ async function obtenerConfiguraciones() {
 
     return { configuraciones, errores };
   } catch (error) {
-    console.error(error);
+    console.log(error);
+    throw error;
   }
 }
 
@@ -1024,7 +1100,7 @@ async function obtenerAlumnos(params = { alumnoId: undefined }) {
           return elemento.reserva;
         });
     }
-console.log({ alumno });
+    console.log({ alumno });
 
     delete alumno?.usuario?.contrasenia;
 
@@ -1037,6 +1113,10 @@ console.log({ alumno });
     }
   }
   return alumnos;
+}
+
+async function agregarReservaAlumno(data) {
+  return await agregar(TABLAS.ALUMNO_TIENE_RESERVA_KEY, data);
 }
 
 module.exports = {
@@ -1066,4 +1146,6 @@ module.exports = {
   eliminarAlumno,
   modificarAlumno,
   obtenerAlumnos,
+  agregarReservaAlumno,
+  // eliminarReservaAlumno
 };

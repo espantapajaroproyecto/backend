@@ -43,7 +43,7 @@
     "estado": "PENDIENTE",
     "observaciones": "Introducción a álgebra.",
     "es_presencial": true,
-    "pc_id": 3,
+    "pc_id": 2,
     "en_instituto": true,
     "grupal": false
   },
@@ -59,7 +59,7 @@
     "estado": "PENDIENTE",
     "observaciones": "Práctica de problemas con porcentajes.",
     "es_presencial": true,
-    "pc_id": 4,
+    "pc_id": 1,
     "en_instituto": true,
     "grupal": false
   },
@@ -75,7 +75,7 @@
     "estado": "PENDIENTE",
     "observaciones": "Revisión previa a examen.",
     "es_presencial": true,
-    "pc_id": 5,
+    "pc_id": 2,
     "en_instituto": false,
     "grupal": false
   }
