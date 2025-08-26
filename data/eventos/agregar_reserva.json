@@ -1,3 +1,3 @@
 {
-    "body": "{\"fecha_hora\":\"2025-07-01T14:00:00\",\"tiempo\":\"01:00:00\",\"profesor_id\":2,\"disponible_id\":3,\"alumno_id\":3,\"materia_id\":2,\"tema_id\":4,\"aula_id\":3,\"observaciones\":\"Revisión de derivadas.\",\"es_presencial\":false,\"pc_id\":2,\"en_instituto\":false,\"grupal\":true}"
+    "body": "{\"fecha_hora\":\"2025-08-29T14:00:00\",\"tiempo\":\"01:00\",\"profesor_id\":1,\"disponible_id\":3,\"alumno_id\":3,\"materia_id\":2,\"tema_id\":4,\"aula_id\":3,\"observaciones\":\"Revisión de derivadas.\",\"es_presencial\":false,\"pc_id\":2,\"en_instituto\":false,\"grupal\":true}"
 }

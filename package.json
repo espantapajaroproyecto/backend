@@ -26,6 +26,7 @@
     "@next/env": "^15.3.3",
     "aws-sdk": "^2.1692.0",
     "bcryptjs": "^3.0.2",
+    "dayjs": "^1.11.13",
     "dotenv": "^16.5.0",
     "jsonwebtoken": "^9.0.2",
     "mysql": "^2.18.1",

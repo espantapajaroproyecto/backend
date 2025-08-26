@@ -78,6 +78,15 @@ const makeHeader = (
   };
 };
 
+function calcularFin(inicio, tiempo) {
+  const [h, m, s] = tiempo.split(":").map(Number);
+  const fin = new Date(inicio);
+  fin.setHours(fin.getHours() + h);
+  fin.setMinutes(fin.getMinutes() + m);
+  fin.setSeconds(fin.getSeconds() + s);
+  return fin;
+}
+
 module.exports = {
   validarLoginInput,
   hashPassword,
@@ -88,5 +97,6 @@ module.exports = {
   FRECUENCIA_CLASE,
   ROLES_BASE,
   obtenerValorSeguro,
-  makeHeader
+  makeHeader,
+  calcularFin
 };

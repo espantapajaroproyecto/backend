@@ -1,6 +1,18 @@
 [
     {
         "profesor_id": 1,
-        "reserva_id": 1
+        "reserva_id": 2
+    },
+    {
+        "profesor_id": 2,
+        "reserva_id": 3
+    },
+    {
+        "profesor_id": 2,
+        "reserva_id": 4
+    },
+    {
+        "profesor_id": 1,
+        "reserva_id": 5
     }
 ]

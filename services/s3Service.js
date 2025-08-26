@@ -1,7 +1,11 @@
 const AWS = require("aws-sdk");
-const { ROLES_BASE, obtenerValorSeguro } = require("../utils/utils");
+const {
+  ROLES_BASE,
+  obtenerValorSeguro,
+  calcularFin,
+} = require("../utils/utils");
 const s3 = new AWS.S3();
-
+const dayjs = require("dayjs");
 const BUCKET = process.env.S3_BUCKET;
 
 const TABLAS = {
@@ -17,6 +21,7 @@ const TABLAS = {
   TEMA_KEY: "temas",
   PROFESOR_TIENE_DISPONIBLE_KEY: "profesor_tiene_disponible",
   PROFESOR_TIENE_MATERIA_KEY: "profesor_tiene_materia",
+  PROFESOR_TIENE_RESERVA_KEY: "profesor_tiene_reserva",
   AULA_KEY: "aulas",
   PC_KEY: "pcs",
   RESERVA_KEY: "reservas",
@@ -45,6 +50,10 @@ const tablasRelacion = {
   profesor_tiene_materia: [
     { key: "profesores", propiedad: "profesor_id" },
     { key: "materias", propiedad: "materia_id" },
+  ],
+  profesor_tiene_reserva: [
+    { key: "profesores", propiedad: "profesor_id" },
+    { key: "reservas", propiedad: "reserva_id" },
   ],
   aulas: [],
   pc: [],
@@ -119,11 +128,11 @@ async function obtener({
     return result;
   }
 
+  const registros = Array.isArray(result) ? result : [result];
   // Si no hay populate o no hay relaciones definidas
-  if (!populate || !tablasRelacion[key]) return result;
+  if (!populate || !tablasRelacion[key]) return registros;
 
   // Determinar si es un array o un solo objeto
-  const registros = Array.isArray(result) ? result : [result];
 
   // Relación de claves a traer
   const relaciones = tablasRelacion[key];
@@ -350,44 +359,117 @@ async function agregarReserva(reserva) {
       en_instituto,
       grupal,
     } = reserva;
+
+    // Buscar si el disponible_id pertenece al profesor
     const profesorDisponibleParams = {
       key: TABLAS.PROFESOR_TIENE_DISPONIBLE_KEY,
       propiedad: "disponible_id",
       valor: disponible_id,
       populate: true,
     };
+
     const profesorDisponible = await obtener(profesorDisponibleParams);
     console.log({ profesorDisponible });
 
-    if (profesorDisponible.length == 0) {
+    if (profesorDisponible.length === 0) {
       throw new Error(
         `No se encontró disponible con ID ${disponible_id} para el profesor ${profesor_id}`
       );
     }
 
-    if (profesorDisponible[0].profesor.id != profesor_id) {
+    if (profesorDisponible[0].profesor.id !== profesor_id) {
       throw new Error(
         `El disponible con ID ${disponible_id} no pertenece al profesor ${profesor_id}`
       );
     }
-    // hasta coincide profesor y disponible
-    // ahora conseguir las reservas del profesor en esa fecha
-    const fechaReserva = new Date(fecha_hora);
 
+    // Extraer disponible y profesor
+    const { disponible, profesor } = profesorDisponible[0];
+
+    const fechaReserva = dayjs("2025-08-29T14:00:00-03:00".replace(/-03:00$/, ""));
+    const [hora, minutos, segundos] = tiempo.split(":").map(Number);
+
+
+
+    const inicioDisponible = dayjs(`${disponible.fecha} ${disponible.inicio}`);
+    const finDisponible = dayjs(`${disponible.fecha} ${disponible.fin}`);
+
+    // ✅ calcular hora de fin correctamente con dayjs
+    const horaReservaFin = fechaReserva
+      .add(hora, "hour")
+      .add(minutos, "minute")
+      .add(segundos, "second");
+
+    console.log({
+      inicio: inicioDisponible.format(),
+      fin: finDisponible.format(),
+      reserva: fechaReserva.format(),
+      horaReservaFin: horaReservaFin.format(),
+    });
+    console.log({ horaReservaFin: horaReservaFin.format() });
+
+    if (
+      fechaReserva.isBefore(inicioDisponible) ||
+      horaReservaFin.isAfter(finDisponible)
+    ) {
+      throw new Error(
+        `La hora ${hora}:${minutos} no está dentro del rango disponible (${disponible.inicio} - ${disponible.fin})`
+      );
+    }
+
+    // ✅ Validar que no se excedan las horas_deseadas
+    if (disponible.horas_asignadas >= disponible.horas_deseadas) {
+      throw new Error(
+        `El profesor ya alcanzó el máximo de horas (${disponible.horas_deseadas}) para este día`
+      );
+    }
+
+    // // ✅ Validar que no se superponga con otra reserva del mismo profesor ese día
+    const reservasProfesor = await obtener({
+      key: TABLAS.PROFESOR_TIENE_RESERVA_KEY,
+      propiedad: "profesor_id",
+      valor: profesor_id,
+      populate: true,
+    });
+
+    console.log({ reservasProfesor });
     console.log();
 
+    const haySuperposicion = reservasProfesor.some((rp) => {
+      const r = rp.reserva;
+
+      // Inicio y fin de la reserva existente
+      const rInicio = new Date(r.fecha_hora);
+      const rFin = calcularFin(rInicio, r.tiempo);
+
+      // Inicio y fin de la nueva reserva
+
+      console.log({ rInicio, rFin, fechaReserva });
+
+      return (
+        (fechaReserva >= rInicio && fechaReserva < rFin) || // empieza dentro de otra
+        (horaReservaFin > rInicio && horaReservaFin <= rFin) || // termina dentro de otra
+        (fechaReserva <= rInicio && horaReservaFin >= rFin) // cubre otra entera
+      );
+    });
+    console.log({ haySuperposicion });
+
+    if (haySuperposicion) {
+      throw new Error(
+        `El profesor ya tiene una reserva que se superpone con la hora solicitada`
+      );
+    }
+
+    // // ✅ Si todo está bien, guardar la reserva
     // const reservaResult = await agregar(TABLAS.RESERVA_KEY, reserva);
-    // const { id: reserva_id, alumno_id } = reservaResult;
+    // const { id: reserva_id } = reservaResult;
 
     // const alumnoTieneReserva = { alumno_id, reserva_id };
-    // const alumnoReservaResult = await agregar(
-    //   TABLAS.ALUMNO_TIENE_RESERVA_KEY,
-    //   alumnoTieneReserva
-    // );
+    // await agregar(TABLAS.ALUMNO_TIENE_RESERVA_KEY, alumnoTieneReserva);
 
     // return reservaResult;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 }
