@@ -1,4 +1,5 @@
 const bcrypt = require("bcryptjs");
+const dayjs = require("dayjs");
 
 // Cantidad de rondas de sal (seguridad). 10 es un buen equilibrio
 const SALT_ROUNDS = 10;
@@ -20,8 +21,6 @@ const hashPassword = async (plainPassword) => {
 
 // Compara una contraseña ingresada con la ya encriptada
 const compararContrasenias = async (inputPassword, storedHashedPassword) => {
-  
-  
   return await bcrypt.compare(inputPassword, storedHashedPassword);
 };
 
@@ -79,11 +78,10 @@ const makeHeader = (
 };
 
 function calcularFin(inicio, tiempo) {
-  const [h, m, s] = tiempo.split(":").map(Number);
-  const fin = new Date(inicio);
-  fin.setHours(fin.getHours() + h);
-  fin.setMinutes(fin.getMinutes() + m);
-  fin.setSeconds(fin.getSeconds() + s);
+  const [hora, minutos, s] = tiempo.split(":").map(Number);
+  const fin = dayjs(inicio);
+  fin.add(hora, "hour");
+  fin.add(minutos, "minute");
   return fin;
 }
 
@@ -98,5 +96,5 @@ module.exports = {
   ROLES_BASE,
   obtenerValorSeguro,
   makeHeader,
-  calcularFin
+  calcularFin,
 };

@@ -386,26 +386,26 @@ async function agregarReserva(reserva) {
     // Extraer disponible y profesor
     const { disponible, profesor } = profesorDisponible[0];
 
-    const fechaReserva = dayjs("2025-08-29T14:00:00-03:00".replace(/-03:00$/, ""));
+    const fechaReserva = dayjs(fecha_hora);
     const [hora, minutos, segundos] = tiempo.split(":").map(Number);
-
-
 
     const inicioDisponible = dayjs(`${disponible.fecha} ${disponible.inicio}`);
     const finDisponible = dayjs(`${disponible.fecha} ${disponible.fin}`);
 
-    // ✅ calcular hora de fin correctamente con dayjs
-    const horaReservaFin = fechaReserva
-      .add(hora, "hour")
-      .add(minutos, "minute")
-      .add(segundos, "second");
-
     console.log({
+      fecha_hora,
       inicio: inicioDisponible.format(),
       fin: finDisponible.format(),
       reserva: fechaReserva.format(),
-      horaReservaFin: horaReservaFin.format(),
+      // horaReservaFin: horaReservaFin,
     });
+    console.log({ hora, minutos, segundos });
+
+    // ✅ calcular hora de fin correctamente con dayjs
+    const horaReservaFin = fechaReserva
+      .add(hora, "hour")
+      .add(minutos, "minute");
+
     console.log({ horaReservaFin: horaReservaFin.format() });
 
     if (
@@ -413,7 +413,7 @@ async function agregarReserva(reserva) {
       horaReservaFin.isAfter(finDisponible)
     ) {
       throw new Error(
-        `La hora ${hora}:${minutos} no está dentro del rango disponible (${disponible.inicio} - ${disponible.fin})`
+        `La hora ${fecha_hora} mas horas: ${hora} y minuttos: ${minutos} no está dentro del rango disponible (${disponible.inicio} - ${disponible.fin})`
       );
     }
 
@@ -439,12 +439,16 @@ async function agregarReserva(reserva) {
       const r = rp.reserva;
 
       // Inicio y fin de la reserva existente
-      const rInicio = new Date(r.fecha_hora);
+      const rInicio = dayjs(r.fecha_hora);
       const rFin = calcularFin(rInicio, r.tiempo);
 
       // Inicio y fin de la nueva reserva
 
-      console.log({ rInicio, rFin, fechaReserva });
+      console.log({
+        rInicio: rInicio.format(),
+        rFin: rFin.format(),
+        fr: fechaReserva.format(),
+      });
 
       return (
         (fechaReserva >= rInicio && fechaReserva < rFin) || // empieza dentro de otra
