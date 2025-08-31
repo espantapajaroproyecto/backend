@@ -5,7 +5,7 @@
     "tiempo": "01:00:00",
     "profesor_id": 1,
     "alumno_id": 1,
-    "materia_id": 1,
+  "materia_id": 1,
     "tema_id": 1,
     "aula_id": 1,
     "estado": "PENDIENTE",

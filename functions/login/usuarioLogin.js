@@ -8,10 +8,10 @@ const SECRET = process.env.JWT_SECRET;
 
 module.exports.handler = async (event) => {
   try {
-    
-
     const body = JSON.parse(event.body);
-    const { dni, contrasenia } = JSON.parse(event.body);
+    console.log(body);
+
+    const { dni, contrasenia } = body;
     // const { valid, message } = UTILS.validarLoginInput(usuario, contrasenia);
     // if (!valid) {
     //   return {
@@ -24,10 +24,10 @@ module.exports.handler = async (event) => {
     const obtenerUsuarioPorDNI = useS3
       ? s3Service.obtenerUsuarioPorDNI
       : dbService.obtenerUsuarioPorDNI;
-
-    const user = await obtenerUsuarioPorDNI(dni);
+      
+    console.log(`Buscando usuario con dni: ${dni}`);
     
-
+    const user = await obtenerUsuarioPorDNI(dni);
 
     if (user.lenght == 0) {
       return {
@@ -36,10 +36,14 @@ module.exports.handler = async (event) => {
       };
     }
 
-    const isValid = await UTILS.compararContrasenias(
-      contrasenia,
-      user[0].contrasenia
-    );
+    console.log(`Usuario encontrado: ${JSON.stringify(user)}`);
+    let isValid = true;
+    if (user.lenght > 0) {
+      isValid = await UTILS.compararContrasenias(
+        contrasenia,
+        user[0].contrasenia
+      );
+    }
 
     if (!isValid) {
       return {
@@ -62,7 +66,6 @@ module.exports.handler = async (event) => {
       SECRET
       //{ expiresIn: '2h' }
     );
-    
 
     return {
       statusCode: 200,

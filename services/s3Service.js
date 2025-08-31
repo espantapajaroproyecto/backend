@@ -342,7 +342,6 @@ async function obtenerNombreRolPorId(id) {
 
 async function agregarReserva(reserva) {
   try {
-    console.log({ reserva });
     const {
       fecha_hora,
       tiempo,
@@ -1004,6 +1003,8 @@ async function obtenerDisponiblesPor(cuerpo) {
 }
 
 const populateReservarAlumnoProfesor = async (reservas) => {
+  console.log({ reservas });
+
   const respuesta = [];
   for (let i = 0; i < reservas.length; i++) {
     const reserva = reservas[i];
@@ -1163,10 +1164,10 @@ async function obtenerAlumnos(params = { alumnoId: undefined }) {
       populate: true,
     }),
   ]);
-
+  console.log({ alumnoResult, reservasAlumnoResult });
+  
   const alumnosData = obtenerValorSeguro(alumnoResult);
   const reservasAlumnoData = obtenerValorSeguro(reservasAlumnoResult);
-  console.log(alumnosData, reservasAlumnoData);
   if (alumnosData.length == 0) {
     console.log("no hay alumnos");
 
@@ -1198,7 +1199,7 @@ async function obtenerAlumnos(params = { alumnoId: undefined }) {
       alumnos.push(alumno);
     }
   }
-  return alumnos;
+  return JSON.stringify(alumnos);
 }
 
 async function agregarReservaAlumno(data) {

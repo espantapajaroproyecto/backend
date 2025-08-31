@@ -1,12 +1,57 @@
 [
-  { "id": 1, "nombre": "Análisis sintáctico", "materia_id": 1 },
-  { "id": 2, "nombre": "Género lírico / poesía", "materia_id": 1 },
-  { "id": 3, "nombre": "Pronombres", "materia_id": 1 },
-  { "id": 4, "nombre": "¿Qué es la historia?", "materia_id": 2 },
-  { "id": 5, "nombre": "Edad Media / Feudalismo", "materia_id": 2 },
-  { "id": 6, "nombre": "Invasiones bárbaras", "materia_id": 2 },
-  { "id": 7, "nombre": "Trecera declinación", "materia_id": 3 },
-  { "id": 8, "nombre": "Adjetivos de 2° clase", "materia_id": 3 },
-  { "id": 9, "nombre": "Odisea", "materia_id": 3 },
-  { "id": 10, "nombre": "Tito Livio", "materia_id": 3 }
+  {
+    "id": 1,
+    "nombre": "Análisis sintáctico",
+    "materia_id": 1
+  },
+  {
+    "id": 2,
+    "nombre": "Género lírico / poesía",
+    "materia_id": 1
+  },
+  {
+    "id": 3,
+    "nombre": "Pronombres",
+    "materia_id": 1
+  },
+  {
+    "id": 4,
+    "nombre": "¿Qué es la historia?",
+    "materia_id": 2
+  },
+  {
+    "id": 5,
+    "nombre": "Edad Media / Feudalismo",
+    "materia_id": 2
+  },
+  {
+    "id": 6,
+    "nombre": "Invasiones bárbaras",
+    "materia_id": 2
+  },
+  {
+    "id": 7,
+    "nombre": "Trecera declinación",
+    "materia_id": 3
+  },
+  {
+    "id": 8,
+    "nombre": "Adjetivos de 2° clase",
+    "materia_id": 3
+  },
+  {
+    "id": 9,
+    "nombre": "Odisea",
+    "materia_id": 3
+  },
+  {
+    "id": 10,
+    "nombre": "Tito Livio",
+    "materia_id": 3
+  },
+  {
+    "id": 11,
+    "nombre": "Tema nuevo prueba 2",
+    "materia_id": 1
+  }
 ]

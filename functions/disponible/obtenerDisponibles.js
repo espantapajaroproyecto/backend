@@ -1,7 +1,7 @@
 require("dotenv").config();
 const dbService = require("../../services/dbService");
 const s3Service = require("../../services/s3Service");
-const { validarCuerpoEvento, makeHeader } = require("../../utils/utils");
+const { validarCuerpoEvento, makeHeader } = require("../../utils/utils" );
 const CAMPOS_REQUERIDOS = [
   // "gradoId",
   // "materiaId",

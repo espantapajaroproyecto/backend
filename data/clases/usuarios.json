@@ -188,5 +188,85 @@
     "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
     "celular": "1160001015",
     "rol_id": 1
+  },
+  {
+    "id": 20,
+    "dni": "29542480",
+    "nombre": "Leticia",
+    "apellido": "Valls",
+    "mail": "Letivalls@gmail.com",
+    "contrasenia": "$2b$10$Phyh45iYKyA9GBcpF3lfSeGECN73nRfW0sujKDGBJ0LYk3oPOnl6q",
+    "celular": "115460-9959",
+    "rol_id": 3
+  },
+  {
+    "id": 21,
+    "dni": "32891585",
+    "nombre": "Lucía",
+    "apellido": "Winograd",
+    "mail": "luliwinograd@gmail.com",
+    "contrasenia": "$2b$10$Oe9JApV23ysVU6.hlaCtfO7hH9Rzy21NMc2KacJpxZ4I71nK2t516",
+    "celular": "1154609959",
+    "rol_id": 3
+  },
+  {
+    "id": 22,
+    "dni": "12345678",
+    "nombre": "Prueba ",
+    "apellido": "Prueba",
+    "mail": "prueba@gmail.com",
+    "contrasenia": "$2b$10$bmo93mfxIPPJAioPCPDxxemOkD3Pe0Nmi71pMV03VyGXTCYkMUXVu",
+    "celular": "112134567",
+    "rol_id": 1
+  },
+  {
+    "id": 23,
+    "dni": "3692580",
+    "nombre": "Prueba",
+    "apellido": "Prueba",
+    "mail": "pruebaprofe@gmail.com",
+    "contrasenia": "$2b$10$NguFnm5yr.zQpvDXdw6fqOg6OKxL3Gb6LJFhp2q3SarvU1NkkqxEq",
+    "celular": "117568765",
+    "rol_id": 2
+  },
+  {
+    "id": 24,
+    "dni": "25836914",
+    "nombre": "Profe",
+    "apellido": "Prueba",
+    "mail": "profeprueba@gmail.com",
+    "contrasenia": "$2b$10$/e0JabLA5XoVB8S4IrA7guwdrEVn4U5uP4L4C5olNPnd.Rqwnfj1K",
+    "celular": "1176457894",
+    "rol_id": 1
+  },
+  {
+    "id": 25,
+    "dni": "12345678",
+    "nombre": "Mauro",
+    "apellido": "Palgi",
+    "mail": "mauro@example.com",
+    "contrasenia": "$2b$10$IC7f7pG6lFUUOstavv5qmO0etyOChxZ3y5hWbsHcDO/6YwPUXy2gu",
+    "celular": "1167894321",
+    "rol_id": 1
+  },
+  {
+    "id": 26,
+    "dni": "66778899",
+    "nombre": "gsgss",
+    "apellido": "rgssg",
+    "mail": "pruebaalumno@gmail.com",
+    "contrasenia": "$2b$10$m7PSB7zWdplFsR26LcqBu.8ANCKfpDzeuWAvO2kOMFLPI27poE8A2",
+    "celular": "112343432",
+    "rol_id": 1
+  },
+  {
+    "id": 27,
+    "dni": "000000010",
+    "nombre": "Mauro",
+    "apellido": "Palgi",
+    "mail": "roberta2@example.com",
+    "contrasenia": "$2b$10$6VN4vDRU7W0Ek4EqXROcoe9Aky4TzS76GgXzn993IC1UUBy4c6l1K",
+    "celular": "1167894321",
+    "rol_id": 1
   }
 ]
