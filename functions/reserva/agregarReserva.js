@@ -66,9 +66,9 @@ module.exports.handler = async (event) => {
       en_instituto,
       grupal,
     };
-
-    const reservaResult = await agregarReserva(nuevaReserva);
-    console.log("Resultado de agregarReserva:", reservaResult);
+    
+    const reserva = await agregarReserva(nuevaReserva);
+    
 
     return {
       statusCode: 201,

@@ -5,8 +5,9 @@
     "inicio": "08:00",
     "fin": "12:00",
     "en_uso": false,
-    "horas_deseadas": 2,
-    "horas_asignadas": 0
+    "duracion": 4,
+    "horas_asignables": 2
+    "tipo_de"
   },
   {
     "id": 2,
