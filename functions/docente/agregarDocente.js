@@ -21,6 +21,7 @@ module.exports.handler = async (event) => {
       mail,
       habilitado,
       valor_hora,
+      color
     } = body;
 
     // Validar campos obligatorios
@@ -82,7 +83,7 @@ module.exports.handler = async (event) => {
     if (habilitado && valor_hora) {
       if (nuevoUsuario) {
         const { id } = nuevoUsuario;
-        await agregarDocente({ usuario_id: id, habilitado, valor_hora });
+        await agregarDocente({ usuario_id: id, habilitado, valor_hora, color });
       }
     }
 
