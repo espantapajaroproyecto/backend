@@ -1,92 +1,90 @@
-<!--
-title: 'AWS Simple HTTP Endpoint example in NodeJS'
-description: 'This template demonstrates how to make a simple HTTP API with Node.js running on AWS Lambda and API Gateway using the Serverless Framework.'
-layout: Doc
-framework: v3
-platform: AWS
-language: nodeJS
-authorLink: 'https://github.com/serverless'
-authorName: 'Serverless, inc.'
-authorAvatar: 'https://avatars1.githubusercontent.com/u/13742415?s=200&v=4'
--->
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-# Serverless Framework Node HTTP API on AWS
+## Getting Started
 
-This template demonstrates how to make a simple HTTP API with Node.js running on AWS Lambda and API Gateway using the Serverless Framework.
-
-This template does not include any kind of persistence (database). For more advanced examples, check out the [serverless/examples repository](https://github.com/serverless/examples/) which includes Typescript, Mongo, DynamoDB and other examples.
-
-## Usage
-
-### Deployment
-
-```
-$ serverless deploy
-```
-
-After deploying, you should see output similar to:
+First, run the development server:
 
 ```bash
-Deploying aws-node-http-api-project to stage dev (us-east-1)
-
-✔ Service deployed to stack aws-node-http-api-project-dev (152s)
-
-endpoint: GET - https://xxxxxxxxxx.execute-api.us-east-1.amazonaws.com/
-functions:
-  hello: aws-node-http-api-project-dev-hello (1.9 kB)
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-_Note_: In current form, after deployment, your API is public and can be invoked by anyone. For production deployments, you might want to configure an authorizer. For details on how to do that, refer to [http event docs](https://www.serverless.com/framework/docs/providers/aws/events/apigateway/).
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-### Invocation
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-After successful deployment, you can call the created application via HTTP:
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-```bash
-curl https://xxxxxxx.execute-api.us-east-1.amazonaws.com/
-```
+Convenciones de Código y Commits
 
-Which should result in response similar to the following (removed `input` content for brevity):
+Este documento define los estilos de nomenclatura que usamos en el proyecto y el proceso para hacer commits siguiendo el estándar Conventional Commits.
+📂 Convenciones de Nombres
+📁 Archivos y Carpetas
+Usar como referencia Vercel Next.js Starter Example
 
-```json
-{
-  "message": "Go Serverless v2.0! Your function executed successfully!",
-  "input": {
-    ...
-  }
-}
-```
+    Formato: kebab-case - ✅ user-profile.js, main-layout/, auth-form/
 
-### Local development
+🐫 Variables y Funciones
 
-You can invoke your function locally by using the following command:
+    Formato: camelCase - ✅
+    Lenguaje: español
+    Ejemplo:
+    obtenerDatosUsuario, ejecutarLogin, autenticarToken
 
-```bash
-serverless invoke local --function hello
-```
+🧱 Clases y Componentes React
 
-Which should result in response similar to the following:
+    Formato: PascalCase - ✅
+    Lenguaje: español
+    Ejemplo:
+    Perfilusuario, FormularioLogin, LayoutPrincipal
 
-```
-{
-  "statusCode": 200,
-  "body": "{\n  \"message\": \"Go Serverless v3.0! Your function executed successfully!\",\n  \"input\": \"\"\n}"
-}
-```
+📢 Constantes Globales
 
+    Formato: UPPER_SNAKE_CASE
+    Lenguaje: español
+    Ejemplo:
+    API_BASE_URL, TIEMO_ESPERA_DEFAULT
 
-Alternatively, it is also possible to emulate API Gateway and Lambda locally by using `serverless-offline` plugin. In order to do that, execute the following command:
+Nomenclatura Gihub Branchs
 
-```bash
-serverless plugin install -n serverless-offline
-```
+    Posicionado en la rama dev cree una nueva rama. 2 El nombre de la rama debe de seguir la siguiente convencion: //
 
-It will add the `serverless-offline` plugin to `devDependencies` in `package.json` file as well as will add it to `plugins` in `serverless.yml`.
+Ejemplo estructura rama: feat/pi-22/initial-commit
+✅ Commits con Conventional Commits
 
-After installation, you can start local emulation with:
+Usamos Conventional Commits para mantener un historial claro y semántico. Esto mejora la legibilidad, automatiza el changelog y facilita los despliegues.
 
-```
-serverless offline
-```
+Utilizá la extensión de VS Code:
 
-To learn more about the capabilities of `serverless-offline`, please refer to its [GitHub repository](https://github.com/dherault/serverless-offline).
+🔗 Conventional Commits by vivaxy
+🧱 Estructura
+
+    En lugar de escribir un commit manualmente, hacé clic en "Conventional Commits".
+    Seleccioná el tipo de cambio (feat, fix, chore, etc.)
+    Ingresá el scope opcional (ej. none)
+    Selecione un emoji correspondiente al trabajo realizado en el commit
+    Escribí el mensaje corto del commit (ej. PI-22 | Initial commit)
+    Presione la tecla enter el paso 5/6 no es obligatorio
+    Escriba la URL del ticket de jira asociado
+    Confirmá el commit generado
+
+Ejemplo estructura commit :
+
+feat: ✨ PI-22 | Initial commit
+
+https://proyectoespanta.atlassian.net/browse/PI-22
+
+## Learn More
+
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
