@@ -24,12 +24,12 @@ module.exports.handler = async (event) => {
     const obtenerUsuarioPorDNI = useS3
       ? s3Service.obtenerUsuarioPorDNI
       : dbService.obtenerUsuarioPorDNI;
-      
+
     console.log(`Buscando usuario con dni: ${dni}`);
-    
+
     const user = await obtenerUsuarioPorDNI(dni);
 
-    if (user.lenght == 0) {
+    if (user.length == 0) {
       return {
         statusCode: 401,
         body: JSON.stringify({ message: "Usuario no encontrado" }),
@@ -37,15 +37,30 @@ module.exports.handler = async (event) => {
     }
 
     console.log(`Usuario encontrado: ${JSON.stringify(user)}`);
-    let isValid = true;
-    if (user.lenght > 0) {
+    let isValid = false;
+    console.log(user.length);
+    console.log(user[0].contrasenia);
+    
+    
+    if (user.length > 0) {
       isValid = await UTILS.compararContrasenias(
         contrasenia,
         user[0].contrasenia
       );
     }
 
-    if (!isValid) {
+    if (!user[0].contrasenia || user[0].contrasenia === "") {
+      return {
+        statusCode: 403,
+        body: JSON.stringify({
+          message: "El usuario debe reiniciar las credenciales ",
+          usuarioId: user[0].id,
+        }),
+      };
+    }
+    console.log(isValid);
+    
+    if (!isValid || !contrasenia) {
       return {
         statusCode: 401,
         body: JSON.stringify({ message: "Password incorrecta" }),

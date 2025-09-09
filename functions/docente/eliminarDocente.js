@@ -17,11 +17,11 @@ module.exports.handler = async (event) => {
     }
 
     const useS3 = process.env.USE_S3 === "true";
-    const eliminarReserva = useS3
+    const eliminarDocente = useS3
       ? s3Service.eliminarDocente
       : dbService.eliminarDocente;
 
-    await eliminarReserva(id);
+    await eliminarDocente(id);
 
     return {
       statusCode: 200,
@@ -32,7 +32,7 @@ module.exports.handler = async (event) => {
       }),
     };
   } catch (error) {
-    console.error("Error en deleteDocente:", error);
+    console.error("Error en delete Docente:", error);
     return {
       statusCode: 500,
       body: JSON.stringify({

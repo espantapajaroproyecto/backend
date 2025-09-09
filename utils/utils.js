@@ -21,6 +21,8 @@ const hashPassword = async (plainPassword) => {
 
 // Compara una contraseña ingresada con la ya encriptada
 const compararContrasenias = async (inputPassword, storedHashedPassword) => {
+  console.log(inputPassword, storedHashedPassword);
+  
   return await bcrypt.compare(inputPassword, storedHashedPassword);
 };
 

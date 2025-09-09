@@ -1,13 +1,13 @@
 require("dotenv").config();
 const dbService = require("../../services/dbService");
 const s3Service = require("../../services/s3Service");
+const { hashPassword } = require("../../utils/utils");
 
 module.exports.handler = async (event) => {
   try {
-    
     const body = JSON.parse(event.body);
 
-    const { id, dni, nombre, apellido, mail, celular } = body;
+    const { id, dni, nombre, apellido, mail, celular, contrasenia } = body;
 
     if (!id) {
       return {
@@ -40,16 +40,23 @@ module.exports.handler = async (event) => {
       });
     }
 
+    if (contrasenia !== undefined && contrasenia !== "") {
+      const contraseniaHasheada = await hashPassword(contrasenia);
+      await modificarUsuario(id, { contrasenia: contraseniaHasheada });
+    }
+    if (contrasenia !== undefined && contrasenia == "") {
+      await modificarUsuario(id, { contrasenia });
+    }
     return {
       statusCode: 200,
       body: JSON.stringify({
         message: useS3
-          ? "Docente modificado en S3"
-          : "Docente modificado en base de datos",
+          ? "Usuario modificado en S3"
+          : "Usuario modificado en base de datos",
       }),
     };
   } catch (error) {
-    console.error("Error en modificarDocente:", error);
+    console.error("Error en modificar Usuario:", error);
     return {
       statusCode: 500,
       body: JSON.stringify({
