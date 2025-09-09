@@ -1,90 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Perfecto 🙌, te armo una sección para tu **README.md** explicando esos scripts en español, clara y ordenada:
 
-## Getting Started
+---
 
-First, run the development server:
+## 📜 Scripts disponibles
+
+En este proyecto podés ejecutar los siguientes scripts definidos en `package.json`:
+
+### ▶️ `npm run local`
+
+Ejecuta una función de **AWS Lambda** de manera local usando **Serverless Framework**.
+
+> Útil para probar funciones sin necesidad de desplegarlas en AWS.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run local nombreDeLaFuncion
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 🧪 `npm run local:evento`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Corre un **test local** ejecutando el script `ejecutar-test-local.sh` ubicado en `./utils/bash/`.
 
-Convenciones de Código y Commits
+> Ideal para simular un evento completo y verificar cómo responde la Lambda.
 
-Este documento define los estilos de nomenclatura que usamos en el proyecto y el proceso para hacer commits siguiendo el estándar Conventional Commits.
-📂 Convenciones de Nombres
-📁 Archivos y Carpetas
-Usar como referencia Vercel Next.js Starter Example
+```bash
+npm run local:evento
+```
 
-    Formato: kebab-case - ✅ user-profile.js, main-layout/, auth-form/
+---
 
-🐫 Variables y Funciones
+### 🔄 `npm run reload:s3`
 
-    Formato: camelCase - ✅
-    Lenguaje: español
-    Ejemplo:
-    obtenerDatosUsuario, ejecutarLogin, autenticarToken
+Invoca de forma local la función **`cargarDataS3`**.
 
-🧱 Clases y Componentes React
+> Se usa para recargar o probar la carga de datos en un bucket S3 desde el entorno local.
 
-    Formato: PascalCase - ✅
-    Lenguaje: español
-    Ejemplo:
-    Perfilusuario, FormularioLogin, LayoutPrincipal
+```bash
+npm run reload:s3
+```
 
-📢 Constantes Globales
+---
 
-    Formato: UPPER_SNAKE_CASE
-    Lenguaje: español
-    Ejemplo:
-    API_BASE_URL, TIEMO_ESPERA_DEFAULT
+### 📦 `npm run package`
 
-Nomenclatura Gihub Branchs
+Ejecuta el script `run-webpack-linux.sh` que empaqueta el proyecto utilizando **Webpack**.
 
-    Posicionado en la rama dev cree una nueva rama. 2 El nombre de la rama debe de seguir la siguiente convencion: //
+> Este comando genera el bundle necesario para desplegar la aplicación en AWS.
 
-Ejemplo estructura rama: feat/pi-22/initial-commit
-✅ Commits con Conventional Commits
+```bash
+npm run package
+```
 
-Usamos Conventional Commits para mantener un historial claro y semántico. Esto mejora la legibilidad, automatiza el changelog y facilita los despliegues.
+---
 
-Utilizá la extensión de VS Code:
-
-🔗 Conventional Commits by vivaxy
-🧱 Estructura
-
-    En lugar de escribir un commit manualmente, hacé clic en "Conventional Commits".
-    Seleccioná el tipo de cambio (feat, fix, chore, etc.)
-    Ingresá el scope opcional (ej. none)
-    Selecione un emoji correspondiente al trabajo realizado en el commit
-    Escribí el mensaje corto del commit (ej. PI-22 | Initial commit)
-    Presione la tecla enter el paso 5/6 no es obligatorio
-    Escriba la URL del ticket de jira asociado
-    Confirmá el commit generado
-
-Ejemplo estructura commit :
-
-feat: ✨ PI-22 | Initial commit
-
-https://proyectoespanta.atlassian.net/browse/PI-22
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
+¿Querés que te lo deje ya maquetado en un **README.md completo** (con introducción, instalación, scripts y convenciones) o solamente esta sección lista para pegarla en el README que ya tenés?
