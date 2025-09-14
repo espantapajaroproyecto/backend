@@ -6,8 +6,14 @@
     "fin": "12:00",
     "en_uso": false,
     "duracion": 4,
-    "horas_asignables": 2
-    "tipo_de"
+    "horas_asignables": 2,
+    "asignables": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
   },
   {
     "id": 2,
@@ -16,7 +22,14 @@
     "fin": "18:00",
     "en_uso": false,
     "horas_deseadas": 2,
-    "horas_asignadas": 0
+    "horas_asignadas": 0,
+    "asignables": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
   },
   {
     "id": 3,
@@ -25,7 +38,14 @@
     "fin": "18:00",
     "en_uso": false,
     "horas_deseadas": 3,
-    "horas_asignadas": 0
+    "horas_asignadas": 0,
+    "asignables": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
   },
   {
     "id": 4,
@@ -34,7 +54,14 @@
     "fin": "13:00",
     "en_uso": false,
     "horas_deseadas": 1,
-    "horas_asignadas": 0
+    "horas_asignadas": 0,
+    "asignables": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
   },
   {
     "id": 5,
@@ -43,7 +70,14 @@
     "fin": "19:00",
     "en_uso": false,
     "horas_deseadas": 2,
-    "horas_asignadas": 0
+    "horas_asignadas": 0,
+    "asignables": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
   },
   {
     "id": 6,
@@ -52,7 +86,14 @@
     "fin": "12:00",
     "en_uso": false,
     "horas_deseadas": 1,
-    "horas_asignadas": 0
+    "horas_asignadas": 0,
+    "asignables": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
   },
   {
     "id": 7,
@@ -61,7 +102,14 @@
     "fin": "14:00",
     "en_uso": false,
     "horas_deseadas": 3,
-    "horas_asignadas": 0
+    "horas_asignadas": 0,
+    "asignables": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
   },
   {
     "id": 8,
@@ -70,7 +118,14 @@
     "fin": "16:00",
     "en_uso": false,
     "horas_deseadas": 1,
-    "horas_asignadas": 0
+    "horas_asignadas": 0,
+    "asignables": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
   },
   {
     "id": 9,
@@ -79,7 +134,14 @@
     "fin": "12:00",
     "en_uso": false,
     "horas_deseadas": 2,
-    "horas_asignadas": 0
+    "horas_asignadas": 0,
+    "asignables": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
   },
   {
     "id": 10,
@@ -88,6 +150,13 @@
     "fin": "18:00",
     "en_uso": false,
     "horas_deseadas": 1,
-    "horas_asignadas": 0
+    "horas_asignadas": 0,
+    "asignables": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
   }
 ]

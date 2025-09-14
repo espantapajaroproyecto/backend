@@ -21,19 +21,11 @@ module.exports.handler = async (event) => {
       mail,
       habilitado,
       valor_hora,
-      color
+      color,
     } = body;
 
     // Validar campos obligatorios
-    if (
-      !dni ||
-      !nombre ||
-      !apellido ||
-      !mail ||
-      !contrasenia ||
-      !celular ||
-      !usuarioId
-    ) {
+    if (!dni || !nombre || !apellido || !mail || !contrasenia || !celular) {
       return {
         statusCode: 400,
         body: JSON.stringify({ message: "Faltan campos obligatorios" }),
@@ -80,10 +72,21 @@ module.exports.handler = async (event) => {
     //JWT con rol incluido
 
     let nuevoUsuario = await buscarUsuario(dni, mail);
-    if (habilitado && valor_hora) {
+    if (
+      color !== undefined ||
+      habilitado !== undefined ||
+      valor_hora !== undefined
+    ) {
       if (nuevoUsuario) {
         const { id } = nuevoUsuario;
-        await agregarDocente({ usuario_id: id, habilitado, valor_hora, color });
+        const nuevoDocente = {
+          usuario_id: id,
+          ...(habilitado !== undefined && { habilitado }),
+          ...(color !== undefined && { color }),
+          ...(valor_hora !== undefined && { valor_hora }),
+        };
+        console.log("nuevoDocente", nuevoDocente);        
+        await agregarDocente(nuevoDocente);
       }
     }
 

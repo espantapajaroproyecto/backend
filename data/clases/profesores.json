@@ -1,72 +1,93 @@
 [
   {
     "id": 1,
-    "usuario_id": 2,
-    "habilitado": true,
-    "valor_hora": 50.00,
-    "color": "#FF5733"
-  },
-  {
-    "id": 2,
     "usuario_id": 3,
     "habilitado": true,
     "valor_hora": 60.00,
     "color": "#33A1FF"
   },
   {
-    "id": 3,
+    "id": 2,
     "usuario_id": 4,
     "habilitado": true,
     "valor_hora": 55.00,
     "color": "#28A745"
   },
   {
-    "id": 4,
-    "usuario_id": 5,
+    "id": 3,
+    "usuario_id": 23,
     "habilitado": true,
-    "valor_hora": 52.50,
-    "color": "#FFC300"
+    "valor_hora": 54.00,
+    "color": "#2ECC71"
+  },
+  {
+    "id": 4,
+    "usuario_id": 28,
+    "habilitado": true,
+    "valor_hora": 56.50,
+    "color": "#F39C12"
   },
   {
     "id": 5,
-    "usuario_id": 6,
+    "usuario_id": 30,
     "habilitado": true,
-    "valor_hora": 58.00,
-    "color": "#8E44AD"
+    "valor_hora": 53.00,
+    "color": "#9B59B6"
   },
   {
     "id": 6,
-    "usuario_id": 7,
+    "usuario_id": 31,
     "habilitado": true,
-    "valor_hora": 65.00,
-    "color": "#E74C3C"
+    "valor_hora": 60.00,
+    "color": "#33A1FF"
   },
   {
     "id": 7,
-    "usuario_id": 8,
+    "usuario_id": 33,
     "habilitado": true,
-    "valor_hora": 60.00,
-    "color": "#3498DB"
+    "valor_hora": 55.00,
+    "color": "#28A745"
   },
   {
     "id": 8,
-    "usuario_id": 9,
+    "usuario_id": 34,
     "habilitado": true,
     "valor_hora": 54.00,
     "color": "#2ECC71"
   },
   {
     "id": 9,
-    "usuario_id": 10,
+    "usuario_id": 35,
     "habilitado": true,
     "valor_hora": 56.50,
     "color": "#F39C12"
   },
   {
     "id": 10,
-    "usuario_id": 11,
+    "usuario_id": 36,
     "habilitado": true,
     "valor_hora": 53.00,
     "color": "#9B59B6"
+  },
+  {
+    "id": 11,
+    "usuario_id": 37,
+    "habilitado": true,
+    "valor_hora": 60.00,
+    "color": "#33A1FF"
+  },
+  {
+    "id": 12,
+    "usuario_id": 38,
+    "habilitado": true,
+    "valor_hora": 55.00,
+    "color": "#28A745"
+  },
+  {
+    "id": 13,
+    "usuario_id": 40,
+    "habilitado": true,
+    "valor_hora": 54.00,
+    "color": "#2ECC71"
   }
 ]

@@ -5,12 +5,22 @@ const { hashPassword } = require("../../utils/utils");
 
 module.exports.handler = async (event) => {
   try {
-    
+    console.log({ event });
+
     const body = JSON.parse(event.body);
 
-    const { id, habilitado, valor_hora, dni, nombre, apellido, mail, celular } =
-      body;
-
+    const {
+      id,
+      habilitado,
+      valor_hora,
+      dni,
+      nombre,
+      apellido,
+      mail,
+      celular,
+      color,
+    } = body;
+    let itemModificado = null;
     if (!id) {
       return {
         statusCode: 400,
@@ -22,6 +32,10 @@ module.exports.handler = async (event) => {
 
     const useS3 = process.env.USE_S3 === "true";
 
+    const obtenerDocentes = useS3
+      ? s3Service.obtenerDocentes
+      : dbService.obtenerDocentes;
+
     const modificarDocente = useS3
       ? s3Service.modificarDocente
       : dbService.modificarDocente;
@@ -30,9 +44,22 @@ module.exports.handler = async (event) => {
       ? s3Service.modificarUsuario
       : dbService.modificarUsuario;
 
-    if (habilitado !== undefined || valor_hora !== undefined) {
-      await modificarDocente(id, {
+    const docenteAModificar = await obtenerDocentes({ profesorId: id });
+    console.log({ docenteAModificar });
+    if (docenteAModificar.length === 0) {
+      return {
+        statusCode: 404,
+        body: JSON.stringify({ message: "No se encontró el docente" }),
+      };
+    }
+    if (
+      color !== undefined ||
+      habilitado !== undefined ||
+      valor_hora !== undefined
+    ) {
+      itemModificado = await modificarDocente(id, {
         ...(habilitado !== undefined && { habilitado }),
+        ...(color !== undefined && { color }),
         ...(valor_hora !== undefined && { valor_hora }),
       });
     }
@@ -43,7 +70,10 @@ module.exports.handler = async (event) => {
       mail !== undefined ||
       celular !== undefined
     ) {
-      await modificarUsuario(id, {
+      const { usuario_id } = docenteAModificar[0];
+      console.log({ usuario_id });
+      
+      await modificarUsuario(usuario_id, {
         ...(dni !== undefined && { dni }),
         ...(nombre !== undefined && { nombre }),
         ...(apellido !== undefined && { apellido }),

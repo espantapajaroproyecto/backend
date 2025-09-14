@@ -17,7 +17,7 @@
     "mail": "laura.gomez@example.com",
     "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
     "celular": "1167894322",
-    "rol_id": "3"
+    "rol_id": 3
   },
   {
     "id": 3,
@@ -27,7 +27,7 @@
     "mail": "fernanda.martinez@example.com",
     "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
     "celular": "1167894323",
-    "rol_id": "2"
+    "rol_id": 2
   },
   {
     "id": 4,
@@ -37,7 +37,7 @@
     "mail": "daniela.suarez@example.com",
     "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
     "celular": "1167894323",
-    "rol_id": "2"
+    "rol_id": 2
   },
   {
     "id": 5,

@@ -137,6 +137,7 @@ async function obtener({
   // Relación de claves a traer
   const relaciones = tablasRelacion[key];
 
+
   const relatedDataMap = {};
 
   // Cargar datos relacionados
@@ -156,10 +157,15 @@ async function obtener({
       }
     })
   );
-
+  console.log({relaciones});
+  
   const populated = registros.map((obj) => {
     const newObj = { ...obj };
     relaciones.forEach(({ key: relatedKey, propiedad }) => {
+      console.log("---");      
+      console.log({ relatedKey, propiedad, valor: obj[propiedad] });
+      console.log("---");
+      
       const relatedObj = relatedDataMap[relatedKey]?.[obj[propiedad]];
       if (relatedObj) {
         newObj[propiedad.replace("_id", "")] = relatedObj;
@@ -224,18 +230,21 @@ async function actualizar({ key, propiedad = "id", valor, nuevosValores }) {
   const response = await s3.getObject({ Bucket: BUCKET, Key: s3Key }).promise();
   const data = JSON.parse(response.Body.toString());
 
-  // Encontrar y actualizar el objeto
-  const nuevosDatos = data.map((item) => {
+  let itemModificado = null;
+  const nuevosDatos = [];
+
+  for (let i = 0; i < data.length; i++) {
+    let item = data[i];
     if (item[propiedad] == valor) {
       const nuevosValoresFiltrados = Object.fromEntries(
         Object.entries(nuevosValores).filter(([_, v]) => v !== undefined)
       );
-      const modificada = { ...item, ...nuevosValoresFiltrados };
-      return modificada;
+      item = { ...item, ...nuevosValoresFiltrados };
+      itemModificado = item;
     }
-    return item;
-  });
-
+    nuevosDatos.push(item);
+  }
+  
   // Guardar actualizado
   await s3
     .putObject({
@@ -246,8 +255,9 @@ async function actualizar({ key, propiedad = "id", valor, nuevosValores }) {
     })
     .promise();
 
-  return { actualizado: true };
+  return { actualizado: true, itemModificado };
 }
+
 
 // USUARIOS
 async function agregarUsuario(user) {
@@ -483,6 +493,8 @@ async function modificarUsuario(id, camposActualizados) {
     valor: id,
     nuevosValores: camposActualizados,
   };
+  console.log({ modificarParams });
+  
   return await actualizar(modificarParams);
 }
 
@@ -572,13 +584,14 @@ async function obtenerDocentes(cuerpo = { profesorId: undefined }) {
   const docentesData = obtenerValorSeguro(docentesResult);
   const disponibleDocenteData = obtenerValorSeguro(disponiblesDocentesResult);
   const materiaDocentesData = obtenerValorSeguro(materiaDocentesResult);
-
+  
   if (docentesData.length == 0) {
     return docentes;
   }
   for (let i = 0; i < docentesData.length; i++) {
     const docente = docentesData[i];
-
+    console.log({ docente });
+    
     const { id } = docente;
 
     if (disponibleDocenteData.length > 0) {
@@ -599,7 +612,11 @@ async function obtenerDocentes(cuerpo = { profesorId: undefined }) {
           return elemento.materia;
         });
     }
-    delete docente.usuario.contrasenia;
+    console.log("---");    
+    console.log(docente);
+    console.log("---");
+    
+    delete docente?.usuario?.contrasenia;
 
     if (profesorId && id == profesorId) {
       docentes = [];
@@ -827,9 +844,9 @@ async function obtenerDisponibles() {
   const profesoresData = obtenerValorSeguro(profesoresResult).map(
     (elemento) => {
       const { usuario, id: profesor_id } = elemento;
-      delete usuario.contrasenia;
-      delete usuario.id;
-      delete elemento.usuario;
+      delete usuario?.contrasenia;
+      delete usuario?.id;
+      delete elemento?.usuario;
       return { ...elemento, ...usuario, profesor_id };
     }
   );
