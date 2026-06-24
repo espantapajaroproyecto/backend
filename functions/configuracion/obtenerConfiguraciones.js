@@ -1,6 +1,7 @@
 require("dotenv").config();
 const dbService = require("../../services/dbService");
 const s3Service = require("../../services/s3Service");
+const { makeHeader } = require("../../utils/utils");
 
 module.exports.handler = async (event) => {
   const useS3 = process.env.USE_S3 == "true";
@@ -14,6 +15,7 @@ module.exports.handler = async (event) => {
 
     return {
       statusCode: 200,
+      headers: makeHeader(),
       body: JSON.stringify(
         {
           message: useS3
@@ -30,6 +32,7 @@ module.exports.handler = async (event) => {
 
     return {
       statusCode: 500,
+      headers: makeHeader(),
       body: JSON.stringify(
         {
           message: "Error al obtener los Configuraciones",

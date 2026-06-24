@@ -1,6 +1,7 @@
 require("dotenv").config();
 const dbService = require("../../services/dbService");
 const s3Service = require("../../services/s3Service");
+const { makeHeader } = require("../../utils/utils");
 
 module.exports.handler = async (event) => {
   try {
@@ -11,6 +12,7 @@ module.exports.handler = async (event) => {
     if (!id) {
       return {
         statusCode: 400,
+        headers: makeHeader(),
         body: JSON.stringify({
           message: "El ID del Usuario Alumno es obligatorio",
         }),
@@ -28,6 +30,7 @@ module.exports.handler = async (event) => {
     if (!alumnoExists) {
       return {
         statusCode: 404,
+        headers: makeHeader(),
         body: JSON.stringify({
           message: "Alumno no encontrado",
         }),
@@ -44,6 +47,7 @@ module.exports.handler = async (event) => {
 
     return {
       statusCode: 200,
+      headers: makeHeader(),
       body: JSON.stringify({
         message: useS3
           ? "Alumno eliminada en S3"
@@ -54,6 +58,7 @@ module.exports.handler = async (event) => {
     console.error("Error en deleteAlumno:", error);
     return {
       statusCode: 500,
+      headers: makeHeader(),
       body: JSON.stringify({
         message: "Error interno del servidor",
         error: error.message,

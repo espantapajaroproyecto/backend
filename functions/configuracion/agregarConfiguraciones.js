@@ -1,6 +1,7 @@
 require("dotenv").config();
 const dbService = require("../../services/dbService");
 const s3Service = require("../../services/s3Service");
+const { makeHeader } = require("../../utils/utils");
 
 module.exports.handler = async (event) => {
   try {
@@ -13,6 +14,7 @@ module.exports.handler = async (event) => {
     if (!grados && !materias && !niveles && !temas && !aulas && !pcs && !instituciones_educativas) {
       return {
         statusCode: 400,
+        headers: makeHeader(),
         body: JSON.stringify({
           message: "Debe incluirse al menos una configuración para guardar",
         }),
@@ -92,6 +94,7 @@ module.exports.handler = async (event) => {
 
     return {
       statusCode: 201,
+      headers: makeHeader(),
       body: JSON.stringify({
         message: useS3
           ? "Configuraciones guardadas en S3"
@@ -102,6 +105,7 @@ module.exports.handler = async (event) => {
     console.error("Error:", error);
     return {
       statusCode: 500,
+      headers: makeHeader(),
       body: JSON.stringify({
         message: "Error interno",
         error: error.message,

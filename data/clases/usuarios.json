@@ -5,7 +5,7 @@
     "nombre": "Maria Roberta ",
     "apellido": "Fernández Fagundez",
     "mail": "roberta.fernandez.fagundez@example.com",
-    "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "1167894000",
     "rol_id": 1
   },
@@ -15,7 +15,7 @@
     "nombre": "Laura",
     "apellido": "Gómez",
     "mail": "laura.gomez@example.com",
-    "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "1167894322",
     "rol_id": 3
   },
@@ -25,7 +25,7 @@
     "nombre": "Mauro",
     "apellido": "Martínez",
     "mail": "fernanda.martinez@example.com",
-    "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "1167894323",
     "rol_id": 2
   },
@@ -35,7 +35,7 @@
     "nombre": "Danielaa",
     "apellido": "Suárezz",
     "mail": "daniela.suarez@example.com",
-    "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "1167894323",
     "rol_id": 2
   },
@@ -45,7 +45,7 @@
     "nombre": "Gloria",
     "apellido": "Ramírez",
     "mail": "gloria.ramirez@example.com",
-    "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "1160001001",
     "rol_id": 1
   },
@@ -55,7 +55,7 @@
     "nombre": "Mariano",
     "apellido": "Pérez",
     "mail": "mariano.perez@example.com",
-    "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "1160001002",
     "rol_id": 1
   },
@@ -65,7 +65,7 @@
     "nombre": "Nicolás",
     "apellido": "Sánchez",
     "mail": "nicolas.sanchez@example.com",
-    "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "1160001003",
     "rol_id": 1
   },
@@ -75,7 +75,7 @@
     "nombre": "Lucas",
     "apellido": "Moreno",
     "mail": "lucas.moreno@ejemplo.com",
-    "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "1160001004",
     "rol_id": 1
   },
@@ -85,7 +85,7 @@
     "nombre": "Emilia",
     "apellido": "Torres",
     "mail": "emilia.torres@example.com",
-    "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "1160001005",
     "rol_id": 1
   },
@@ -95,7 +95,7 @@
     "nombre": "Bruno",
     "apellido": "Sivori",
     "mail": "bruno.sivori@example.com",
-    "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "1160001006",
     "rol_id": 1
   },
@@ -105,7 +105,7 @@
     "nombre": "Milena",
     "apellido": "García",
     "mail": "milena.garcia@example.com",
-    "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "1160001007",
     "rol_id": 1
   },
@@ -115,7 +115,7 @@
     "nombre": "Augusto",
     "apellido": "Vega",
     "mail": "augusto.vega@example.com",
-    "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "1160001008",
     "rol_id": 1
   },
@@ -125,7 +125,7 @@
     "nombre": "Camilo",
     "apellido": "López",
     "mail": "camilo.lopez@example.com",
-    "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "1160001009",
     "rol_id": 1
   },
@@ -135,7 +135,7 @@
     "nombre": "Mariana",
     "apellido": "Ortega",
     "mail": "mariana.ortega@example.com",
-    "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "1160001010",
     "rol_id": 1
   },
@@ -145,7 +145,7 @@
     "nombre": "Bianca",
     "apellido": "Ruiz",
     "mail": "bianca.ruiz@example.com",
-    "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "1160001011",
     "rol_id": 1
   },
@@ -155,7 +155,7 @@
     "nombre": "Matías",
     "apellido": "Castro",
     "mail": "matias.castro@example.com",
-    "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "1160001012",
     "rol_id": 1
   },
@@ -165,7 +165,7 @@
     "nombre": "Morena",
     "apellido": "Silva",
     "mail": "morena.silva@example.com",
-    "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "1160001013",
     "rol_id": 1
   },
@@ -175,7 +175,7 @@
     "nombre": "Sebastián",
     "apellido": "Domínguez",
     "mail": "sebastian.dominguez@example.com",
-    "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "1160001014",
     "rol_id": 1
   },
@@ -185,7 +185,7 @@
     "nombre": "Violeta",
     "apellido": "Molina",
     "mail": "violeta.molina@example.com",
-    "contrasenia": "$2b$10$whatKSjghqD9uecmrtpfjOiJwvIN9IaAgaH0yOLmn/j4Rda8DdTMe",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "1160001015",
     "rol_id": 1
   },
@@ -195,7 +195,7 @@
     "nombre": "Leticia",
     "apellido": "Valls",
     "mail": "Letivalls@gmail.com",
-    "contrasenia": "$2b$10$Phyh45iYKyA9GBcpF3lfSeGECN73nRfW0sujKDGBJ0LYk3oPOnl6q",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "115460-9959",
     "rol_id": 3
   },
@@ -205,7 +205,7 @@
     "nombre": "Lucía",
     "apellido": "Winograd",
     "mail": "luliwinograd@gmail.com",
-    "contrasenia": "$2b$10$Oe9JApV23ysVU6.hlaCtfO7hH9Rzy21NMc2KacJpxZ4I71nK2t516",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "1154609959",
     "rol_id": 3
   },
@@ -215,7 +215,7 @@
     "nombre": "Prueba ",
     "apellido": "Prueba",
     "mail": "prueba@gmail.com",
-    "contrasenia": "$2b$10$bmo93mfxIPPJAioPCPDxxemOkD3Pe0Nmi71pMV03VyGXTCYkMUXVu",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "112134567",
     "rol_id": 1
   },
@@ -225,7 +225,7 @@
     "nombre": "Prueba",
     "apellido": "Prueba",
     "mail": "pruebaprofe@gmail.com",
-    "contrasenia": "$2b$10$NguFnm5yr.zQpvDXdw6fqOg6OKxL3Gb6LJFhp2q3SarvU1NkkqxEq",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "117568765",
     "rol_id": 2
   },
@@ -235,7 +235,7 @@
     "nombre": "Profe",
     "apellido": "Prueba",
     "mail": "profeprueba@gmail.com",
-    "contrasenia": "$2b$10$/e0JabLA5XoVB8S4IrA7guwdrEVn4U5uP4L4C5olNPnd.Rqwnfj1K",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "1176457894",
     "rol_id": 1
   },
@@ -245,7 +245,7 @@
     "nombre": "Mauro",
     "apellido": "Palgi",
     "mail": "mauro@example.com",
-    "contrasenia": "$2b$10$IC7f7pG6lFUUOstavv5qmO0etyOChxZ3y5hWbsHcDO/6YwPUXy2gu",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "1167894321",
     "rol_id": 1
   },
@@ -255,7 +255,7 @@
     "nombre": "gsgss",
     "apellido": "rgssg",
     "mail": "pruebaalumno@gmail.com",
-    "contrasenia": "$2b$10$m7PSB7zWdplFsR26LcqBu.8ANCKfpDzeuWAvO2kOMFLPI27poE8A2",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "112343432",
     "rol_id": 1
   },
@@ -265,7 +265,7 @@
     "nombre": "Mauro",
     "apellido": "Palgi",
     "mail": "roberta2@example.com",
-    "contrasenia": "$2b$10$6VN4vDRU7W0Ek4EqXROcoe9Aky4TzS76GgXzn993IC1UUBy4c6l1K",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "1167894321",
     "rol_id": 1
   },
@@ -275,7 +275,7 @@
     "nombre": "Maria ",
     "apellido": "Fernandez",
     "mail": "pruebaMariana@gmail.com",
-    "contrasenia": "$2b$10$WXeT8FN0OWFzuCiJq2pmf.X023GBzZAjAHUXjYEyc27OPxAhgQxFG",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "+54118787678",
     "rol_id": 2
   },
@@ -285,7 +285,7 @@
     "nombre": "Juan",
     "apellido": "Fernandez",
     "mail": "pruebaAlumnoMariana@gmail.com",
-    "contrasenia": "$2b$10$jjzklQGiEDD3tQ4GMNt74.kfwAt1c/xIEn4OAx4RlZwdVrlrThQce",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "+54118787678",
     "rol_id": 1
   },
@@ -295,7 +295,7 @@
     "nombre": "Roberta",
     "apellido": "Fernández",
     "mail": "roberta1@example.com",
-    "contrasenia": "$2b$10$73Br.GU4ltB/7BnGbpnEoOuF8KvN0oq5X3FRLu1OGGnOKx0ENUGU2",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "1167894321",
     "rol_id": 2
   },
@@ -305,7 +305,7 @@
     "nombre": "Prueba",
     "apellido": "Prueba",
     "mail": "pruebaProfe2@gmail.com",
-    "contrasenia": "$2b$10$MBcvAxE5yLvz6VE1E4XDHu4dhjaqPZkCunAxQcdfTSohkTv8JGcTm",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "+54118787678",
     "rol_id": 2
   },
@@ -315,7 +315,7 @@
     "nombre": "prueba",
     "apellido": "prueba",
     "mail": "pruebaalumnomariana@gmail.com",
-    "contrasenia": "$2b$10$KrYggX2.7PRJsoKngGBClOkMkhUZ4PVQNB0Ah5hoAoTzPEz3QHJuy",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "+54118787678",
     "rol_id": 1
   },
@@ -325,7 +325,7 @@
     "nombre": "Mariana",
     "apellido": "Mariana",
     "mail": "prueba1234@gmail.com",
-    "contrasenia": "$2b$10$vStUsmdCY5k/te4.hoarhepy1/ud0jamaA60v1rfjxxmQ8Aj2b1EC",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "+54118787678",
     "rol_id": 2
   },
@@ -335,7 +335,7 @@
     "nombre": "Roberta",
     "apellido": "Fernández",
     "mail": "roberta43@example.com",
-    "contrasenia": "$2b$10$PFJK42LDxlmVYMRgiF8jzuwMEcEjrD8WqtJxQc5NgpRiqZLOuoZcq",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "1167894321",
     "rol_id": 2
   },
@@ -345,7 +345,7 @@
     "nombre": "Mariana",
     "apellido": "Mariana",
     "mail": "prueba123444@gmail.com",
-    "contrasenia": "$2b$10$XogXUiDspF9mF.4tIIrmAesvlYB68skIabC5pS71BdtNuVMTKAtXq",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "+54118787678",
     "rol_id": 2
   },
@@ -355,7 +355,7 @@
     "nombre": "mauro",
     "apellido": "elias",
     "mail": "rmauro@example.com",
-    "contrasenia": "$2b$10$EjXXkqRghs3uShs5HyqCCeP39hZrQ7llMsJwJ7wIcJGFVOYKdYor6",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "1167894321",
     "rol_id": 2
   },
@@ -365,7 +365,7 @@
     "nombre": "Mariana",
     "apellido": "Mariana",
     "mail": "prueba12@gmail.com",
-    "contrasenia": "$2b$10$9K7.4cOnudRojvqpmv5uBOGNRpEupnc/UHeoPYkiJlgss3zfTiC/e",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "+54118787678",
     "rol_id": 2
   },
@@ -375,7 +375,7 @@
     "nombre": "marianaa",
     "apellido": "marianaa",
     "mail": "marianapp2@example.com",
-    "contrasenia": "$2b$10$fCJINMg22v1E0MQ3RgOpjuW7h7joVxszZAXdX4yGJ/gfJjwcQFtXO",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "1167894322",
     "rol_id": 2
   },
@@ -385,7 +385,7 @@
     "nombre": "Raner",
     "apellido": "Wshing",
     "mail": "raner@gmail.com",
-    "contrasenia": "$2b$10$N1.yyoxMSwUGsB.xBqnhx.0WFbDxUMg5DvGqVZ4ybNvWO3yFJTxLK",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "111234567",
     "rol_id": 1
   },
@@ -395,7 +395,7 @@
     "nombre": "Milei",
     "apellido": "Milei",
     "mail": "milei@milei.com",
-    "contrasenia": "$2b$10$JLfsrxqCOK5b4wp25G9s2ueg.d.9ZnTvaYVGzZpwpoIYzAnSaTQui",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "1167894000",
     "rol_id": 2
   },
@@ -405,7 +405,7 @@
     "nombre": "Orsi",
     "apellido": "Yamandu",
     "mail": "yaman@du.com",
-    "contrasenia": "$2b$10$.1hTOkdcNfu8FjT/9XkWz.VMzqybiX4kMtUTugOgILtU2VilUQyAG",
+    "contrasenia": "$2b$10$tyEuB/7wuDKo/QsjTe7pkehycmZFwSzVygiLkUYgKmDlbHhju2PZS",
     "celular": "1167894000",
     "rol_id": 3
   }

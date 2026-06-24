@@ -1,7 +1,7 @@
 require("dotenv").config();
 const dbService = require("../../services/dbService");
 const s3Service = require("../../services/s3Service");
-const { hashPassword } = require("../../utils/utils");
+const { hashPassword, makeHeader } = require("../../utils/utils");
 
 const jwt = require("jsonwebtoken");
 
@@ -33,6 +33,7 @@ module.exports.handler = async (event) => {
     ) {
       return {
         statusCode: 400,
+        headers: makeHeader(),
         body: JSON.stringify({ message: "Faltan campos obligatorios" }),
       };
     }
@@ -89,6 +90,7 @@ module.exports.handler = async (event) => {
 
     return {
       statusCode: 201,
+      headers: makeHeader(),
       body: JSON.stringify({
         token,
         message: useS3
@@ -100,6 +102,7 @@ module.exports.handler = async (event) => {
     console.error("Error:", error);
     return {
       statusCode: 500,
+      headers: makeHeader(),
       body: JSON.stringify({
         message: "Error interno",
         error: error.message,

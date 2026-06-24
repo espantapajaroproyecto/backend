@@ -7,12 +7,19 @@ const JWT_SECRET = process.env.JWT_SECRET;
 const accessControl = {
   admin: ["*"], // Acceso total
   alumno: [
-    { path: "/login", methods: ["POST"] },
-    { path: "/usuario", methods: ["GET"] },
+    { path: "/reserva",      methods: ["GET", "POST", "PUT", "DELETE"] },
+    { path: "/disponible",   methods: ["GET"] },
+    { path: "/configuracion",methods: ["GET"] },
+    { path: "/profesor",     methods: ["GET"] },
+    { path: "/alumno",       methods: ["GET", "PUT"] },
+    { path: "/usuario",      methods: ["GET", "PUT"] },
   ],
   profesor: [
-    { path: "/login", methods: ["POST"] },
-    { path: "/usuario", methods: ["GET"] },
+    { path: "/reserva",      methods: ["GET", "PUT"] },
+    { path: "/disponible",   methods: ["GET", "POST", "PUT", "DELETE"] },
+    { path: "/configuracion",methods: ["GET"] },
+    { path: "/profesor",     methods: ["GET", "PUT"] },
+    { path: "/usuario",      methods: ["GET", "PUT"] },
   ],
 };
 
