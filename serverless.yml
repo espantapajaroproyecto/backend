@@ -376,6 +376,7 @@ functions:
         - data/clases/**
 
   # Functions intentionally excluded from this deploy:
+
   # - helloWorld: broken (contains React hook)
   # - playground: dev utility only
   # - agregarDisponible, eliminarDisponible, modificarDisponible: empty stubs
@@ -383,3 +384,56 @@ functions:
   # - agregarMateriaProfesor, eliminarMateriaProfesor: empty stubs
   # - reiniciarContra: empty stub (TODO)
   # - agregarReservaAlumno, eliminarReservaAlumno: not yet implemented
+
+# ── API GATEWAY ERROR RESPONSES WITH CORS HEADERS ────────────────────────────
+# When the Lambda authorizer denies a request (bad/missing token), API Gateway
+# returns the 401/403 itself — the Lambda never runs, so makeHeader() never fires.
+# These GatewayResponse resources inject CORS headers at the gateway level so
+# the browser sees the real HTTP status code instead of a misleading CORS error.
+#
+# TODO: Replace "*" with the Amplify domain before client delivery.
+resources:
+  Resources:
+    GatewayResponseDefault4XX:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,authorizationToken'"
+          gatewayresponse.header.Access-Control-Allow-Methods: "'GET,POST,PUT,DELETE,OPTIONS'"
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: ApiGatewayRestApi
+
+    GatewayResponseDefault5XX:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,authorizationToken'"
+          gatewayresponse.header.Access-Control-Allow-Methods: "'GET,POST,PUT,DELETE,OPTIONS'"
+        ResponseType: DEFAULT_5XX
+        RestApiId:
+          Ref: ApiGatewayRestApi
+
+    GatewayResponseUnauthorized:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,authorizationToken'"
+          gatewayresponse.header.Access-Control-Allow-Methods: "'GET,POST,PUT,DELETE,OPTIONS'"
+        ResponseType: UNAUTHORIZED
+        RestApiId:
+          Ref: ApiGatewayRestApi
+
+    GatewayResponseAccessDenied:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,authorizationToken'"
+          gatewayresponse.header.Access-Control-Allow-Methods: "'GET,POST,PUT,DELETE,OPTIONS'"
+        ResponseType: ACCESS_DENIED
+        RestApiId:
+          Ref: ApiGatewayRestApi
