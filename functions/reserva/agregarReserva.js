@@ -1,7 +1,7 @@
 require("dotenv").config();
 const dbService = require("../../services/dbService");
 const s3Service = require("../../services/s3Service");
-const { ESTADO_RESERVA } = require("../../utils/utils");
+const { ESTADO_RESERVA, makeHeader } = require("../../utils/utils");
 
 module.exports.handler = async (event) => {
   try {
@@ -41,6 +41,7 @@ module.exports.handler = async (event) => {
     ) {
       return {
         statusCode: 400,
+        headers: makeHeader(),
         body: JSON.stringify({ message: "Faltan campos obligatorios" }),
       };
     }
@@ -72,6 +73,7 @@ module.exports.handler = async (event) => {
 
     return {
       statusCode: 201,
+      headers: makeHeader(),
       body: JSON.stringify({
         message: useS3
           ? "Reserva guardada en S3"
@@ -82,6 +84,7 @@ module.exports.handler = async (event) => {
     console.error("Error en createReserva:", error);
     return {
       statusCode: 500,
+      headers: makeHeader(),
       body: JSON.stringify({
         message: "Error interno del servidor",
         error: error.message,

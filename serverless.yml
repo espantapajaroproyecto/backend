@@ -1,36 +1,39 @@
-service: aws-node-http-api-project
+service: cei-espantapajaros
 frameworkVersion: "3.40.0"
+
+plugins:
+  - serverless-dotenv-plugin
 
 provider:
   name: aws
   runtime: nodejs20.x
   region: us-east-1
-  stage: dev
+  stage: ${opt:stage, 'prod'}
+  environment:
+    USE_S3: "true"
+    S3_BUCKET: cei-espantapajaros-data-prod
+    # JWT_SECRET is injected from SSM Parameter Store at deploy time.
+    # Create it first: aws ssm put-parameter --name /cei/prod/jwt-secret --type SecureString --value <secret>
+    JWT_SECRET: ${ssm:/cei/prod/jwt-secret}
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - s3:GetObject
+            - s3:PutObject
+            - s3:DeleteObject
+            - s3:ListBucket
+          Resource:
+            - "arn:aws:s3:::cei-espantapajaros-data-prod"
+            - "arn:aws:s3:::cei-espantapajaros-data-prod/*"
 
 package:
   individually: true
 
 functions:
-  helloWorld:
-    handler: index.handler
 
-  usuarioLogin:
-    handler: functions/login/usuarioLogin.handler
-
-  cargarDataS3:
-    handler: utils/cargarDataS3.handler
-    package:
-      individually: true
-      include:
-        - utils/cargarDataS3.js
-
-  playground:
-    handler: utils/playground.handler
-    package:
-      individually: true
-      include:
-        - utils/playground.js
-
+  # ── AUTH (Lambda Authorizer — attached to all protected routes) ──────────
   lambdaAutorizer:
     handler: functions/auth/lambdaAutorizer.handler
     package:
@@ -38,16 +41,48 @@ functions:
       include:
         - functions/auth/lambdaAutorizer.js
 
-  #  USUARIOS
+  # ── LOGIN (public — no authorizer) ───────────────────────────────────────
+  usuarioLogin:
+    handler: functions/login/usuarioLogin.handler
+    package:
+      individually: true
+      include:
+        - functions/login/usuarioLogin.js
+    events:
+      - http:
+          path: /login
+          method: POST
+          cors: true
+
+  # ── USUARIOS ──────────────────────────────────────────────────────────────
+  # POST /usuario is public (self-registration)
   agregarUsuario:
     handler: functions/usuario/agregarUsuario.handler
     package:
       individually: true
       include:
         - functions/usuario/agregarUsuario.js
+    events:
+      - http:
+          path: /usuario
+          method: POST
+          cors: true
 
   obtenerUsuarios:
     handler: functions/usuario/obtenerUsuarios.handler
+    package:
+      individually: true
+      include:
+        - functions/usuario/obtenerUsuarios.js
+    events:
+      - http:
+          path: /usuario
+          method: GET
+          cors: true
+          authorizer:
+            name: lambdaAutorizer
+            identitySource: method.request.header.authorizationToken
+            type: token
 
   modificarUsuario:
     handler: functions/usuario/modificarUsuario.handler
@@ -55,14 +90,32 @@ functions:
       individually: true
       include:
         - functions/usuario/modificarUsuario.js
+    events:
+      - http:
+          path: /usuario
+          method: PUT
+          cors: true
+          authorizer:
+            name: lambdaAutorizer
+            identitySource: method.request.header.authorizationToken
+            type: token
 
-  #  RESERVAS
+  # ── RESERVAS ──────────────────────────────────────────────────────────────
   agregarReserva:
     handler: functions/reserva/agregarReserva.handler
     package:
       individually: true
       include:
         - functions/reserva/agregarReserva.js
+    events:
+      - http:
+          path: /reserva
+          method: POST
+          cors: true
+          authorizer:
+            name: lambdaAutorizer
+            identitySource: method.request.header.authorizationToken
+            type: token
 
   obtenerReservas:
     handler: functions/reserva/obtenerReservas.handler
@@ -70,6 +123,15 @@ functions:
       individually: true
       include:
         - functions/reserva/obtenerReservas.js
+    events:
+      - http:
+          path: /reserva
+          method: GET
+          cors: true
+          authorizer:
+            name: lambdaAutorizer
+            identitySource: method.request.header.authorizationToken
+            type: token
 
   modificarReserva:
     handler: functions/reserva/modificarReserva.handler
@@ -77,6 +139,15 @@ functions:
       individually: true
       include:
         - functions/reserva/modificarReserva.js
+    events:
+      - http:
+          path: /reserva
+          method: PUT
+          cors: true
+          authorizer:
+            name: lambdaAutorizer
+            identitySource: method.request.header.authorizationToken
+            type: token
 
   eliminarReserva:
     handler: functions/reserva/eliminarReserva.handler
@@ -84,21 +155,45 @@ functions:
       individually: true
       include:
         - functions/reserva/eliminarReserva.js
+    events:
+      - http:
+          path: /reserva
+          method: DELETE
+          cors: true
+          authorizer:
+            name: lambdaAutorizer
+            identitySource: method.request.header.authorizationToken
+            type: token
 
-  #  DOCENTE
-  agregarDocente:
-    handler: functions/docente/agregarDocente.handler
-    package:
-      individually: true
-      include:
-        - functions/docente/agregarDocente.js
-
+  # ── DOCENTES / PROFESORES ─────────────────────────────────────────────────
+  # GET is public so students can browse teachers during booking
   obtenerDocentes:
     handler: functions/docente/obtenerDocentes.handler
     package:
       individually: true
       include:
         - functions/docente/obtenerDocentes.js
+    events:
+      - http:
+          path: /profesor
+          method: GET
+          cors: true
+
+  agregarDocente:
+    handler: functions/docente/agregarDocente.handler
+    package:
+      individually: true
+      include:
+        - functions/docente/agregarDocente.js
+    events:
+      - http:
+          path: /profesor
+          method: POST
+          cors: true
+          authorizer:
+            name: lambdaAutorizer
+            identitySource: method.request.header.authorizationToken
+            type: token
 
   modificarDocente:
     handler: functions/docente/modificarDocente.handler
@@ -106,6 +201,15 @@ functions:
       individually: true
       include:
         - functions/docente/modificarDocente.js
+    events:
+      - http:
+          path: /profesor
+          method: PUT
+          cors: true
+          authorizer:
+            name: lambdaAutorizer
+            identitySource: method.request.header.authorizationToken
+            type: token
 
   eliminarDocente:
     handler: functions/docente/eliminarDocente.handler
@@ -113,13 +217,29 @@ functions:
       individually: true
       include:
         - functions/docente/eliminarDocente.js
-  #  CONFIGURACIONES
+    events:
+      - http:
+          path: /profesor
+          method: DELETE
+          cors: true
+          authorizer:
+            name: lambdaAutorizer
+            identitySource: method.request.header.authorizationToken
+            type: token
+
+  # ── CONFIGURACIONES ───────────────────────────────────────────────────────
+  # GET is public (needed for the booking filter form — subject/topic selectors)
   obtenerConfiguraciones:
     handler: functions/configuracion/obtenerConfiguraciones.handler
     package:
       individually: true
       include:
         - functions/configuracion/obtenerConfiguraciones.js
+    events:
+      - http:
+          path: /configuracion
+          method: GET
+          cors: true
 
   agregarConfiguraciones:
     handler: functions/configuracion/agregarConfiguraciones.handler
@@ -127,6 +247,15 @@ functions:
       individually: true
       include:
         - functions/configuracion/agregarConfiguraciones.js
+    events:
+      - http:
+          path: /configuracion
+          method: POST
+          cors: true
+          authorizer:
+            name: lambdaAutorizer
+            identitySource: method.request.header.authorizationToken
+            type: token
 
   modificarConfiguraciones:
     handler: functions/configuracion/modificarConfiguraciones.handler
@@ -134,6 +263,15 @@ functions:
       individually: true
       include:
         - functions/configuracion/modificarConfiguraciones.js
+    events:
+      - http:
+          path: /configuracion
+          method: PUT
+          cors: true
+          authorizer:
+            name: lambdaAutorizer
+            identitySource: method.request.header.authorizationToken
+            type: token
 
   eliminarConfiguraciones:
     handler: functions/configuracion/eliminarConfiguraciones.handler
@@ -141,36 +279,59 @@ functions:
       individually: true
       include:
         - functions/configuracion/eliminarConfiguraciones.js
+    events:
+      - http:
+          path: /configuracion
+          method: DELETE
+          cors: true
+          authorizer:
+            name: lambdaAutorizer
+            identitySource: method.request.header.authorizationToken
+            type: token
 
-  # DISPONIBLES
+  # ── DISPONIBLES ───────────────────────────────────────────────────────────
+  # GET handles both list-all and filtered search via queryStringParameters
   obtenerDisponibles:
     handler: functions/disponible/obtenerDisponibles.handler
     package:
       individually: true
       include:
         - functions/disponible/obtenerDisponibles.js
+    events:
+      - http:
+          path: /disponible
+          method: GET
+          cors: true
 
-  obtenerDisponiblesPor:
-    handler: functions/disponible/obtenerDisponiblesPor.handler
-    package:
-      individually: true
-      include:
-        - functions/disponible/obtenerDisponiblesPor.js
-
-  #  ALUMNOS
-  obtenerAlumnos:
-    handler: functions/alumno/obtenerAlumnos.handler
-    package:
-      individually: true
-      include:
-        - functions/alumno/obtenerAlumnos.js
-
+  # ── ALUMNOS ───────────────────────────────────────────────────────────────
+  # POST is public (student self-registration)
   agregarAlumno:
     handler: functions/alumno/agregarAlumno.handler
     package:
       individually: true
       include:
         - functions/alumno/agregarAlumno.js
+    events:
+      - http:
+          path: /alumno
+          method: POST
+          cors: true
+
+  obtenerAlumnos:
+    handler: functions/alumno/obtenerAlumnos.handler
+    package:
+      individually: true
+      include:
+        - functions/alumno/obtenerAlumnos.js
+    events:
+      - http:
+          path: /alumno
+          method: GET
+          cors: true
+          authorizer:
+            name: lambdaAutorizer
+            identitySource: method.request.header.authorizationToken
+            type: token
 
   modificarAlumno:
     handler: functions/alumno/modificarAlumno.handler
@@ -178,6 +339,15 @@ functions:
       individually: true
       include:
         - functions/alumno/modificarAlumno.js
+    events:
+      - http:
+          path: /alumno
+          method: PUT
+          cors: true
+          authorizer:
+            name: lambdaAutorizer
+            identitySource: method.request.header.authorizationToken
+            type: token
 
   eliminarAlumno:
     handler: functions/alumno/eliminarAlumno.handler
@@ -185,17 +355,85 @@ functions:
       individually: true
       include:
         - functions/alumno/eliminarAlumno.js
+    events:
+      - http:
+          path: /alumno
+          method: DELETE
+          cors: true
+          authorizer:
+            name: lambdaAutorizer
+            identitySource: method.request.header.authorizationToken
+            type: token
 
-  agregarReservaAlumno:
-    handler: functions/alumnoReserva/agregarReservaAlumno.handler
+  # ── SEEDING UTILITY (invoke manually — not exposed via API Gateway) ───────
+  # Run: sls invoke --function cargarDataS3 --stage prod
+  cargarDataS3:
+    handler: utils/cargarDataS3.handler
     package:
       individually: true
       include:
-        - functions/alumnoReserva/agregarReservaAlumno.js
+        - utils/cargarDataS3.js
+        - data/clases/**
 
-  eliminarReservaAlumno:
-    handler: functions/alumnoReserva/eliminarReservaAlumno.handler
-    package:
-      individually: true
-      include:
-        - functions/alumnoReserva/eliminarReservaAlumno.js
+  # Functions intentionally excluded from this deploy:
+
+  # - helloWorld: broken (contains React hook)
+  # - playground: dev utility only
+  # - agregarDisponible, eliminarDisponible, modificarDisponible: empty stubs
+  # - agregarDisponibleProfesor, eliminarDisponibleProfesor: empty stubs
+  # - agregarMateriaProfesor, eliminarMateriaProfesor: empty stubs
+  # - reiniciarContra: empty stub (TODO)
+  # - agregarReservaAlumno, eliminarReservaAlumno: not yet implemented
+
+# ── API GATEWAY ERROR RESPONSES WITH CORS HEADERS ────────────────────────────
+# When the Lambda authorizer denies a request (bad/missing token), API Gateway
+# returns the 401/403 itself — the Lambda never runs, so makeHeader() never fires.
+# These GatewayResponse resources inject CORS headers at the gateway level so
+# the browser sees the real HTTP status code instead of a misleading CORS error.
+#
+# TODO: Replace "*" with the Amplify domain before client delivery.
+resources:
+  Resources:
+    GatewayResponseDefault4XX:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,authorizationToken'"
+          gatewayresponse.header.Access-Control-Allow-Methods: "'GET,POST,PUT,DELETE,OPTIONS'"
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: ApiGatewayRestApi
+
+    GatewayResponseDefault5XX:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,authorizationToken'"
+          gatewayresponse.header.Access-Control-Allow-Methods: "'GET,POST,PUT,DELETE,OPTIONS'"
+        ResponseType: DEFAULT_5XX
+        RestApiId:
+          Ref: ApiGatewayRestApi
+
+    GatewayResponseUnauthorized:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,authorizationToken'"
+          gatewayresponse.header.Access-Control-Allow-Methods: "'GET,POST,PUT,DELETE,OPTIONS'"
+        ResponseType: UNAUTHORIZED
+        RestApiId:
+          Ref: ApiGatewayRestApi
+
+    GatewayResponseAccessDenied:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,authorizationToken'"
+          gatewayresponse.header.Access-Control-Allow-Methods: "'GET,POST,PUT,DELETE,OPTIONS'"
+        ResponseType: ACCESS_DENIED
+        RestApiId:
+          Ref: ApiGatewayRestApi

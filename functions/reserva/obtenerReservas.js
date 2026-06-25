@@ -1,14 +1,13 @@
 require("dotenv").config();
 const dbService = require("../../services/dbService");
 const s3Service = require("../../services/s3Service");
-const { validarCuerpoEvento } = require("../../utils/utils");
+const { validarCuerpoEvento, makeHeader } = require("../../utils/utils");
 
 const CAMPOS_REQUERIDOS = ["usuarioId"];
 
 module.exports.handler = async (event) => {
   const useS3 = process.env.USE_S3 == "true";
   const cuerpo = event?.body && JSON.parse(event?.body);
-  console.log(cuerpo);
 
   const obtenerReservas = useS3
     ? s3Service.obtenerReservas
@@ -21,6 +20,7 @@ module.exports.handler = async (event) => {
   if (cuerpo && !validarCuerpoEvento(cuerpo, CAMPOS_REQUERIDOS)) {
     return {
       statusCode: 500,
+      headers: makeHeader(),
       body: JSON.stringify(
         {
           message: "Error Faltan campos requeridos",
@@ -37,6 +37,7 @@ module.exports.handler = async (event) => {
 
     return {
       statusCode: 200,
+      headers: makeHeader(),
       body: JSON.stringify(
         {
           message: useS3
@@ -53,6 +54,7 @@ module.exports.handler = async (event) => {
 
     return {
       statusCode: 500,
+      headers: makeHeader(),
       body: JSON.stringify(
         {
           message: "Error al obtener los reservas",

@@ -1,7 +1,7 @@
 require("dotenv").config();
 const dbService = require("../../services/dbService");
 const s3Service = require("../../services/s3Service");
-const { hashPassword } = require("../../utils/utils");
+const { hashPassword, makeHeader } = require("../../utils/utils");
 
 const jwt = require("jsonwebtoken");
 
@@ -28,6 +28,7 @@ module.exports.handler = async (event) => {
     if (!dni || !nombre || !apellido || !mail || !contrasenia || !celular) {
       return {
         statusCode: 400,
+        headers: makeHeader(),
         body: JSON.stringify({ message: "Faltan campos obligatorios" }),
       };
     }
@@ -51,6 +52,7 @@ module.exports.handler = async (event) => {
     if (usuarioExistente) {
       return {
         statusCode: 409,
+        headers: makeHeader(),
         body: JSON.stringify({
           message: "Ya existe un usuario con ese DNI o correo",
         }),
@@ -85,7 +87,6 @@ module.exports.handler = async (event) => {
           ...(color !== undefined && { color }),
           ...(valor_hora !== undefined && { valor_hora }),
         };
-        console.log("nuevoDocente", nuevoDocente);        
         await agregarDocente(nuevoDocente);
       }
     }
@@ -98,15 +99,16 @@ module.exports.handler = async (event) => {
         apellido: nuevoUsuario.apellido,
         mail: nuevoUsuario.mail,
         celular: nuevoUsuario.celular,
-        rol: "profesor", // ej: "alumno", "profesor", "admin"
+        rol: "profesor",
       },
-      SECRET
-      //{ expiresIn: '2h' }
+      SECRET,
+      { expiresIn: "8h" }
     );
     //
 
     return {
       statusCode: 201,
+      headers: makeHeader(),
       body: JSON.stringify({
         token,
         message: useS3
@@ -118,6 +120,7 @@ module.exports.handler = async (event) => {
     console.error("Error:", error);
     return {
       statusCode: 500,
+      headers: makeHeader(),
       body: JSON.stringify({
         message: "Error interno",
         error: error.message,
