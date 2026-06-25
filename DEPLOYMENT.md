@@ -230,7 +230,7 @@ After seeding, verify the login endpoint returns a JWT:
 curl -s -X POST \
   https://XXXXXXXXXX.execute-api.us-east-1.amazonaws.com/prod/login \
   -H "Content-Type: application/json" \
-  -d '{"body":"{\"dni\":\"67890999\",\"contrasenia\":\"TestPassword123!\"}"}' \
+  -d '{"dni":"67890123","contrasenia":"Espanta2024!"}' \
   | python3 -m json.tool
 ```
 
