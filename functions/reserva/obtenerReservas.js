@@ -8,7 +8,6 @@ const CAMPOS_REQUERIDOS = ["usuarioId"];
 module.exports.handler = async (event) => {
   const useS3 = process.env.USE_S3 == "true";
   const cuerpo = event?.body && JSON.parse(event?.body);
-  console.log(cuerpo);
 
   const obtenerReservas = useS3
     ? s3Service.obtenerReservas

@@ -5,8 +5,6 @@ const { hashPassword, makeHeader } = require("../../utils/utils");
 
 module.exports.handler = async (event) => {
   try {
-    console.log({ event });
-
     const body = JSON.parse(event.body);
 
     const {
@@ -46,7 +44,6 @@ module.exports.handler = async (event) => {
       : dbService.modificarUsuario;
 
     const docenteAModificar = await obtenerDocentes({ profesorId: id });
-    console.log({ docenteAModificar });
     if (docenteAModificar.length === 0) {
       return {
         statusCode: 404,

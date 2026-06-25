@@ -21,8 +21,6 @@ const hashPassword = async (plainPassword) => {
 
 // Compara una contraseña ingresada con la ya encriptada
 const compararContrasenias = async (inputPassword, storedHashedPassword) => {
-  console.log(inputPassword, storedHashedPassword);
-  
   return await bcrypt.compare(inputPassword, storedHashedPassword);
 };
 
@@ -69,8 +67,8 @@ const obtenerValorSeguro = (result, valorPorDefecto = []) => {
 
 const makeHeader = (
   allowOrigin = "*",
-  allowHeaders = "Content-Type",
-  allowMethods = "GET,OPTIONS"
+  allowHeaders = "Content-Type,authorizationToken",
+  allowMethods = "GET,POST,PUT,DELETE,OPTIONS"
 ) => {
   return {
     "Access-Control-Allow-Origin": allowOrigin,

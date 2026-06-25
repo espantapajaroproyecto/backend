@@ -87,7 +87,6 @@ module.exports.handler = async (event) => {
           ...(color !== undefined && { color }),
           ...(valor_hora !== undefined && { valor_hora }),
         };
-        console.log("nuevoDocente", nuevoDocente);        
         await agregarDocente(nuevoDocente);
       }
     }
@@ -100,10 +99,10 @@ module.exports.handler = async (event) => {
         apellido: nuevoUsuario.apellido,
         mail: nuevoUsuario.mail,
         celular: nuevoUsuario.celular,
-        rol: "profesor", // ej: "alumno", "profesor", "admin"
+        rol: "profesor",
       },
-      SECRET
-      //{ expiresIn: '2h' }
+      SECRET,
+      { expiresIn: "8h" }
     );
     //
 

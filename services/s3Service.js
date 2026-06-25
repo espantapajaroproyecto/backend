@@ -493,8 +493,6 @@ async function modificarUsuario(id, camposActualizados) {
     valor: id,
     nuevosValores: camposActualizados,
   };
-  console.log({ modificarParams });
-  
   return await actualizar(modificarParams);
 }
 
@@ -590,8 +588,6 @@ async function obtenerDocentes(cuerpo = { profesorId: undefined }) {
   }
   for (let i = 0; i < docentesData.length; i++) {
     const docente = docentesData[i];
-    console.log({ docente });
-    
     const { id } = docente;
 
     if (disponibleDocenteData.length > 0) {
@@ -612,10 +608,6 @@ async function obtenerDocentes(cuerpo = { profesorId: undefined }) {
           return elemento.materia;
         });
     }
-    console.log("---");    
-    console.log(docente);
-    console.log("---");
-    
     delete docente?.usuario?.contrasenia;
 
     if (profesorId && id == profesorId) {
